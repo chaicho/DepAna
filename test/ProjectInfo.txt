@@ -1,0 +1,289 @@
+========================================
+dependency-graph-as-task-inputs:util:unspecified
+test.libs:lib1:unspecified
+org.apache.commons:commons-collections4:4.4
+========================================
+Project version: unspecified
+Project name: app
+Project group: dependency-graph-as-task-inputs
+Project path: :app
+Project description: null
+Project buildDir: D:\Pathtodoc\dependency-graph-as-task-inputs\app\build
+Project rootDir: D:\Pathtodoc\dependency-graph-as-task-inputs
+Project projectDir: D:\Pathtodoc\dependency-graph-as-task-inputs\app
+Project gradleVersion: 7.4
+Project gradleHomeDir: D:\Gradles\.gradle\wrapper\dists\gradle-7.4-bin\c0gwcg53nkjbqw7r0h0umtfvt\gradle-7.4
+Project gradleUserHomeDir: D:\Gradles\.gradle
+========================================
+Project Artifacts: configuration ':app:runtimeClasspath' all dependencies
+Project runtimeClasspath Artifacts: configuration ':app:runtimeClasspath' dependencies
+========ResolvableDependencies=========
+Project runtimeClasspath Artifacts: dependency-graph-as-task-inputs:util:unspecified
+Reason: null
+Project runtimeClasspath Artifacts: test.libs:lib1:1.0
+Reason: null
+Project runtimeClasspath Artifacts: org.apache.commons:commons-collections4:4.2
+Reason: null
+Project runtimeClasspath Artifacts: org.apache.commons:commons-collections4:4.4
+Reason: null
+========ResolvedConfiguration=========
+Project runtimeClasspath Artifacts: dependency-graph-as-task-inputs:util:unspecified
+ file:D:\Pathtodoc\dependency-graph-as-task-inputs\util\build\libs\util.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: util
+Project runtimeClasspath Artifacts: test.libs:lib1:unspecified
+ file:D:\Pathtodoc\dependency-graph-as-task-inputs\libs\lib1\build\libs\lib1.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: lib1
+Project runtimeClasspath Artifacts: org.apache.commons:commons-collections4:4.4
+ file:D:\Gradles\.gradle\caches\modules-2\files-2.1\org.apache.commons\commons-collections4\4.4\62ebe7544cb7164d87e0637a2a6a2bdc981395e8\commons-collections4-4.4.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: commons-collections4
+Project runtimeClasspath Artifacts: test.libs:lib2:unspecified
+ file:D:\Pathtodoc\dependency-graph-as-task-inputs\libs\lib2\build\libs\lib2.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: lib2
+Project runtimeClasspath Artifacts: com.google.guava:guava:31.0.1-jre
+ file:D:\Gradles\.gradle\caches\modules-2\files-2.1\com.google.guava\guava\31.0.1-jre\119ea2b2bc205b138974d351777b20f02b92704b\guava-31.0.1-jre.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: guava
+Project runtimeClasspath Artifacts: org.apache.commons:commons-exec:1.3
+ file:D:\maven\mavenrepo\org\apache\commons\commons-exec\1.3\commons-exec-1.3.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: commons-exec
+Project runtimeClasspath Artifacts: com.fasterxml.jackson.core:jackson-annotations:2.13.1
+ file:D:\Gradles\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.13.1\1cbcbe4623113e6af92ccaa89884a345270f1a87\jackson-annotations-2.13.1.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: jackson-annotations
+Project runtimeClasspath Artifacts: com.fasterxml.jackson.core:jackson-core:2.13.1
+ file:D:\Gradles\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.13.1\51ae921a2ed1e06ca8876f12f32f265e83c0b2b8\jackson-core-2.13.1.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: jackson-core
+Project runtimeClasspath Artifacts: com.fasterxml.jackson.core:jackson-databind:2.13.1
+ file:D:\Gradles\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.13.1\698b2d2b15d9a1b7aae025f1d9f576842285e7f6\jackson-databind-2.13.1.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: jackson-databind
+Project runtimeClasspath Artifacts: com.google.guava:failureaccess:1.0.1
+ file:D:\maven\mavenrepo\com\google\guava\failureaccess\1.0.1\failureaccess-1.0.1.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: failureaccess
+Project runtimeClasspath Artifacts: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
+ file:D:\maven\mavenrepo\com\google\guava\listenablefuture\9999.0-empty-to-avoid-conflict-with-guava\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: listenablefuture
+Project runtimeClasspath Artifacts: com.google.code.findbugs:jsr305:3.0.2
+ file:D:\maven\mavenrepo\com\google\code\findbugs\jsr305\3.0.2\jsr305-3.0.2.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: jsr305
+Project runtimeClasspath Artifacts: org.checkerframework:checker-qual:3.12.0
+ file:D:\maven\mavenrepo\org\checkerframework\checker-qual\3.12.0\checker-qual-3.12.0.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: checker-qual
+Project runtimeClasspath Artifacts: com.google.errorprone:error_prone_annotations:2.7.1
+ file:D:\Gradles\.gradle\caches\modules-2\files-2.1\com.google.errorprone\error_prone_annotations\2.7.1\458d9042f7aa6fa9a634df902b37f544e15aacac\error_prone_annotations-2.7.1.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: error_prone_annotations
+Project runtimeClasspath Artifacts: com.google.j2objc:j2objc-annotations:1.3
+ file:D:\maven\mavenrepo\com\google\j2objc\j2objc-annotations\1.3\j2objc-annotations-1.3.jar
+ type: jar
+ extension: jar
+ classifier: null
+ name: j2objc-annotations
+========ResolutionResult=========
+Project runtimeClasspath Artifacts: dependency-graph-as-task-inputs:app:unspecified
+Dependencies: [project :util, test.libs:lib1:1.0 -> project :libs:lib1, org.apache.commons:commons-collections4:4.2 -> org.apache.commons:commons-collections4:4.4, org.apache.commons:commons-collections4:4.4]
+project :app ---> project :util
+project :app ---> test.libs:lib1:1.0
+project :app ---> org.apache.commons:commons-collections4:4.2
+project :app ---> org.apache.commons:commons-collections4:4.4
+Dependents: []
+Variants : [runtimeClasspath]
+Id : project :app
+
+Project runtimeClasspath Artifacts: dependency-graph-as-task-inputs:util:unspecified
+Dependencies: [test.libs:lib2:1.0 -> project :libs:lib2]
+project :util ---> test.libs:lib2:1.0
+Dependents: [project :util]
+Variants : [runtimeElements]
+Id : project :util
+
+Project runtimeClasspath Artifacts: test.libs:lib2:unspecified
+Dependencies: [org.apache.commons:commons-exec:1.3, com.fasterxml.jackson.core:jackson-databind:2.13.1]
+project :libs:lib2 ---> org.apache.commons:commons-exec:1.3
+project :libs:lib2 ---> com.fasterxml.jackson.core:jackson-databind:2.13.1
+Dependents: [test.libs:lib2:1.0 -> project :libs:lib2]
+Variants : [runtimeElements]
+Id : project :libs:lib2
+
+Project runtimeClasspath Artifacts: org.apache.commons:commons-exec:1.3
+Dependencies: []
+Dependents: [org.apache.commons:commons-exec:1.3]
+Variants : [runtime]
+Id : org.apache.commons:commons-exec:1.3
+
+Project runtimeClasspath Artifacts: com.fasterxml.jackson.core:jackson-databind:2.13.1
+Dependencies: [com.fasterxml.jackson.core:jackson-annotations:2.13.1, com.fasterxml.jackson.core:jackson-core:2.13.1, com.fasterxml.jackson:jackson-bom:2.13.1]
+com.fasterxml.jackson.core:jackson-databind:2.13.1 ---> com.fasterxml.jackson.core:jackson-annotations:2.13.1
+com.fasterxml.jackson.core:jackson-databind:2.13.1 ---> com.fasterxml.jackson.core:jackson-core:2.13.1
+com.fasterxml.jackson.core:jackson-databind:2.13.1 ---> com.fasterxml.jackson:jackson-bom:2.13.1
+Dependents: [com.fasterxml.jackson.core:jackson-databind:2.13.1, com.fasterxml.jackson.core:jackson-databind:2.13.1]
+Variants : [runtimeElements]
+Id : com.fasterxml.jackson.core:jackson-databind:2.13.1
+
+Project runtimeClasspath Artifacts: com.fasterxml.jackson.core:jackson-annotations:2.13.1
+Dependencies: [com.fasterxml.jackson:jackson-bom:2.13.1]
+com.fasterxml.jackson.core:jackson-annotations:2.13.1 ---> com.fasterxml.jackson:jackson-bom:2.13.1
+Dependents: [com.fasterxml.jackson.core:jackson-annotations:2.13.1, com.fasterxml.jackson.core:jackson-annotations:2.13.1]
+Variants : [runtimeElements]
+Id : com.fasterxml.jackson.core:jackson-annotations:2.13.1
+
+Project runtimeClasspath Artifacts: com.fasterxml.jackson:jackson-bom:2.13.1
+Dependencies: [com.fasterxml.jackson.core:jackson-annotations:2.13.1, com.fasterxml.jackson.core:jackson-core:2.13.1, com.fasterxml.jackson.core:jackson-databind:2.13.1]
+com.fasterxml.jackson:jackson-bom:2.13.1 ---> com.fasterxml.jackson.core:jackson-annotations:2.13.1
+com.fasterxml.jackson:jackson-bom:2.13.1 ---> com.fasterxml.jackson.core:jackson-core:2.13.1
+com.fasterxml.jackson:jackson-bom:2.13.1 ---> com.fasterxml.jackson.core:jackson-databind:2.13.1
+Dependents: [com.fasterxml.jackson:jackson-bom:2.13.1, com.fasterxml.jackson:jackson-bom:2.13.1, com.fasterxml.jackson:jackson-bom:2.13.1]
+Variants : [platform-runtime]
+Id : com.fasterxml.jackson:jackson-bom:2.13.1
+
+Project runtimeClasspath Artifacts: com.fasterxml.jackson.core:jackson-core:2.13.1
+Dependencies: [com.fasterxml.jackson:jackson-bom:2.13.1]
+com.fasterxml.jackson.core:jackson-core:2.13.1 ---> com.fasterxml.jackson:jackson-bom:2.13.1
+Dependents: [com.fasterxml.jackson.core:jackson-core:2.13.1, com.fasterxml.jackson.core:jackson-core:2.13.1]
+Variants : [runtimeElements]
+Id : com.fasterxml.jackson.core:jackson-core:2.13.1
+
+Project runtimeClasspath Artifacts: test.libs:lib1:unspecified
+Dependencies: [com.google.guava:guava:31.0.1-jre]
+project :libs:lib1 ---> com.google.guava:guava:31.0.1-jre
+Dependents: [test.libs:lib1:1.0 -> project :libs:lib1]
+Variants : [runtimeElements]
+Id : project :libs:lib1
+
+Project runtimeClasspath Artifacts: com.google.guava:guava:31.0.1-jre
+Dependencies: [com.google.guava:failureaccess:1.0.1, com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava, com.google.code.findbugs:jsr305:3.0.2, org.checkerframework:checker-qual:3.12.0, com.google.errorprone:error_prone_annotations:2.7.1, com.google.j2objc:j2objc-annotations:1.3]
+com.google.guava:guava:31.0.1-jre ---> com.google.guava:failureaccess:1.0.1
+com.google.guava:guava:31.0.1-jre ---> com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
+com.google.guava:guava:31.0.1-jre ---> com.google.code.findbugs:jsr305:3.0.2
+com.google.guava:guava:31.0.1-jre ---> org.checkerframework:checker-qual:3.12.0
+com.google.guava:guava:31.0.1-jre ---> com.google.errorprone:error_prone_annotations:2.7.1
+com.google.guava:guava:31.0.1-jre ---> com.google.j2objc:j2objc-annotations:1.3
+Dependents: [com.google.guava:guava:31.0.1-jre]
+Variants : [runtime]
+Id : com.google.guava:guava:31.0.1-jre
+
+Project runtimeClasspath Artifacts: com.google.guava:failureaccess:1.0.1
+Dependencies: []
+Dependents: [com.google.guava:failureaccess:1.0.1]
+Variants : [runtime]
+Id : com.google.guava:failureaccess:1.0.1
+
+Project runtimeClasspath Artifacts: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
+Dependencies: []
+Dependents: [com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava]
+Variants : [runtime]
+Id : com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
+
+Project runtimeClasspath Artifacts: com.google.code.findbugs:jsr305:3.0.2
+Dependencies: []
+Dependents: [com.google.code.findbugs:jsr305:3.0.2]
+Variants : [runtime]
+Id : com.google.code.findbugs:jsr305:3.0.2
+
+Project runtimeClasspath Artifacts: org.checkerframework:checker-qual:3.12.0
+Dependencies: []
+Dependents: [org.checkerframework:checker-qual:3.12.0]
+Variants : [runtime]
+Id : org.checkerframework:checker-qual:3.12.0
+
+Project runtimeClasspath Artifacts: com.google.errorprone:error_prone_annotations:2.7.1
+Dependencies: []
+Dependents: [com.google.errorprone:error_prone_annotations:2.7.1]
+Variants : [runtime]
+Id : com.google.errorprone:error_prone_annotations:2.7.1
+
+Project runtimeClasspath Artifacts: com.google.j2objc:j2objc-annotations:1.3
+Dependencies: []
+Dependents: [com.google.j2objc:j2objc-annotations:1.3]
+Variants : [runtime]
+Id : com.google.j2objc:j2objc-annotations:1.3
+
+Project runtimeClasspath Artifacts: org.apache.commons:commons-collections4:4.4
+Dependencies: []
+Dependents: [org.apache.commons:commons-collections4:4.2 -> org.apache.commons:commons-collections4:4.4, org.apache.commons:commons-collections4:4.4]
+Variants : [runtime]
+Id : org.apache.commons:commons-collections4:4.4
+
+===================Root=================
+Root: dependency-graph-as-task-inputs:app:unspecified
+Dependencies: [project :util, test.libs:lib1:1.0 -> project :libs:lib1, org.apache.commons:commons-collections4:4.2 -> org.apache.commons:commons-collections4:4.4, org.apache.commons:commons-collections4:4.4]
+Dependents: []
+Variants : [runtimeClasspath]
+Id : project :app
+project :app ---> project :util
+dependency-graph-as-task-inputs:util:unspecified
+[test.libs:lib2:1.0 -> project :libs:lib2]
+project :app ---> test.libs:lib1:1.0
+test.libs:lib1:unspecified
+[com.google.guava:guava:31.0.1-jre]
+project :app ---> org.apache.commons:commons-collections4:4.2
+org.apache.commons:commons-collections4:4.4
+[]
+project :app ---> org.apache.commons:commons-collections4:4.4
+org.apache.commons:commons-collections4:4.4
+[]
+Variant: runtimeClasspath
+Attributes: {org.gradle.category=library, org.gradle.dependency.bundling=external, org.gradle.jvm.environment=standard-jvm, org.gradle.jvm.version=8, org.gradle.libraryelements=jar, org.gradle.usage=java-runtime}
+Ownerproject :app
+=================ReportComponent===================
+
+  project :util -> 
+    test.libs:lib2:1.0 -> 
+      org.apache.commons:commons-exec:1.3 -> 
+      com.fasterxml.jackson.core:jackson-databind:2.13.1 -> 
+        com.fasterxml.jackson.core:jackson-annotations:2.13.1 -> 
+          com.fasterxml.jackson:jackson-bom:2.13.1 -> 
+            com.fasterxml.jackson.core:jackson-annotations:2.13.1 ->  (already seen)
+            com.fasterxml.jackson.core:jackson-core:2.13.1 -> 
+              com.fasterxml.jackson:jackson-bom:2.13.1 ->  (already seen)
+            com.fasterxml.jackson.core:jackson-databind:2.13.1 ->  (already seen)
+        com.fasterxml.jackson.core:jackson-core:2.13.1 ->  (already seen)
+        com.fasterxml.jackson:jackson-bom:2.13.1 ->  (already seen)
+  test.libs:lib1:1.0 -> 
+    com.google.guava:guava:31.0.1-jre -> 
+      com.google.guava:failureaccess:1.0.1 -> 
+      com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava -> 
+      com.google.code.findbugs:jsr305:3.0.2 -> 
+      org.checkerframework:checker-qual:3.12.0 -> 
+      com.google.errorprone:error_prone_annotations:2.7.1 -> 
+      com.google.j2objc:j2objc-annotations:1.3 -> 
+  org.apache.commons:commons-collections4:4.2 -> 
+  org.apache.commons:commons-collections4:4.4 ->  (already seen)
