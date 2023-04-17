@@ -302,6 +302,14 @@ public class DepJars {
         MyLogger.i().warn("No used dep Jar for " + groupId + ":" + artifactId);
         return null;
     }
+    public DepJar getSelectedDepJarById(String componentId) {
+        for (DepJar depJar : container) {
+            if (depJar.getName().equals(componentId) && depJar.isSelected()) {
+                return depJar;
+            }
+        }
+        return null;
+    }
 }
 
 

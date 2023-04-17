@@ -4,6 +4,8 @@ import lombok.Getter;
 import neu.lab.conflict.container.AllCls;
 import neu.lab.conflict.container.DepJars;
 import neu.lab.conflict.container.NodeAdapters;
+import neu.lab.conflict.util.ConflictHandler.ClassSmell;
+import neu.lab.conflict.util.ConflictHandler.LibrarySmell;
 import neu.lab.conflict.util.MyLogger;
 import neu.lab.conflict.util.SootUtil;
 import org.gradle.api.DefaultTask;
@@ -156,6 +158,8 @@ public abstract class BaseConflictTask extends DefaultTask {
         validateSysSize();
         System.out.println("Calculate classes");
         AllCls.i().init(DepJars.i());
+        LibrarySmell.getInstance().detect();
+        ClassSmell.i().detect();
 
         File outputFile = getOutputFile().getAsFile().get();
 

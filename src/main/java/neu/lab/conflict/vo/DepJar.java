@@ -55,6 +55,9 @@ public class DepJar {
     }
 
     public Map<String, ClassVO> getClsTb() {
+        if(clsTb==null){
+            clsTb = initClsTbRealTime();
+        }
         return clsTb;
     }
 
@@ -66,7 +69,12 @@ public class DepJar {
      *            soot;miss class that generated.
      * @return
      */
-    public List<String> getJarFilePaths(boolean useTarget) {
+    public List<String> getJarFilePaths(boolean useTarget ) {
+//        TODO
+        return jarFilePaths;
+    }
+
+    public List<String> getJarFilePaths( ) {
 //        TODO
         return jarFilePaths;
     }

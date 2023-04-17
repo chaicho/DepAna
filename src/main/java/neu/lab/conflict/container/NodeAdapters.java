@@ -84,5 +84,12 @@ public class NodeAdapters {
                 System.out.println(nodeAdapter);
             }
     }
-
+    public NodeAdapter getConflictNodeAdapter(String groupId, String artifactId, String version) {
+        for (NodeAdapter nodeAdapter : container) {
+            if(nodeAdapter.getGroupId().equals(groupId) && nodeAdapter.getArtifactId().equals(artifactId) && nodeAdapter.getVersion().equals(version)){
+                return nodeAdapter;
+            }
+        }
+        return null;
+    }
 }

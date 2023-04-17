@@ -1,17 +1,16 @@
 package neu.lab.conflict.util.ConflictHandler;
 
 import java.io.*;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 //import org.aw.asm;
 import neu.lab.conflict.container.DepJars;
 import neu.lab.conflict.container.NodeAdapters;
-import org.gradle.jvm.tasks.Jar;
-import org.objectweb.asm.*;
+import neu.lab.conflict.util.ConflictHandler.Conflict.ConflictJars;
+import neu.lab.conflict.vo.DepJar;
+import neu.lab.conflict.vo.NodeAdapter;
 
-import java.io.File;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 public class LibrarySmell {
     private static LibrarySmell instance;
@@ -26,11 +25,22 @@ public class LibrarySmell {
         }
         return instance;
     }
-    public void init(DepJars depJars, NodeAdapters nodeAdapters){
-
-    }
     public void detect(){
-
+//        Set<NodeAdapter> conflictingNodes = NodeAdapters.i().getAllNodeAdapter()
+//                .stream()
+//                .filter( nodeAdapter -> { return !nodeAdapter.isNodeSelected();})
+//                .collect(Collectors.toSet());
+        Set<DepJar>  conflictingDepJars = DepJars.i().getAllDepJar()
+                .stream()
+                .filter( depJar -> { return !depJar.isSelected();})
+                .collect(Collectors.toSet());
+        for (DepJar depJar : conflictingDepJars) {
+            System.out.println(depJar.getJarFilePaths());
+//            System.out.println(DepJars.i().getUsedJarPathsSeqForRisk(depJar));
+            DepJar selectedJar =  DepJars.i().getSelectedDepJarById(depJar.getName());
+            ConflictJars.i().addConflictJar(selectedJar,depJar);
+        }
+        ConflictJars.i().printAllConflictJars();
     }
     public static void main(String[] args) throws IOException {
         LibrarySmell librarySmell = LibrarySmell.getInstance();
