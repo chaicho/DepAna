@@ -8,6 +8,7 @@ import neu.lab.conflict.util.ConflictHandler.ClassSmell;
 import neu.lab.conflict.util.ConflictHandler.LibrarySmell;
 import neu.lab.conflict.util.MyLogger;
 import neu.lab.conflict.util.SootUtil;
+import neu.lab.conflict.util.soot.TypeAna;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.*;
@@ -16,14 +17,12 @@ import org.gradle.api.artifacts.component.ComponentIdentifier;
 import org.gradle.api.artifacts.component.ComponentSelector;
 import org.gradle.api.artifacts.result.*;
 import org.gradle.api.file.ConfigurableFileCollection;
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
-import org.gradle.api.tasks.Input;
-import org.gradle.api.tasks.InputFiles;
-import org.gradle.api.tasks.OutputFile;
-import org.gradle.api.tasks.TaskAction;
+import org.gradle.api.tasks.*;
 import neu.lab.conflict.util.GradleUtil;
 import neu.lab.conflict.vo.DepJar;
 
@@ -47,6 +46,13 @@ public abstract class BaseConflictTask extends DefaultTask {
 
     @OutputFile
     public abstract RegularFileProperty getOutputFile();
+
+
+//    @InputFiles
+//    public abstract ConfigurableFileCollection getSourceFiles();
+
+//    @OutputDirectory
+//    public abstract DirectoryProperty getOutputDir();
 
 
     private ArtifactCollection artifactCollection;
@@ -73,6 +79,8 @@ public abstract class BaseConflictTask extends DefaultTask {
     private ResolvableDependencies resolveableDependencies;
 
     public File buildDir;
+
+    public Set<File> compileSrcDirs;
 
     public BaseConflictTask() {
         super();
@@ -144,6 +152,11 @@ public abstract class BaseConflictTask extends DefaultTask {
         resolvedArtifactResults = artifactCollection.getArtifacts();
 
         buildDir = project.getBuildDir();
+
+        compileSrcDirs = project.getExtensions().getByType(SourceSetContainer.class)
+                            .getByName("main").getAllJava().getSrcDirs();
+//                                            .getByName("main").getAllJava().get()
+
         artifactMap = initMapArtifactByIdentifiers();
 
     }
@@ -157,9 +170,17 @@ public abstract class BaseConflictTask extends DefaultTask {
         DepJars.init(NodeAdapters.i());
         validateSysSize();
         System.out.println("Calculate classes");
-        AllCls.i().init(DepJars.i());
-        LibrarySmell.getInstance().detect();
-        ClassSmell.i().detect();
+
+        //        AllCls.i().init(DepJars.i());
+//        LibrarySmell.getInstance().detect();
+//        ClassSmell.i().detect();
+        System.out.println(DepJars.i().getUsedJarPaths());
+        System.out.println(buildDir.getAbsolutePath());
+        System.out.println("comilesrc"+ compileSrcDirs);
+
+
+        //        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
+
 
         File outputFile = getOutputFile().getAsFile().get();
 

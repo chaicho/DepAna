@@ -40,6 +40,19 @@ public class TypeAna extends AbstractSootAna{
 
     }
 
+    public void getABIType(List<String> JarPaths) {
+
+
+
+        List<String> args = this.getArgs(JarPaths.toArray(new String[0]));
+        System.out.println(args);
+        APITypeTransformer apiTypeTransformer = new APITypeTransformer();
+        PackManager.v().getPack("wjtp")
+                .add(new Transform("wjtp.APIType", apiTypeTransformer));
+        soot.Main.main(args.toArray(new String[0]));
+
+    }
+
     protected void addCgArgs(List<String> argsList) {
         argsList.addAll(Arrays.asList("-p", "cg", "off"));
     }

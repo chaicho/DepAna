@@ -1,6 +1,7 @@
 import neu.lab.conflict.tasks.ReportArtifactMetadataTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+
 import org.gradle.api.Transformer;
 import org.gradle.api.artifacts.ConfigurationContainer;
 import org.gradle.api.artifacts.ResolvableDependencies;
@@ -13,6 +14,8 @@ import org.gradle.api.file.RegularFile;
 import org.gradle.api.provider.Provider;
 import neu.lab.conflict.tasks.BaseConflictTask;
 import org.gradle.api.tasks.TaskContainer;
+import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.tasks.SourceSetContainer;
 
 import java.util.Collection;
 import java.util.List;
@@ -36,6 +39,8 @@ public class TestPlugin implements Plugin<Project> {
                 task.getArtifactIdentifiers().set(resolvedArtifacts.map(result -> result.stream().map(ResolvedArtifactResult::getId).collect(toList())));
                 task.getRootComponent().set(resolvableDependencies.getResolutionResult().getRootComponent());
                 task.getOutputFile().set(project.getLayout().getBuildDirectory().file("test.txt"));
+//                task.getSourceFiles().setFrom(project.getExtensions().getByType(SourceSetContainer.class)
+//                                            .getByName("main").getAllJava().get());
             });
         });
 
