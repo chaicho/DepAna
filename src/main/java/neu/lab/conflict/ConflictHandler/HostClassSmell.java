@@ -1,4 +1,4 @@
-package neu.lab.conflict.util.ConflictHandler;
+package neu.lab.conflict.ConflictHandler;
 
 public class HostClassSmell extends BaseSmell{
     public static HostClassSmell instance;

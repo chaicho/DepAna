@@ -1,6 +1,7 @@
 package neu.lab.conflict.tasks;
 
 import lombok.Getter;
+import neu.lab.conflict.ConflictHandler.UnUsedSmell;
 import neu.lab.conflict.container.DepJars;
 import neu.lab.conflict.container.NodeAdapters;
 import neu.lab.conflict.util.MyLogger;
@@ -172,12 +173,15 @@ public abstract class BaseConflictTask extends DefaultTask {
         //        AllCls.i().init(DepJars.i());
 //        LibrarySmell.getInstance().detect();
 //        ClassSmell.i().detect();
+        UnUsedSmell.i().detect();
+
         System.out.println(DepJars.i().getUsedJarPaths());
         System.out.println(buildDir.getAbsolutePath());
         System.out.println("comilesrc"+ compileSrcDirs);
 
 
-        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
+//        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
+
 
 
         File outputFile = getOutputFile().getAsFile().get();

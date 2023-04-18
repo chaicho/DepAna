@@ -1,4 +1,4 @@
-package neu.lab.conflict.util.ConflictHandler;
+package neu.lab.conflict.ConflictHandler;
 
 public abstract class BaseSmell {
 

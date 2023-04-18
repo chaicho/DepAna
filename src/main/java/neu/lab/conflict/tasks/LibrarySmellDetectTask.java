@@ -1,6 +1,6 @@
 package neu.lab.conflict.tasks;
 
-import neu.lab.conflict.util.ConflictHandler.LibrarySmell;
+import neu.lab.conflict.ConflictHandler.LibrarySmell;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 

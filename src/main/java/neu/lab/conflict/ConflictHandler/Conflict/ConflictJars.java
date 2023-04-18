@@ -1,4 +1,4 @@
-package neu.lab.conflict.util.ConflictHandler.Conflict;
+package neu.lab.conflict.ConflictHandler.Conflict;
 
 import neu.lab.conflict.vo.DepJar;
 

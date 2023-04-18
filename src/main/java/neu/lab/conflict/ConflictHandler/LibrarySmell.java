@@ -1,4 +1,4 @@
-package neu.lab.conflict.util.ConflictHandler;
+package neu.lab.conflict.ConflictHandler;
 
 import java.io.*;
 import java.util.Set;
@@ -6,10 +6,8 @@ import java.util.stream.Collectors;
 
 //import org.aw.asm;
 import neu.lab.conflict.container.DepJars;
-import neu.lab.conflict.container.NodeAdapters;
-import neu.lab.conflict.util.ConflictHandler.Conflict.ConflictJars;
+import neu.lab.conflict.ConflictHandler.Conflict.ConflictJars;
 import neu.lab.conflict.vo.DepJar;
-import neu.lab.conflict.vo.NodeAdapter;
 
 
 public class LibrarySmell {
