@@ -28,28 +28,18 @@ public class TypeAna extends AbstractSootAna{
     /*
     Use the APITypeTransformer to get the ABI type of the AnalyzedClass
      */
-    public void getABIType(String projectPath) {
-
-
-
-        List<String> args = this.getArgs(new String[]{projectPath});
-        APITypeTransformer apiTypeTransformer = new APITypeTransformer();
-        PackManager.v().getPack("wjtp")
-                .add(new Transform("wjtp.APIType", apiTypeTransformer));
-        soot.Main.main(args.toArray(new String[0]));
-
-    }
 
     public void getABIType(List<String> JarPaths) {
 
 
 
-        List<String> args = this.getArgs(JarPaths.toArray(new String[0]));
+        List<String> args = this.getArgsWithHost(JarPaths.toArray(new String[0]));
         System.out.println(args);
         APITypeTransformer apiTypeTransformer = new APITypeTransformer();
         PackManager.v().getPack("wjtp")
                 .add(new Transform("wjtp.APIType", apiTypeTransformer));
         soot.Main.main(args.toArray(new String[0]));
+
 
     }
 

@@ -1,23 +1,18 @@
 package neu.lab.conflict.tasks;
 
 import lombok.Getter;
-import neu.lab.conflict.container.AllCls;
 import neu.lab.conflict.container.DepJars;
 import neu.lab.conflict.container.NodeAdapters;
-import neu.lab.conflict.util.ConflictHandler.ClassSmell;
-import neu.lab.conflict.util.ConflictHandler.LibrarySmell;
 import neu.lab.conflict.util.MyLogger;
-import neu.lab.conflict.util.SootUtil;
 import neu.lab.conflict.util.soot.TypeAna;
+import neu.lab.conflict.vo.HostProjectInfo;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.*;
 import org.gradle.api.artifacts.component.ComponentArtifactIdentifier;
 import org.gradle.api.artifacts.component.ComponentIdentifier;
-import org.gradle.api.artifacts.component.ComponentSelector;
 import org.gradle.api.artifacts.result.*;
 import org.gradle.api.file.ConfigurableFileCollection;
-import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.ListProperty;
@@ -64,6 +59,7 @@ public abstract class BaseConflictTask extends DefaultTask {
     private int systemSize;
 
     public String target = "default";
+
 
     public Configuration configuration;
 
@@ -159,6 +155,8 @@ public abstract class BaseConflictTask extends DefaultTask {
 
         artifactMap = initMapArtifactByIdentifiers();
 
+        HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
+        HostProjectInfo.i().setBuildDir(buildDir);
     }
 
     @TaskAction
@@ -179,7 +177,7 @@ public abstract class BaseConflictTask extends DefaultTask {
         System.out.println("comilesrc"+ compileSrcDirs);
 
 
-        //        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
+        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
 
 
         File outputFile = getOutputFile().getAsFile().get();

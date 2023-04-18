@@ -1,7 +1,7 @@
 package neu.lab.conflict.util.soot;
 
-import neu.lab.conflict.util.GradleUtil;
 import neu.lab.conflict.util.MyLogger;
+import neu.lab.conflict.vo.HostProjectInfo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.List;
 public abstract class AbstractSootAna {
 	protected List<String> getArgs(String[] jarFilePaths) {
 		List<String> argsList = new ArrayList<String>();
-		addClassPath(argsList, jarFilePaths);
+		addProcessDir(argsList, jarFilePaths);
 		//this class can't analysis
 		if(argsList.size()==0) {
 			return argsList;
@@ -26,12 +26,41 @@ public abstract class AbstractSootAna {
 		addIgrArgs(argsList);
 		return argsList;
 	}
+
+
+
+	public List<String> getArgsWithHost(String[] jarFilePaths) {
+		List<String> argsList = new ArrayList<String>();
+		addClassPath(argsList, jarFilePaths);
+		//this class can't analysis
+		if(argsList.size()==0) {
+			return argsList;
+		}
+		addHostArg(argsList);
+		addGenArg(argsList);
+		addCgArgs(argsList);
+		addIgrArgs(argsList);
+		return argsList;
+	}
+
+	private void addHostArg(List<String> argsList) {
+//		for (String srcDir : HostProjectInfo.i().getCompileSrcDirs()) {
+//			argsList.add("-process-dir");
+//			argsList.add(srcDir);
+//		}
+
+		argsList.add("-process-dir");
+		argsList.add(HostProjectInfo.i().getBuildCp());
+
+	}
+
 	/**
 	 * addCgArgs
 	 * @param argsList
 	 */
 	protected abstract void addCgArgs(List<String> argsList);
-	protected void addClassPath(List<String> argsList, String[] jarFilePaths) {
+
+	private void addProcessDir(List<String> argsList, String[] jarFilePaths) {
 		for (String jarFilePath : jarFilePaths) {
 			if (new File(jarFilePath).exists()) {
 				if (canAna(jarFilePath)) {
@@ -44,6 +73,28 @@ public abstract class AbstractSootAna {
 				MyLogger.i().warn("add classpath error:doesn't exist file " + jarFilePath);
 			}
 		}
+	}
+	protected void addClassPath(List<String> argsList, String[] jarFilePaths) {
+//		String classPath = HostProjectInfo.i().getCompileSrcCp();
+		String classPath = HostProjectInfo.i().getBuildCp();
+//		String classPath = "D:\\Pathtodoc\\dependency-graph-as-task-inputs\\app\\build\\classes\\java\\main";
+		argsList.add("-cp");
+
+		for (String jarFilePath : jarFilePaths) {
+			if (new File(jarFilePath).exists()) {
+				if (canAna(jarFilePath)) {
+//					argsList.add("-cp");
+					classPath += File.pathSeparator + jarFilePath;
+//					if(File.)
+				}else {
+					MyLogger.i().warn("add classpath error:can't analysis file " + jarFilePath);
+				}
+			} else {
+				MyLogger.i().warn("add classpath error:doesn't exist file " + jarFilePath);
+			}
+		}
+		argsList.add(classPath);
+//		argsList.add(classPath.substring(1));
 	}
 	/**
 	 * @param argsList
@@ -82,6 +133,8 @@ public abstract class AbstractSootAna {
 		argsList.add("-w");
 		argsList.add("-ignore-resolving-levels");
 		argsList.add("-ignore-resolution-errors");
+
+		argsList.add("-pp");
 	}
 	protected void addIgrArgs(List<String> argsList) {
 		argsList.addAll(Arrays.asList(new String[] { "-p", "wjop", "off", }));
