@@ -1,7 +1,7 @@
 package neu.lab.conflict.util.soot;
 
 import neu.lab.conflict.util.MyLogger;
-import neu.lab.conflict.vo.HostProjectInfo;
+import nju.lab.DSchecker.model.HostProjectInfo;
 
 import java.io.File;
 import java.util.ArrayList;

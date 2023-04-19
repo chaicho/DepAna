@@ -1,6 +1,9 @@
 package neu.lab.conflict.vo;
 //import neu.lab.conflict.util.risk.ConflictJRisk;
 import neu.lab.conflict.util.MyLogger;
+import nju.lab.DSchecker.model.DepJar;
+import nju.lab.DSchecker.model.NodeAdapter;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

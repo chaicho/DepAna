@@ -6,7 +6,7 @@
 //import neu.lab.conflict.util.LibCopyInfo;
 //import neu.lab.conflict.util.MyLogger;
 //import neu.lab.conflict.util.risk.DepJarJRisk;
-//import neu.lab.conflict.vo.DepJar;
+//import nju.lab.DSchecker.model.DepJar;
 //import soot.SceneTransformer;
 //import soot.jimple.toolkits.callgraph.CHATransformer;
 //

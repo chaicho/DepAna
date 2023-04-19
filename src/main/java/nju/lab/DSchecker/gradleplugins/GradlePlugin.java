@@ -1,10 +1,9 @@
-//import neu.lab.conflict.tasks.DownloadArtifactTask;
-import neu.lab.conflict.tasks.GraphResolvedComponentsAndFiles;
-import neu.lab.conflict.tasks.LibrarySmellDetectTask;
+package nju.lab.DSchecker.gradleplugins;//import neu.lab.conflict.tasks.DownloadArtifactTask;
+import nju.lab.DSchecker.gradleplugins.tasks.GraphResolvedComponentsAndFiles;
+import nju.lab.DSchecker.gradleplugins.tasks.LibrarySmellDetectTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Transformer;
-import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ConfigurationContainer;
 import org.gradle.api.artifacts.ResolvableDependencies;
 import org.gradle.api.artifacts.component.ComponentArtifactIdentifier;

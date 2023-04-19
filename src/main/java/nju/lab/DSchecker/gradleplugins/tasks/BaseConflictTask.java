@@ -1,12 +1,11 @@
-package neu.lab.conflict.tasks;
+package nju.lab.DSchecker.gradleplugins.tasks;
 
 import lombok.Getter;
-import neu.lab.conflict.ConflictHandler.UnUsedSmell;
+import nju.lab.DSchecker.analyze.UnUsedSmell;
 import neu.lab.conflict.container.DepJars;
 import neu.lab.conflict.container.NodeAdapters;
 import neu.lab.conflict.util.MyLogger;
-import neu.lab.conflict.util.soot.TypeAna;
-import neu.lab.conflict.vo.HostProjectInfo;
+import nju.lab.DSchecker.model.HostProjectInfo;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.*;
@@ -20,7 +19,7 @@ import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.*;
 import neu.lab.conflict.util.GradleUtil;
-import neu.lab.conflict.vo.DepJar;
+import nju.lab.DSchecker.model.DepJar;
 
 import java.io.File;
 import java.io.FileWriter;

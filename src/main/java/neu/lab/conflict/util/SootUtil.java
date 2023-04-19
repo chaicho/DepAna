@@ -1,5 +1,5 @@
 package neu.lab.conflict.util;
-import neu.lab.conflict.vo.ClassVO;
+import nju.lab.DSchecker.model.ClassVO;
 import neu.lab.conflict.vo.MethodVO;
 import soot.Scene;
 import soot.SootClass;

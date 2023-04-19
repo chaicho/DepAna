@@ -1,20 +1,17 @@
 package neu.lab.conflict.util;
 
 
-import neu.lab.conflict.tasks.BaseConflictTask;
-import neu.lab.conflict.vo.NodeAdapter;
+import nju.lab.DSchecker.gradleplugins.tasks.BaseConflictTask;
+import nju.lab.DSchecker.model.NodeAdapter;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ResolvedArtifact;
 import org.gradle.api.artifacts.ResolvedConfiguration;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.gradle.api.artifacts.query.ArtifactResolutionQuery;
-import org.gradle.api.artifacts.result.ArtifactResolutionResult;
 import org.gradle.api.logging.Logger;
-import org.gradle.jvm.JvmLibrary;
 
 import java.io.File;
-import java.util.List;
 import java.util.Set;
 
 /**

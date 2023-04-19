@@ -1,8 +1,8 @@
 package neu.lab.conflict.statistics;
 
 
-import neu.lab.conflict.vo.ClassVO;
-import neu.lab.conflict.vo.DepJar;
+import nju.lab.DSchecker.model.ClassVO;
+import nju.lab.DSchecker.model.DepJar;
 import neu.lab.conflict.vo.MethodVO;
 
 import java.util.*;

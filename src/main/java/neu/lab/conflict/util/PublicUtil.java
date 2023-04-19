@@ -1,6 +1,6 @@
 package neu.lab.conflict.util;
 import neu.lab.conflict.container.DepJars;
-import neu.lab.conflict.vo.DepJar;
+import nju.lab.DSchecker.model.DepJar;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;

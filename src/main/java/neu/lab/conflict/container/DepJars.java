@@ -1,9 +1,8 @@
 package neu.lab.conflict.container;
 
-import neu.lab.conflict.util.GradleUtil;
 import neu.lab.conflict.util.MyLogger;
-import neu.lab.conflict.vo.DepJar;
-import neu.lab.conflict.vo.NodeAdapter;
+import nju.lab.DSchecker.model.DepJar;
+import nju.lab.DSchecker.model.NodeAdapter;
 
 import java.io.File;
 import java.util.*;

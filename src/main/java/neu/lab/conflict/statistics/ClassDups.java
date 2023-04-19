@@ -3,7 +3,7 @@
 //import neu.lab.conflict.container.DepJars;
 //import neu.lab.conflict.statistics.ClassDup;
 //import neu.lab.conflict.util.risk.DepJarJRisk;
-//import neu.lab.conflict.vo.DepJar;
+//import nju.lab.DSchecker.model.DepJar;
 //
 //import java.util.*;
 //

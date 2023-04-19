@@ -1,7 +1,7 @@
 package neu.lab.conflict.util.soot.tf;
 
 import neu.lab.conflict.util.SootUtil;
-import neu.lab.conflict.vo.ClassVO;
+import nju.lab.DSchecker.model.ClassVO;
 import soot.SceneTransformer;
 
 import java.util.List;

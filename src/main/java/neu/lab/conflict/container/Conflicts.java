@@ -1,7 +1,7 @@
 //package neu.lab.conflict.container;
 //import neu.lab.conflict.util.Conf;
 //import neu.lab.conflict.vo.Conflict;
-//import neu.lab.conflict.vo.NodeAdapter;
+//import nju.lab.DSchecker.model.NodeAdapter;
 //import java.util.ArrayList;
 //import java.util.Arrays;
 //import java.util.List;

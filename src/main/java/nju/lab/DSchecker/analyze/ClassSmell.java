@@ -1,4 +1,4 @@
-package neu.lab.conflict.ConflictHandler;
+package nju.lab.DSchecker.analyze;
 
 import neu.lab.conflict.container.DepJars;
 

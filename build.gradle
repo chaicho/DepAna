@@ -12,14 +12,14 @@ repositories {
 gradlePlugin {
     plugins {
         create("test") {
-            id = "test.plugin"
-            implementationClass = "TestPlugin"
+            id = "nju.lab.DSchecker"
+            implementationClass = "nju.lab.DSchecker.gradleplugins.TestPlugin"
         }
     }
     plugins {
         create("testnew") {
             id = "test.newplugin"
-            implementationClass = "GradlePlugin"
+            implementationClass = "nju.lab.DSchecker.gradleplugins.GradlePlugin"
         }
     }
 }

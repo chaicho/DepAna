@@ -9,7 +9,7 @@ import java.util.Set;
 import neu.lab.conflict.util.SootUtil;
 import neu.lab.conflict.util.soot.tf.DsTransformer;
 
-import neu.lab.conflict.vo.ClassVO;
+import nju.lab.DSchecker.model.ClassVO;
 import soot.G;
 import soot.Main;
 import soot.PackManager;

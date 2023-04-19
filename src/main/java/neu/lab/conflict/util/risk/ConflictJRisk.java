@@ -5,7 +5,7 @@
 //import neu.lab.conflict.graph.Dog.Strategy;
 //import neu.lab.conflict.util.*;
 //import neu.lab.conflict.vo.Conflict;
-//import neu.lab.conflict.vo.DepJar;
+//import nju.lab.DSchecker.model.DepJar;
 //import java.io.File;
 //import java.util.*;
 ///**

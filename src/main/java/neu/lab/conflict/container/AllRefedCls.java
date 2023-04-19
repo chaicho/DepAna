@@ -6,8 +6,7 @@ import neu.lab.conflict.vo.GlobalVar;
 import neu.lab.conflict.util.GradleUtil;
 //import neu.lab.conflict.util.MavenUtil;
 import neu.lab.conflict.util.SootUtil;
-import neu.lab.conflict.vo.DepJar;
-import neu.lab.conflict.vo.GlobalVar;
+import nju.lab.DSchecker.model.DepJar;
 //import neu.lab.vo.GlobalVar;
 
 import java.util.*;

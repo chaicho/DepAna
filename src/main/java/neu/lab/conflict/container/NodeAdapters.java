@@ -2,14 +2,13 @@ package neu.lab.conflict.container;
 
 import neu.lab.conflict.util.GradleUtil;
 import neu.lab.conflict.util.MyLogger;
-import neu.lab.conflict.vo.NodeAdapter;
+import nju.lab.DSchecker.model.NodeAdapter;
 import org.gradle.api.artifacts.ResolvedArtifact;
 import org.gradle.api.artifacts.component.*;
 import org.gradle.api.artifacts.result.DependencyResult;
 import org.gradle.api.artifacts.result.ResolvedComponentResult;
 import org.gradle.api.artifacts.result.ResolvedDependencyResult;
 
-import java.io.File;
 import java.util.*;
 
 public class NodeAdapters {

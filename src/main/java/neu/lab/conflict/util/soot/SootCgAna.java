@@ -13,7 +13,7 @@
 //import neu.lab.conflict.util.SootUtil;
 //import neu.lab.conflict.util.risk.DepJarJRisk;
 //import neu.lab.conflict.util.soot.tf.AddEntryTransformer;
-//import neu.lab.conflict.vo.DepJar;
+//import nju.lab.DSchecker.model.DepJar;
 //import neu.lab.conflict.vo.GlobalVar;
 //import soot.PackManager;
 //import soot.Scene;

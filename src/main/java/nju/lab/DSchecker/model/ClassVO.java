@@ -1,4 +1,6 @@
-package neu.lab.conflict.vo;
+package nju.lab.DSchecker.model;
+
+import neu.lab.conflict.vo.MethodVO;
 
 import java.util.HashSet;
 import java.util.Set;

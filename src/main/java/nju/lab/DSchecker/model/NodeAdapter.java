@@ -1,4 +1,4 @@
-package neu.lab.conflict.vo;
+package nju.lab.DSchecker.model;
 
 import lombok.Setter;
 import neu.lab.conflict.util.MyLogger;
@@ -8,7 +8,6 @@ import lombok.Data;
 import org.gradle.api.artifacts.component.ComponentSelector;
 import org.gradle.api.artifacts.result.ResolvedComponentResult;
 import org.gradle.api.artifacts.result.ResolvedDependencyResult;
-import org.gradle.api.artifacts.result.ResolvedVariantResult;
 
 import java.io.IOException;
 import java.util.ArrayList;

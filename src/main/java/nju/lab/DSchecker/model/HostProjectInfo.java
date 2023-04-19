@@ -1,4 +1,4 @@
-package neu.lab.conflict.vo;
+package nju.lab.DSchecker.model;
 
 import java.io.File;
 import java.util.List;

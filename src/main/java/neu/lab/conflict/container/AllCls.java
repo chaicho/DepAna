@@ -1,8 +1,8 @@
 package neu.lab.conflict.container;
 
 import lombok.Getter;
-import neu.lab.conflict.vo.DepJar;
-//import neu.lab.conflict.vo.DepJar;
+import nju.lab.DSchecker.model.DepJar;
+//import nju.lab.DSchecker.model.DepJar;
 
 import java.util.HashSet;
 import java.util.Set;

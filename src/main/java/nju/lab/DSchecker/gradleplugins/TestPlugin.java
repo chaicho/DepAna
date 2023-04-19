@@ -1,4 +1,6 @@
-import neu.lab.conflict.tasks.ReportArtifactMetadataTask;
+package nju.lab.DSchecker.gradleplugins;
+
+import nju.lab.DSchecker.gradleplugins.tasks.ReportArtifactMetadataTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
@@ -12,10 +14,8 @@ import org.gradle.api.file.Directory;
 import org.gradle.api.file.ProjectLayout;
 import org.gradle.api.file.RegularFile;
 import org.gradle.api.provider.Provider;
-import neu.lab.conflict.tasks.BaseConflictTask;
+import nju.lab.DSchecker.gradleplugins.tasks.BaseConflictTask;
 import org.gradle.api.tasks.TaskContainer;
-import org.gradle.api.tasks.SourceSet;
-import org.gradle.api.tasks.SourceSetContainer;
 
 import java.util.Collection;
 import java.util.List;

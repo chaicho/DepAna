@@ -1,6 +1,6 @@
 package neu.lab.conflict.util;
 
-import neu.lab.conflict.vo.NodeAdapter;
+import nju.lab.DSchecker.model.NodeAdapter;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
 
 import java.util.ArrayList;

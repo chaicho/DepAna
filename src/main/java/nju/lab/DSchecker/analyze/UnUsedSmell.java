@@ -1,7 +1,7 @@
-package neu.lab.conflict.ConflictHandler;
+package nju.lab.DSchecker.analyze;
 
 import neu.lab.conflict.util.javassist.GetRefedClasses;
-import neu.lab.conflict.vo.HostProjectInfo;
+import nju.lab.DSchecker.model.HostProjectInfo;
 
 import java.util.Set;
 

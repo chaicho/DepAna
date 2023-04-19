@@ -7,7 +7,7 @@
 //import neu.lab.conflict.util.soot.SootJRiskCg;
 //import neu.lab.conflict.util.Conf;
 //import neu.lab.conflict.util.SootUtil;
-//import neu.lab.conflict.vo.DepJar;
+//import nju.lab.DSchecker.model.DepJar;
 //import neu.lab.conflict.vo.GsonEdgeVO;
 //import neu.lab.conflict.vo.MethodCall;
 //import soot.jimple.toolkits.callgraph.CallGraph;

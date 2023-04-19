@@ -1,6 +1,6 @@
 //package neu.lab.conflict.statistics;
 //
-//import neu.lab.conflict.vo.DepJar;
+//import nju.lab.DSchecker.model.DepJar;
 //
 //import java.util.ArrayList;
 //import java.util.List;

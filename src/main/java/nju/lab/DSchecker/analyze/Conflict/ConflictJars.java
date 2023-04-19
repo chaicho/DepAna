@@ -1,6 +1,6 @@
-package neu.lab.conflict.ConflictHandler.Conflict;
+package nju.lab.DSchecker.analyze.Conflict;
 
-import neu.lab.conflict.vo.DepJar;
+import nju.lab.DSchecker.model.DepJar;
 
 import java.util.HashMap;
 import java.util.HashSet;

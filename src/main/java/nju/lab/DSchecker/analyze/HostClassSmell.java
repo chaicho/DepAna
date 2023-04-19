@@ -1,4 +1,4 @@
-package neu.lab.conflict.ConflictHandler;
+package nju.lab.DSchecker.analyze;
 
 public class HostClassSmell extends BaseSmell{
     public static HostClassSmell instance;

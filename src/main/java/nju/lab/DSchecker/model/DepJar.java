@@ -1,4 +1,4 @@
-package neu.lab.conflict.vo;
+package nju.lab.DSchecker.model;
 
 import javassist.ClassPool;
 import lombok.Data;
@@ -11,7 +11,10 @@ import neu.lab.conflict.util.GradleUtil;
 import neu.lab.conflict.util.MyLogger;
 import neu.lab.conflict.util.SootUtil;
 import neu.lab.conflict.util.soot.JarAna;
+import neu.lab.conflict.vo.GlobalVar;
+import neu.lab.conflict.vo.MethodVO;
 
+import java.io.File;
 import java.util.*;
 
 @Data
@@ -23,6 +26,8 @@ public class DepJar {
     private String version;// version
     private String classifier;
     private List<String> jarFilePaths;
+
+    private File file;
     private Set<String> allCls;
     private Map<String, ClassVO> clsTb = null;// all class in jar
 
