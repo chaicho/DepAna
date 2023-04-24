@@ -45,7 +45,12 @@ public class HostProjectInfo {
             }
         }
     }
-
+    public Collection<String> getDuplicateClassNames(){
+        return usedDependenciesPerClass.keySet()
+                .stream()
+                .filter(className -> usedDependenciesPerClass.get(className).size() > 1)
+                .collect(Collectors.toList());
+    }
     public Collection<DepJar> getUsedDepFromClass(String className) {
         if(usedDependenciesPerClass.get(className).size() == 0)
             return Collections.emptyList();

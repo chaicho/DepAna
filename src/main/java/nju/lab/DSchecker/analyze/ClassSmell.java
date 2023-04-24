@@ -1,6 +1,10 @@
 package nju.lab.DSchecker.analyze;
 
 import neu.lab.conflict.container.DepJars;
+import nju.lab.DSchecker.model.DepJar;
+import nju.lab.DSchecker.model.HostProjectInfo;
+
+import java.util.Collection;
 
 public class ClassSmell implements BaseSmell {
     public static  ClassSmell instance;
@@ -15,13 +19,14 @@ public class ClassSmell implements BaseSmell {
 
     @Override
     public void detect(){
-        DepJars.i().getAllDepJar().forEach(depJar -> {
-//                depJar.initClsTbRealTime();
-                depJar.getClsTb().forEach((clssig,classVO) -> {
-                    System.out.println(clssig);
-                });
+        Collection<String> duplicateClassNames = HostProjectInfo.i().getDuplicateClassNames();
+        for(String className : duplicateClassNames){
+            Collection<DepJar> depJars = HostProjectInfo.i().getUsedDepFromClass(className);
+            System.out.println("Duplicate Class Smell: " + className);
+            for(DepJar depJar : depJars){
+               System.out.println(   "in " + depJar.getName());
             }
-        );
+        }
     }
 
 }

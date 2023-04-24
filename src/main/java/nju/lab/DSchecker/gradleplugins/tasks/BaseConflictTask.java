@@ -6,6 +6,8 @@ import neu.lab.conflict.container.DepJars;
 import neu.lab.conflict.container.NodeAdapters;
 import neu.lab.conflict.util.MyLogger;
 import nju.lab.DSchecker.analyze.BloatedSmell;
+import nju.lab.DSchecker.analyze.ClassSmell;
+import nju.lab.DSchecker.analyze.LibrarySmell;
 import nju.lab.DSchecker.analyze.UnDeclaredSmell;
 import nju.lab.DSchecker.model.HostProjectInfo;
 import nju.lab.DSchecker.util.soot.TypeAna;
@@ -172,8 +174,7 @@ public abstract class BaseConflictTask extends DefaultTask {
         System.out.println("Calculate classes");
 
         AllCls.i().init(DepJars.i());
-//        LibrarySmell.getInstance().detect();
-//        ClassSmell.i().detect();
+
         HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().buildDepClassMap();
@@ -181,6 +182,9 @@ public abstract class BaseConflictTask extends DefaultTask {
 
         TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
 
+        LibrarySmell.i().detect();
+        ClassSmell.i().detect();
+        ClassSmell.i().detect();
         BloatedSmell.i().detect();
         UnDeclaredSmell.i().detect();
 
