@@ -42,7 +42,7 @@ public class AllCls {
 		for (DepJar depJar : depJars.getAllDepJar()) {
 				if (depJar.isSelected()) {
 					//得到depJar中所有的类
-					clses.addAll(depJar.getAllCls(true));
+					clses.addAll(depJar.getAllCls());
 				}
 			}
 
@@ -56,9 +56,9 @@ public class AllCls {
 			if (depJar.isSelected()) {
 				//得到depJar中所有的类
 				if (depJar.isSameLib(usedDepJar)) {
-					clses.addAll(usedDepJar.getAllCls(true));
+					clses.addAll(usedDepJar.getAllCls());
 				} else {
-					clses.addAll(depJar.getAllCls(true));
+					clses.addAll(depJar.getAllCls());
 				}
 			}
 		}

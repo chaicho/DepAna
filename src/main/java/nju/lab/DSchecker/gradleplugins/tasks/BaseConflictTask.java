@@ -1,11 +1,13 @@
 package nju.lab.DSchecker.gradleplugins.tasks;
 
 import lombok.Getter;
+import neu.lab.conflict.container.AllCls;
 import nju.lab.DSchecker.analyze.UnUsedSmell;
 import neu.lab.conflict.container.DepJars;
 import neu.lab.conflict.container.NodeAdapters;
 import neu.lab.conflict.util.MyLogger;
 import nju.lab.DSchecker.model.HostProjectInfo;
+import nju.lab.DSchecker.util.soot.TypeAna;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.*;
@@ -155,8 +157,7 @@ public abstract class BaseConflictTask extends DefaultTask {
 
         artifactMap = initMapArtifactByIdentifiers();
 
-        HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
-        HostProjectInfo.i().setBuildDir(buildDir);
+
     }
 
     @TaskAction
@@ -169,17 +170,21 @@ public abstract class BaseConflictTask extends DefaultTask {
         validateSysSize();
         System.out.println("Calculate classes");
 
-        //        AllCls.i().init(DepJars.i());
+        AllCls.i().init(DepJars.i());
 //        LibrarySmell.getInstance().detect();
 //        ClassSmell.i().detect();
-        UnUsedSmell.i().detect();
 
-        System.out.println(DepJars.i().getUsedJarPaths());
-        System.out.println(buildDir.getAbsolutePath());
-        System.out.println("comilesrc"+ compileSrcDirs);
+        HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
+        HostProjectInfo.i().setBuildDir(buildDir);
+        HostProjectInfo.i().buildDepClassMap();
+
+//        UnUsedSmell.i().detect();
+//        System.out.println(DepJars.i().getUsedJarPaths());
+//        System.out.println(buildDir.getAbsolutePath());
+//        System.out.println("comilesrc"+ compileSrcDirs);
 
 
-//        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
+        TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
 
 
 

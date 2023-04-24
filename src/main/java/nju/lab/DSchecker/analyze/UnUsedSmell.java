@@ -1,9 +1,14 @@
 package nju.lab.DSchecker.analyze;
 
-import neu.lab.conflict.util.javassist.GetRefedClasses;
+import nju.lab.DSchecker.model.DepJar;
+import nju.lab.DSchecker.util.soot.javassist.GetRefedClasses;
 import nju.lab.DSchecker.model.HostProjectInfo;
 
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UnUsedSmell extends BaseSmell {
     public static UnUsedSmell instance;
@@ -18,14 +23,27 @@ public class UnUsedSmell extends BaseSmell {
 
     @Override
     public void detect(){
-//        GetRefedClasses getRefedClasses = new GetRefedClasses();
         Set<String> referencedClasses = GetRefedClasses.analyzeReferencedClasses(HostProjectInfo.i().getBuildCp());
-        ;
 
-        // Print the referenced classes
-        System.out.println("Referenced classes:");
         for (String refClass : referencedClasses) {
-            System.out.println(refClass);
+            Collection<DepJar> dep = HostProjectInfo.i().getUsedDepFromClass(refClass);
+
+           if(dep.size() == 0){
+               // Mostly the case where standard Java libraries are used;
+               continue;
+           }
+
+           /* Since there are possibly several Depjars containing the same class ,we select the closest one */
+           DepJar closestDep =  dep.stream()
+                    .min(Comparator.comparingInt(DepJar::getDepth))
+                    .orElse(null); // 如果dep集合为空，则返回null
+
+            if(closestDep != null ){
+                if(closestDep.getDepth() > 0){
+                    System.out.println("Used undeclared dependencies " + refClass + " in " + closestDep.getName() + "" + closestDep.getDepth());
+                }
+            }
         }
     }
+//    public
 }

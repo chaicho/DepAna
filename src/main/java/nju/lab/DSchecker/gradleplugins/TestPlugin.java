@@ -1,6 +1,7 @@
 package nju.lab.DSchecker.gradleplugins;
 
 import nju.lab.DSchecker.gradleplugins.tasks.ReportArtifactMetadataTask;
+import nju.lab.DSchecker.gradleplugins.tasks.ReportDependencyGraphTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
@@ -9,6 +10,7 @@ import org.gradle.api.artifacts.ConfigurationContainer;
 import org.gradle.api.artifacts.ResolvableDependencies;
 import org.gradle.api.artifacts.component.ComponentArtifactIdentifier;
 import org.gradle.api.artifacts.result.ResolvedArtifactResult;
+import org.gradle.api.artifacts.result.ResolvedComponentResult;
 import org.gradle.api.artifacts.result.ResolvedVariantResult;
 import org.gradle.api.file.Directory;
 import org.gradle.api.file.ProjectLayout;
@@ -55,11 +57,11 @@ public class TestPlugin implements Plugin<Project> {
         });
 
 //
-//        target.getTasks().register("graph-report", neu.lab.tasks.ReportDependencyGraphTask.class, t -> {
-//            Provider<ResolvedComponentResult> rootComponent = target.getConfigurations().getByName("runtimeClasspath").getIncoming().getResolutionResult().getRootComponent();
-//            t.getRootComponent().set(rootComponent);
-//            t.getOutputFile().set(target.getLayout().getBuildDirectory().file("graph.txt"));
-//        });
+        project.getTasks().register("graph-report", ReportDependencyGraphTask.class, t -> {
+            Provider<ResolvedComponentResult> rootComponent = project.getConfigurations().getByName("runtimeClasspath").getIncoming().getResolutionResult().getRootComponent();
+            t.getRootComponent().set(rootComponent);
+            t.getOutputFile().set(project.getLayout().getBuildDirectory().file("graph.txt"));
+        });
     }
 
     static class IdExtractor implements Transformer<List<ComponentArtifactIdentifier>, Collection<ResolvedArtifactResult>> {

@@ -127,7 +127,7 @@ public class NodeAdapter {
         return;
     }
 
-    public int getNodeDepth() {
+    public int getDepth() {
         return depth;
     }
     public String getValidDepPath() {

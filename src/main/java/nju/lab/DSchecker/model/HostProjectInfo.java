@@ -1,6 +1,12 @@
 package nju.lab.DSchecker.model;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import neu.lab.conflict.container.DepJars;
+
 import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -8,8 +14,6 @@ import java.util.stream.Collectors;
 
 public class HostProjectInfo {
     private static HostProjectInfo instance;
-    private File buildDir;
-    private String buildPath;
 
     private HostProjectInfo() {
     }
@@ -21,11 +25,32 @@ public class HostProjectInfo {
         return instance;
     }
 
+    private final Multimap<String, DepJar> usedDependenciesPerClass = ArrayListMultimap.create();
+
+    private File buildDir;
+    private String buildPath;
+
+
     Set<File> compileSrcFiles ;
 
 
     List<String> compileSrcDirs = null;
 
+    public void buildDepClassMap() {
+        for (DepJar depJar : DepJars.i().getUsedDepJars()) {
+            System.out.println("DepJars: " + depJar.getName());
+            for (String className : depJar.getAllCls()) {
+                usedDependenciesPerClass.put(className, depJar);
+//                System.out.println(className + " " + depJar.getName());
+            }
+        }
+    }
+
+    public Collection<DepJar> getUsedDepFromClass(String className) {
+        if(usedDependenciesPerClass.get(className).size() == 0)
+            return Collections.emptyList();
+        return usedDependenciesPerClass.get(className);
+    }
     public Set<File> getCompileSrcFiles() {
         return compileSrcFiles;
     }

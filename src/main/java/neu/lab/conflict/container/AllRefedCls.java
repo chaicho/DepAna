@@ -32,7 +32,7 @@ public class AllRefedCls {
 	 */
 	public List<String> getRefPath(String refedCls) {
 		Set<String> visited = new HashSet<>();
-		Set<String> entryClses = DepJars.i().getHostDepJar().getAllCls(true);
+		Set<String> entryClses = DepJars.i().getHostDepJar().getAllCls();
 		Map<String, String> mp = new HashMap<>();
 		for (String entryCls : entryClses) {
 			boolean found = getRefedPathDfs(entryCls, refedCls, visited, mp);
@@ -147,7 +147,7 @@ public class AllRefedCls {
 			Set<String> loadedClasses = new HashSet<>();
 			try {
 				for (DepJar jar : DepJars.i().getSeqUsedDepJars()) {
-					refedClses.addAll(jar.getAllCls(true));
+					refedClses.addAll(jar.getAllCls());
 					Map<String, Collection<String>> jarRefedClses = jar.getRefedCls();
 					for (String key : jarRefedClses.keySet()) {
 						if (!loadedClasses.contains(key)) {
@@ -295,7 +295,7 @@ public class AllRefedCls {
 					pool.appendClassPath(DepJars.i().getHostDepJar().getJarFilePath().replace("test-classes", "classes"));
 				}
 				// add all host defined classes into worklist
-				workList.addAll(DepJars.i().getHostDepJar().getAllCls(true));
+				workList.addAll(DepJars.i().getHostDepJar().getAllCls());
 				while (!workList.isEmpty()) {
 					String cls = workList.poll();
 					if (SootUtil.getInstance().isJavaLibraryClass(cls)) {
@@ -338,7 +338,7 @@ public class AllRefedCls {
 					}
 				}
 				// add all host defined classes into worklist
-				workList.addAll(DepJars.i().getHostDepJar().getAllCls(true));
+				workList.addAll(DepJars.i().getHostDepJar().getAllCls());
 				// while worklist not empty
 				while (!workList.isEmpty()) {
 					// cls = worklist.poll

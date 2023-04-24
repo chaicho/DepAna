@@ -41,7 +41,7 @@ public class DepJars {
 //        System.out.println(nodeAdapters);
         for (NodeAdapter nodeAdapter : nodeAdapters.getAllNodeAdapter()) {
             DepJar addDepJar = new DepJar(nodeAdapter.getGroupId(), nodeAdapter.getArtifactId(), nodeAdapter.getVersion(),
-                    nodeAdapter.getClassifier(), nodeAdapter.getFilePath(),nodeAdapter.getPriority());
+                    nodeAdapter.getClassifier(), nodeAdapter.getFilePath(),nodeAdapter.getPriority(), nodeAdapter.getDepth());
             if (!container.contains(addDepJar)) {
                 container.add(addDepJar);
                 seqContainer.add(addDepJar);

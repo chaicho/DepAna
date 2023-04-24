@@ -42,13 +42,13 @@ public class NodeAdapters {
             for (DependencyResult dependency : component.getDependencies()) {
                 if (dependency instanceof ResolvedDependencyResult) {
                     ResolvedDependencyResult resolvedDependency = (ResolvedDependencyResult) dependency;
-                    ResolvedComponentResult selectdCompoment = resolvedDependency.getSelected();
-                    Set<ResolvedArtifact> artifacts = newArtifactMap.get(selectdCompoment.getId());
+                    ResolvedComponentResult selectedComponent = resolvedDependency.getSelected();
+                    Set<ResolvedArtifact> artifacts = newArtifactMap.get(selectedComponent.getId());
 
                     NodeAdapter nodeAdapter =  new NodeAdapter(resolvedDependency.getSelected(),artifacts, resolvedDependency, dep, resolvedDependency.getRequested());
                     i().container.add(nodeAdapter);
                     if(nodeAdapter.isNodeSelected()) {
-                        walk(selectdCompoment, newArtifactMap, seen, dep + 1);
+                        walk(selectedComponent, newArtifactMap, seen, dep + 1);
                     }
                     else{
 //                        Artifact Unresolved, the node is not selected.

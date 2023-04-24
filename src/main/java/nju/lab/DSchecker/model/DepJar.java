@@ -10,7 +10,7 @@ import neu.lab.conflict.container.DepJars;
 import neu.lab.conflict.util.GradleUtil;
 import neu.lab.conflict.util.MyLogger;
 import neu.lab.conflict.util.SootUtil;
-import neu.lab.conflict.util.soot.JarAna;
+import nju.lab.DSchecker.util.soot.JarAna;
 import neu.lab.conflict.vo.GlobalVar;
 import neu.lab.conflict.vo.MethodVO;
 
@@ -21,6 +21,7 @@ import java.util.*;
 @Getter
 @Setter
 public class DepJar {
+    private final int depth;
     private String groupId;
     private String artifactId;// artifactId
     private String version;// version
@@ -36,14 +37,16 @@ public class DepJar {
     private int priority;
     private HashSet<String> allMthd;
 
+    
 
-    public DepJar(String groupId, String artifactId, String version, String classifier, List<String> jarFilePaths,int priority) {
+    public DepJar(String groupId, String artifactId, String version, String classifier, List<String> jarFilePaths,int priority,int depth) {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
         this.classifier = classifier;
         this.jarFilePaths = jarFilePaths;
         this.priority = priority;
+        this.depth = depth;
     }
 
     public String getGroupId() {
@@ -58,7 +61,7 @@ public class DepJar {
     public String getClassifier() {
         return classifier;
     }
-
+    public int getDepth() { return depth; }
     public Map<String, ClassVO> getClsTb() {
         if(clsTb==null){
             clsTb = initClsTbRealTime();
@@ -89,12 +92,12 @@ public class DepJar {
         return nodeAdapters.iterator().next().isNodeSelected();
     }
 
-    synchronized public Set<String> getAllCls(boolean useTarget) {
+    synchronized public Set<String> getAllCls() {
         if (allCls == null) {
             if (!GlobalVar.i().useAllClsBuffer) {
-                allCls =  getAllClsRealTime(useTarget);
+                allCls =  getAllClsRealTime(true);
             } else {
-                allCls =  getAllClsWithBuffer(useTarget);
+                allCls =  getAllClsWithBuffer(true);
             }
         }
         return allCls;
@@ -289,7 +292,7 @@ public class DepJar {
         try {
             ClassPool pool = new ClassPool();
             pool.appendClassPath(this.getJarFilePath());
-            for (String cls : this.getAllCls(true)) {
+            for (String cls : this.getAllCls()) {
                 if (pool.getOrNull(cls) != null) {
                     if (!ret.containsKey(cls)) {
                         ret.put(cls, new LinkedList<>());
@@ -357,7 +360,7 @@ public class DepJar {
     }
 
     public boolean containsCls(String clsSig) {
-        return this.getAllCls(true).contains(clsSig);
+        return this.getAllCls().contains(clsSig);
     }
 
     public Set<String> getRiskClasses(Collection<String> entryClasses) {
