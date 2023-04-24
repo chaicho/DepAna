@@ -51,6 +51,11 @@ public class HostProjectInfo {
             return Collections.emptyList();
         return usedDependenciesPerClass.get(className);
     }
+    public DepJar getSingleUsedDepFromClass(String className){
+        if(usedDependenciesPerClass.get(className).size() > 1 || usedDependenciesPerClass.get(className).size() == 0)
+            return null;
+        return usedDependenciesPerClass.get(className).iterator().next();
+    }
     public Set<File> getCompileSrcFiles() {
         return compileSrcFiles;
     }

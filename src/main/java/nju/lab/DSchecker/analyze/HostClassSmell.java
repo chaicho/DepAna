@@ -1,6 +1,6 @@
 package nju.lab.DSchecker.analyze;
 
-public class HostClassSmell extends BaseSmell{
+public class HostClassSmell implements BaseSmell{
     public static HostClassSmell instance;
     private HostClassSmell() {
     }

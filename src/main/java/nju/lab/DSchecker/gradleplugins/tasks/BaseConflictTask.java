@@ -2,10 +2,11 @@ package nju.lab.DSchecker.gradleplugins.tasks;
 
 import lombok.Getter;
 import neu.lab.conflict.container.AllCls;
-import nju.lab.DSchecker.analyze.UnUsedSmell;
 import neu.lab.conflict.container.DepJars;
 import neu.lab.conflict.container.NodeAdapters;
 import neu.lab.conflict.util.MyLogger;
+import nju.lab.DSchecker.analyze.BloatedSmell;
+import nju.lab.DSchecker.analyze.UnDeclaredSmell;
 import nju.lab.DSchecker.model.HostProjectInfo;
 import nju.lab.DSchecker.util.soot.TypeAna;
 import org.gradle.api.DefaultTask;
@@ -173,10 +174,18 @@ public abstract class BaseConflictTask extends DefaultTask {
         AllCls.i().init(DepJars.i());
 //        LibrarySmell.getInstance().detect();
 //        ClassSmell.i().detect();
-
         HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().buildDepClassMap();
+
+
+        TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
+
+        BloatedSmell.i().detect();
+        UnDeclaredSmell.i().detect();
+
+
+
 
 //        UnUsedSmell.i().detect();
 //        System.out.println(DepJars.i().getUsedJarPaths());
@@ -184,7 +193,6 @@ public abstract class BaseConflictTask extends DefaultTask {
 //        System.out.println("comilesrc"+ compileSrcDirs);
 
 
-        TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
 
 
 

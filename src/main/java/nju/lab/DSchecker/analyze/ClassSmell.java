@@ -2,7 +2,7 @@ package nju.lab.DSchecker.analyze;
 
 import neu.lab.conflict.container.DepJars;
 
-public class ClassSmell extends BaseSmell {
+public class ClassSmell implements BaseSmell {
     public static  ClassSmell instance;
     private ClassSmell() {
     }

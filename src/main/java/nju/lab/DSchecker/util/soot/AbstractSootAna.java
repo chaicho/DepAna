@@ -128,7 +128,7 @@ public abstract class AbstractSootAna {
 	 * @param argsList
 	 */
 	protected void addExcludeArgs(List<String> argsList) {
-		argsList.add("-app");
+//		argsList.add("-app");
 		argsList.addAll(Arrays.asList(new String[] { "-no-bodies-for-excluded", }));
 		for (String excludePkg : excludeList()) {
 			argsList.addAll(Arrays.asList(new String[]{"-x", excludePkg,}));

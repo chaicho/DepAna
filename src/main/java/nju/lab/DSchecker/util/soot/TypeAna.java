@@ -60,26 +60,15 @@ public class TypeAna extends AbstractSootAna{
         }
 
         SootClass mainClass = Scene.v().getMainClass();
+        System.out.println("------mainClass------");
         System.out.println(mainClass);
+        System.out.println("-----------EntryPoints-------------");
+        System.out.println(Scene.v().getEntryPoints());
+        System.out.println("---------------ArgumentClasses-------------");
+        System.out.println(Scene.v().getApplicationClasses());
+        System.out.println("---------------CallGraph-------------");
         System.out.println(Scene.v().getCallGraph().size());
         String callGraphString = Scene.v().getCallGraph().toString();
-        ReachableMethods reachableMethods = Scene.v().getReachableMethods();
-        QueueReader queueReader = reachableMethods.listener();
-        while (queueReader.hasNext()){
-            MethodOrMethodContext sootMethodContext = ((MethodOrMethodContext) queueReader.next());
-            SootMethod sootMethod = sootMethodContext.method();
-            Context context = sootMethodContext.context();
-            if(sootMethod.isJavaLibraryMethod()){
-                continue;
-            }
-            String declaringclassName = sootMethod.getDeclaringClass().getName();
-            HostProjectInfo.i().getUsedDepFromClass(declaringclassName).forEach(depJar -> {
-                System.out.println(depJar.getName());
-            });
-//            System.out.println(sootMethod.getDeclaringClass());
-//            System.out.println(sootMethod.getDeclaringClass().getName() + "." + sootMethod.getName() + " " + context.toString());
-
-        }
 
         try {
             FileWriter fileWriter = new FileWriter("CallGraph_Small.txt");
@@ -94,9 +83,10 @@ public class TypeAna extends AbstractSootAna{
     public void addCgArgs(List<String> argsList){
         argsList.add("-p");
         argsList.add("cg");
-        argsList.add("verbose:true");
-        argsList.add("implicit-entry:false");
-        argsList.add("exclude:java.*");
+        argsList.add("verbose:true,all-reachable:true,implicit-entry:false");
+//        argsList.add("implicit-entry:false,");
+//        argsList.add("all-reachable:true");
+//        argsList.add("exclude:java.*");
     }
 
     public static void main(String[] args){

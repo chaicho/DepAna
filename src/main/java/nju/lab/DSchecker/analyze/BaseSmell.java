@@ -1,6 +1,6 @@
 package nju.lab.DSchecker.analyze;
 
-public abstract class BaseSmell {
+public abstract interface BaseSmell {
 
     public abstract void detect();
 }
