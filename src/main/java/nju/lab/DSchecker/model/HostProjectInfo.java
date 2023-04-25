@@ -3,8 +3,6 @@ package nju.lab.DSchecker.model;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import neu.lab.conflict.container.DepJars;
-import soot.SootClass;
-import soot.SootMethod;
 import soot.SourceLocator;
 
 import java.io.File;
@@ -14,6 +12,7 @@ import java.util.stream.Collectors;
 
 public class HostProjectInfo {
     private static HostProjectInfo instance;
+    private Set<String> apiDepJars = new HashSet<>();
 
     private HostProjectInfo() {
     }
@@ -109,5 +108,13 @@ public class HostProjectInfo {
         }
         return depJars;
     }
-//    public void addABIClasses(Set<>)
+
+    public void setApiDepJars(Set<String> apiArtifacts) {
+        this.apiDepJars = apiArtifacts;
+        System.out.println(apiArtifacts);
+    }
+    public Set<String> getApiDepJars() {
+        return apiDepJars;
+    }
+
 }

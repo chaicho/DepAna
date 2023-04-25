@@ -1,14 +1,10 @@
 package nju.lab.DSchecker.gradleplugins.tasks;
 
 import lombok.Getter;
-import neu.lab.conflict.container.AllCls;
 import neu.lab.conflict.container.DepJars;
 import neu.lab.conflict.container.NodeAdapters;
 import neu.lab.conflict.util.MyLogger;
-import nju.lab.DSchecker.analyze.BloatedSmell;
-import nju.lab.DSchecker.analyze.ClassSmell;
-import nju.lab.DSchecker.analyze.LibrarySmell;
-import nju.lab.DSchecker.analyze.UnDeclaredSmell;
+import nju.lab.DSchecker.analyze.LibraryScopeSmell;
 import nju.lab.DSchecker.model.HostProjectInfo;
 import nju.lab.DSchecker.util.soot.TypeAna;
 import org.gradle.api.DefaultTask;
@@ -164,6 +160,13 @@ public abstract class BaseConflictTask extends DefaultTask {
 
     public void getApiElements(){
         Configuration apiConf  = project.getConfigurations().getByName("apiElements");
+        DependencySet dependencies = apiConf.getAllDependencies();
+        Set<String> apiArtifacts = new HashSet<>();
+        for(Dependency dependency: dependencies){
+            apiArtifacts.add(dependency.getGroup() + ":" + dependency.getName());
+        }
+        HostProjectInfo.i().setApiDepJars(apiArtifacts);
+
     }
     @TaskAction
     void execute() throws Exception {
@@ -173,10 +176,10 @@ public abstract class BaseConflictTask extends DefaultTask {
         NodeAdapters.init(getRootComponent().get(),artifactMap);
         DepJars.init(NodeAdapters.i());
         validateSysSize();
-        System.out.println("Calculate classes");
+//        System.out.println("Calculate classes");
 
-        AllCls.i().init(DepJars.i());
-
+//        AllCls.i().init(DepJars.i());
+        getApiElements();
 
         HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
         HostProjectInfo.i().setBuildDir(buildDir);
@@ -184,7 +187,7 @@ public abstract class BaseConflictTask extends DefaultTask {
 
 //        TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
 
-//        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
+        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
 
 //
 //        LibrarySmell.i().detect();
@@ -192,7 +195,7 @@ public abstract class BaseConflictTask extends DefaultTask {
 //        ClassSmell.i().detect();
 //        BloatedSmell.i().detect();
 //        UnDeclaredSmell.i().detect();
-
+        LibraryScopeSmell.i().detect();
 
 
 
