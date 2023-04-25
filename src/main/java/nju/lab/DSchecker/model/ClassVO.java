@@ -1,5 +1,6 @@
 package nju.lab.DSchecker.model;
 
+import lombok.Getter;
 import neu.lab.conflict.vo.MethodVO;
 import soot.SootClass;
 
@@ -13,6 +14,8 @@ import java.util.Set;
 public class ClassVO {
     private String clsSig;//类标记
     private Set<MethodVO> mthds;// methods in class
+
+    private SootClass sootClass;
     private DepJar depJar;//所属的jar
     /**
      * 构造函数
@@ -25,6 +28,7 @@ public class ClassVO {
 
     public ClassVO(SootClass sootClass){
         this.clsSig = sootClass.getName();
+        this.sootClass = sootClass;
         mthds = new HashSet<MethodVO>();
     }
     /**
@@ -110,6 +114,11 @@ public class ClassVO {
      */
     public void setMthds(Set<MethodVO> mthds) {
         this.mthds = mthds;
+    }
+
+    public SootClass getSootClass() {
+        System.out.println("SootClass :" + sootClass.getName() );
+        return sootClass;
     }
     /**
      * toString

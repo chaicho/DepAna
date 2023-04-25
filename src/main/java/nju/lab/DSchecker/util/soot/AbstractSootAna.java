@@ -64,6 +64,22 @@ public abstract class AbstractSootAna {
 		return argsList;
 	}
 
+	public List<String> getArgsWithHostNoCg(List<String> jarFilePaths) {
+		List<String> argsList = new ArrayList<String>();
+		addClassPath(argsList, jarFilePaths);
+		//this class can't analysis
+		if(argsList.size()==0) {
+			return argsList;
+		}
+		addHostArg(argsList);
+		addGenArg(argsList);
+		addIgrArgs(argsList);
+		argsList.add("-p");
+		argsList.add("cg");
+		argsList.add("off");
+		return argsList;
+	}
+
 	private void addHostArg(List<String> argsList) {
 //		for (String srcDir : HostProjectInfo.i().getCompileSrcDirs()) {
 //			argsList.add("-process-dir");

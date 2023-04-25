@@ -3,6 +3,8 @@ package nju.lab.DSchecker.model;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import neu.lab.conflict.container.DepJars;
+import soot.SootClass;
+import soot.SootMethod;
 import soot.SourceLocator;
 
 import java.io.File;
@@ -30,7 +32,9 @@ public class HostProjectInfo {
     private Set<File> compileSrcFiles ;
     //   compileSrcDirs represents the source paths of the project;
     private Set<String> compileSrcDirs = new HashSet<>();
-    private Set<ClassVO> consumerClasses;
+    private Set<ClassVO> consumerClasses = new HashSet<>();
+
+    private Set<String> ABIClasses = new HashSet<>();
 
     public void buildDepClassMap() {
         for (DepJar depJar : DepJars.i().getUsedDepJars()) {
@@ -41,10 +45,10 @@ public class HostProjectInfo {
             }
         }
         for ( String compileSrcDir: compileSrcDirs){
-            consumerClasses = SourceLocator.v().getClassesUnder(compileSrcDir)
+            consumerClasses.addAll(SourceLocator.v().getClassesUnder(compileSrcDir)
                     .stream()
                     .map(ClassVO::new)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toSet()));
             consumerClasses.forEach(consumerClass -> {
                 System.out.println("consumerClass: " + consumerClass.getClsSig());
             });
@@ -83,7 +87,7 @@ public class HostProjectInfo {
     public String getCompileSrcCp(){
         return String.join(";", getCompileSrcDirs());
     }
-
+//    void public addABItype
     public void setBuildDir(File buildDir) {
         this.buildDir = buildDir;
         this.buildPath = buildDir.getAbsolutePath();
@@ -91,4 +95,5 @@ public class HostProjectInfo {
     public String getBuildCp() {
         return buildPath + File.separator + "classes" + File.separator + "java" + File.separator + "main";
     }
+
 }

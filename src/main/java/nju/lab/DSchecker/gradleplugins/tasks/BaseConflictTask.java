@@ -179,8 +179,10 @@ public abstract class BaseConflictTask extends DefaultTask {
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().buildDepClassMap();
 
-//
 //        TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
+
+        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
+
 //
 //        LibrarySmell.i().detect();
 //        ClassSmell.i().detect();

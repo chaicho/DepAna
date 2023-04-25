@@ -2,6 +2,7 @@ package nju.lab.DSchecker.util.soot;
 
 import nju.lab.DSchecker.model.HostProjectInfo;
 import nju.lab.DSchecker.util.soot.tf.APITypeTransformer;
+import org.gradle.model.dsl.internal.transform.SourceLocation;
 import soot.*;
 import soot.jimple.toolkits.callgraph.ReachableMethods;
 import soot.options.Options;
@@ -33,8 +34,7 @@ public class TypeAna extends AbstractSootAna{
      */
 
     public void getABIType(List<String> JarPaths) {
-        List<String> args = this.getArgsWithHost(JarPaths);
-        System.out.println(args);
+        List<String> args = this.getArgsWithHostNoCg(JarPaths);
         APITypeTransformer apiTypeTransformer = new APITypeTransformer();
         PackManager.v().getPack("wjtp")
                 .add(new Transform("wjtp.APIType", apiTypeTransformer));

@@ -1,6 +1,8 @@
 package nju.lab.DSchecker.util.soot.tf;
 
+import lombok.Setter;
 import soot.*;
+import soot.util.Chain;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -9,35 +11,37 @@ import java.util.stream.Collectors;
 
 public class APITypeTransformer extends SceneTransformer {
 
-
     private Set<Type> typesUsedInSuperClasses;
     private Set<Type> typesUsedInPublicFields;
     private Set<Type> typesUsedInPublicMethodParameters;
 
+
     @Override
     protected void internalTransform(String phaseName, Map<String, String> options) {
-
-
+        Chain<SootClass> classesToBeAnalyzed = Scene.v().getApplicationClasses();
         // Get the types used in super classes or interfaces
-       typesUsedInSuperClasses = new HashSet<>();
-        for (SootClass clazz : Scene.v().getClasses()) {
-            if (clazz.hasSuperclass() && !clazz.isJavaLibraryClass()) {
+        System.out.println("System to be analyzed: " + classesToBeAnalyzed);
+        typesUsedInSuperClasses = new HashSet<>();
+
+        // Get the types used in public method parameters, including generic parameter types
+        typesUsedInPublicMethodParameters = new HashSet<>();
+
+        typesUsedInPublicFields = new HashSet<>();
+        for (SootClass clazz : classesToBeAnalyzed) {
+            if(clazz.isJavaLibraryClass()){
+                continue;
+            }
+            // Get the types used in super classes or interfaces
+            if (clazz.hasSuperclass()) {
                 typesUsedInSuperClasses.addAll(clazz.getSuperclass().getInterfaces()
                         .stream()
                         .map(sootClass -> {return sootClass.getType();})
                         .collect(Collectors.toList()));
 
                 typesUsedInSuperClasses.add(clazz.getSuperclass().getType());
-//                System.out.println(clazz.getSuperclass().getType());
             }
-        }
 
-        // Get the types used in public method parameters, including generic parameter types
-        typesUsedInPublicMethodParameters = new HashSet<>();
-        for (SootClass clazz : Scene.v().getClasses()) {
-            if(clazz.isJavaLibraryClass()){
-                continue;
-            }
+            // Get the types used in public method parameters, including generic parameter types
             for (SootMethod method : clazz.getMethods()) {
                 if (method.isPublic() || method.isProtected() || !method.isPrivate()) {
                     for (Type type : method.getParameterTypes()) {
@@ -57,15 +61,8 @@ public class APITypeTransformer extends SceneTransformer {
                     typesUsedInPublicMethodParameters.add(returnType);
                 }
             }
-        }
 
-
-        // Get the types used in public fields
-        typesUsedInPublicFields = new HashSet<>();
-        for (SootClass clazz : Scene.v().getClasses()) {
-            if(clazz.isJavaLibraryClass()){
-                continue;
-            }
+            // Get the types used in public fields
             for (SootField field : clazz.getFields()) {
                 if (field.isPublic() || field.isProtected() || !field.isPrivate()) {
                     typesUsedInPublicFields.add(field.getType());
@@ -73,9 +70,10 @@ public class APITypeTransformer extends SceneTransformer {
             }
         }
 
-        // Get the public annotation types
+
+
 //        Set<Type> publicAnnotationTypes = new HashSet<>();
-//        for (SootClass clazz : Scene.v().getClasses()) {
+//        for (SootClass clazz : classesToBeAnalyzed) {
 //            if (clazz.isAnnotation() && (clazz.isPublic() || clazz.isProtected() || !clazz.isPrivate())) {
 //                publicAnnotationTypes.add(clazz.getType());
 //            }
@@ -84,8 +82,9 @@ public class APITypeTransformer extends SceneTransformer {
         // Perform analysis using typesUsedInInternalClasses
         // ... (rest of the analysis code here)
 
-//        System.out.println("TypesUsedInSuperClasses = " + typesUsedInSuperClasses);
-//        System.out.println("TypesUsedInPublicMethodParameters = " + typesUsedInPublicMethodParameters);
-//        System.out.println("TypesUsedInPublicFields = " + typesUsedInPublicFields);
+        System.out.println("TypesUsedInSuperClasses = " + typesUsedInSuperClasses);
+        System.out.println("TypesUsedInPublicMethodParameters = " + typesUsedInPublicMethodParameters);
+        System.out.println("TypesUsedInPublicFields = " + typesUsedInPublicFields);
+
     }
 }
