@@ -3,12 +3,10 @@ package nju.lab.DSchecker.model;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import neu.lab.conflict.container.DepJars;
+import soot.SourceLocator;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -26,15 +24,13 @@ public class HostProjectInfo {
     }
 
     private final Multimap<String, DepJar> usedDependenciesPerClass = ArrayListMultimap.create();
-
     private File buildDir;
     private String buildPath;
-
-
-    Set<File> compileSrcFiles ;
-
-
-    List<String> compileSrcDirs = null;
+//    compileSrcFiles represents the source files of the project;
+    private Set<File> compileSrcFiles ;
+    //   compileSrcDirs represents the source paths of the project;
+    private Set<String> compileSrcDirs = new HashSet<>();
+    private Set<ClassVO> consumerClasses;
 
     public void buildDepClassMap() {
         for (DepJar depJar : DepJars.i().getUsedDepJars()) {
@@ -44,6 +40,16 @@ public class HostProjectInfo {
 //                System.out.println(className + " " + depJar.getName());
             }
         }
+        for ( String compileSrcDir: compileSrcDirs){
+            consumerClasses = SourceLocator.v().getClassesUnder(compileSrcDir)
+                    .stream()
+                    .map(ClassVO::new)
+                    .collect(Collectors.toSet());
+            consumerClasses.forEach(consumerClass -> {
+                System.out.println("consumerClass: " + consumerClass.getClsSig());
+            });
+        }
+
     }
     public Collection<String> getDuplicateClassNames(){
         return usedDependenciesPerClass.keySet()
@@ -66,11 +72,12 @@ public class HostProjectInfo {
     }
     public void setCompileSrcFiles(Set<File> compileSrcFiles) {
         this.compileSrcFiles = compileSrcFiles;
+        this.compileSrcDirs = compileSrcFiles.stream()
+                                             .map(File::getAbsolutePath)
+                                             .collect(Collectors.toSet());
     }
-    public List<String> getCompileSrcDirs() {
-        if (compileSrcDirs != null)
-            return compileSrcDirs;
-        compileSrcDirs = compileSrcFiles.stream().map(File::getAbsolutePath).collect(Collectors.toList());
+    public Set<String> getCompileSrcDirs() {
+
         return compileSrcDirs;
     }
     public String getCompileSrcCp(){

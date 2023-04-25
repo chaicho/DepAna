@@ -1,6 +1,7 @@
 package nju.lab.DSchecker.model;
 
 import neu.lab.conflict.vo.MethodVO;
+import soot.SootClass;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +20,11 @@ public class ClassVO {
      */
     public ClassVO(String clsSig) {
         this.clsSig = clsSig;
+        mthds = new HashSet<MethodVO>();
+    }
+
+    public ClassVO(SootClass sootClass){
+        this.clsSig = sootClass.getName();
         mthds = new HashSet<MethodVO>();
     }
     /**

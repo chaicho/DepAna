@@ -136,20 +136,7 @@ public class DepJar {
 
     synchronized public Set<String> getAllClsRealTime(boolean useTarget) {
         if (allCls == null) {
-            /**
-             * get AllCls or
-             */
-            if (GlobalVar.i().sootProcess) {
-//                TODO
-
-//                allCls = SootProcessUtil.getInstance().getJarsClasses(this.getJarFilePaths(useTarget));
-            }
-            /**
-             * get allCls with process
-             */
-            else {
-                allCls = SootUtil.getInstance().getJarsClasses(this.getJarFilePaths(useTarget)); // TODO
-            }
+            allCls = SootUtil.getInstance().getJarsClasses(this.getJarFilePaths(useTarget));
         }
         //System.out.println("allCls:" + allCls);
         return allCls;
