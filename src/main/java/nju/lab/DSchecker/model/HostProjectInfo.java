@@ -96,4 +96,18 @@ public class HostProjectInfo {
         return buildPath + File.separator + "classes" + File.separator + "java" + File.separator + "main";
     }
 
+    public void addABIClasses(Set<String> ABInames) {
+        ABIClasses.addAll(ABInames);
+//        System.out.println("ABIClasses: " + ABIClasses);
+    }
+    public Set<DepJar> getABIDepJars(){
+        Set<DepJar> depJars = new HashSet<>();
+        for(String ABIName : ABIClasses){
+            DepJar dep = getSingleUsedDepFromClass(ABIName);
+            if(dep != null)
+                depJars.add(dep);
+        }
+        return depJars;
+    }
+//    public void addABIClasses(Set<>)
 }

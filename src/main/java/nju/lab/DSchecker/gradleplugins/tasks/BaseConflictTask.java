@@ -160,9 +160,11 @@ public abstract class BaseConflictTask extends DefaultTask {
 
         artifactMap = initMapArtifactByIdentifiers();
 
-
     }
 
+    public void getApiElements(){
+        Configuration apiConf  = project.getConfigurations().getByName("apiElements");
+    }
     @TaskAction
     void execute() throws Exception {
         initGlobalValues();
@@ -175,13 +177,14 @@ public abstract class BaseConflictTask extends DefaultTask {
 
         AllCls.i().init(DepJars.i());
 
+
         HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().buildDepClassMap();
 
 //        TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
 
-        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
+//        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
 
 //
 //        LibrarySmell.i().detect();

@@ -1,6 +1,7 @@
 package nju.lab.DSchecker.util.soot.tf;
 
 import lombok.Setter;
+import nju.lab.DSchecker.model.HostProjectInfo;
 import soot.*;
 import soot.util.Chain;
 
@@ -45,13 +46,8 @@ public class APITypeTransformer extends SceneTransformer {
             for (SootMethod method : clazz.getMethods()) {
                 if (method.isPublic() || method.isProtected() || !method.isPrivate()) {
                     for (Type type : method.getParameterTypes()) {
-                        typesUsedInPublicMethodParameters.add(type);
-                        if (type instanceof RefType) {
-                            RefType refType = (RefType) type;
-
-                            Type refedType = refType.getSootClass().getType();
-                            typesUsedInPublicMethodParameters.add(refedType);
-                        } else if (type instanceof ArrayType) {
+//                        typesUsedInPublicMethodParameters.add(type);
+                        if (type instanceof ArrayType) {
                             ArrayType arrayType = (ArrayType) type;
                             Type elementType = arrayType.getArrayElementType();
                             typesUsedInPublicMethodParameters.add(elementType);
@@ -86,5 +82,18 @@ public class APITypeTransformer extends SceneTransformer {
         System.out.println("TypesUsedInPublicMethodParameters = " + typesUsedInPublicMethodParameters);
         System.out.println("TypesUsedInPublicFields = " + typesUsedInPublicFields);
 
+        Set<Type> allABItypes = new HashSet<>();
+        Set<String> ABInames = new HashSet<>();
+        allABItypes.addAll(typesUsedInSuperClasses);
+        allABItypes.addAll(typesUsedInPublicMethodParameters);
+        allABItypes.addAll(typesUsedInPublicFields);
+        for(Type type : allABItypes){
+            if(type instanceof RefType){
+                RefType refType = (RefType) type;
+                ABInames.add(refType.getClassName());
+            }
+        }
+//        System.out.println("AllABITypes = " + allABItypes);
+        HostProjectInfo.i().addABIClasses(ABInames);
     }
 }
