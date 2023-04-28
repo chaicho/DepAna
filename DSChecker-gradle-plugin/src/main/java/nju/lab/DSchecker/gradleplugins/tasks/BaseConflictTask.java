@@ -195,7 +195,7 @@ public abstract class BaseConflictTask extends DefaultTask {
 //        ClassSmell.i().detect();
 //        BloatedSmell.i().detect();
 //        UnDeclaredSmell.i().detect();
-        LibraryScopeSmell.i().detect();
+//        LibraryScopeSmell.i().detect();
 
 
 
