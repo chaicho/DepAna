@@ -17,15 +17,7 @@ import java.util.Set;
 import  nju.lab.DSchecker.util.soot.javassist.GetRefedClasses;
 
 public class UnDeclaredSmell implements BaseSmell {
-    public static UnDeclaredSmell instance;
-    private UnDeclaredSmell() {
-    }
-    public static UnDeclaredSmell i() {
-        if (instance == null) {
-            instance = new UnDeclaredSmell();
-        }
-        return instance;
-    }
+
 
     @Override
     public void detect(){

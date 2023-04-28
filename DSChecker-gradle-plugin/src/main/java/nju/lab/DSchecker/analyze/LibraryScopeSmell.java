@@ -6,15 +6,6 @@ import nju.lab.DSchecker.model.HostProjectInfo;
 import java.util.Set;
 
 public class LibraryScopeSmell implements BaseSmell {
-    public static LibraryScopeSmell instance;
-    private LibraryScopeSmell() {
-    }
-    public static LibraryScopeSmell i() {
-        if (instance == null) {
-            instance = new LibraryScopeSmell();
-        }
-        return instance;
-    }
     @Override
     public void detect() {
         Set<DepJar> ABIDepjars = HostProjectInfo.i().getABIDepJars();

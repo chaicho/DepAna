@@ -1,21 +1,11 @@
 package nju.lab.DSchecker.analyze;
 
-import neu.lab.conflict.container.DepJars;
 import nju.lab.DSchecker.model.DepJar;
 import nju.lab.DSchecker.model.HostProjectInfo;
 
 import java.util.Collection;
 
-public class ClassSmell implements BaseSmell {
-    public static  ClassSmell instance;
-    private ClassSmell() {
-    }
-    public static ClassSmell i() {
-        if (instance == null) {
-            instance = new ClassSmell();
-        }
-        return instance;
-    }
+public class ClassConflictSmell implements BaseSmell {
 
     @Override
     public void detect(){

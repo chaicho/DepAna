@@ -5,6 +5,7 @@ import neu.lab.conflict.container.DepJars;
 import neu.lab.conflict.container.NodeAdapters;
 import neu.lab.conflict.util.MyLogger;
 import nju.lab.DSchecker.analyze.LibraryScopeSmell;
+import nju.lab.DSchecker.analyze.SmellFactory;
 import nju.lab.DSchecker.model.HostProjectInfo;
 import nju.lab.DSchecker.util.soot.TypeAna;
 import org.gradle.api.DefaultTask;
@@ -181,23 +182,16 @@ public abstract class BaseConflictTask extends DefaultTask {
 //        AllCls.i().init(DepJars.i());
         getApiElements();
 
+
         HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().buildDepClassMap();
 
-//        TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
+        TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
 
-        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
+//        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
 
-//
-//        LibrarySmell.i().detect();
-//        ClassSmell.i().detect();
-//        ClassSmell.i().detect();
-//        BloatedSmell.i().detect();
-//        UnDeclaredSmell.i().detect();
-//        LibraryScopeSmell.i().detect();
-
-
+        SmellFactory.detectAll();
 
 //        UnUsedSmell.i().detect();
 //        System.out.println(DepJars.i().getUsedJarPaths());
@@ -211,30 +205,6 @@ public abstract class BaseConflictTask extends DefaultTask {
         File outputFile = getOutputFile().getAsFile().get();
 
         try ( PrintWriter writer = new PrintWriter(new FileWriter(outputFile))){
-//            DepJars.i().getAllDepJar().forEach(depJar -> {
-//                depJar.initClsTbRealTime();
-//                depJar.getClsTb().forEach((clssig,classVO) -> {
-//                    writer.println(classVO.getMthds());
-//                });
-//                }
-//            );
-//            projectInfo(writer);
-//            writer.println(SootUtil.getInstance().getJarClasses("D:\\Pathtodoc\\dependency-graph-as-task-inputs\\libs\\lib1\\build\\libs\\lib1.jar"));
-//            writer.println(SootUtil.getInstance().getJarClasses("D:\\Pathtodoc\\dependency-graph-as-task-inputs\\libs\\lib2\\build\\libs\\lib2.jar"));
-//            writer.println(AllCls.i().getAllCls());
-//            for (ResolvedDependency dependency : firstLevelModuleDependencies) {
-//                dependency.getParents().forEach(parent -> {
-//                    System.out.println(parent.getModuleGroup() + ":" + parent.getModuleName() + ":" + parent.getModuleVersion());
-//                });
-//                for (ResolvedArtifact artifact : dependency.getModuleArtifacts()) {
-//                    if ("jar".equals(artifact.getType())) {
-//                        String jarPath = artifact.getFile().getAbsolutePath();
-//                        System.out.println("JAR import path: " + jarPath);
-//                    }
-//                }
-//
-//            }
-
             writer.println("=================ReportComponent===================");
             Set<ResolvedComponentResult> seen = new HashSet<>();
             reportComponent(root, writer, seen, "");

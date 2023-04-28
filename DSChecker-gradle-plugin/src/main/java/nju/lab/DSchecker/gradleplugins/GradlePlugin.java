@@ -1,6 +1,5 @@
 package nju.lab.DSchecker.gradleplugins;//import neu.lab.conflict.tasks.DownloadArtifactTask;
 import nju.lab.DSchecker.gradleplugins.tasks.GraphResolvedComponentsAndFiles;
-import nju.lab.DSchecker.gradleplugins.tasks.LibrarySmellDetectTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Transformer;
@@ -44,18 +43,8 @@ public abstract class GradlePlugin implements Plugin<Project> {
 
                 task.getOutputFile().set(layout.getBuildDirectory().file(task.getName() + "/report.txt"));
             });
-            tasks.register("LibrarySmell", LibrarySmellDetectTask.class, task -> {
-//                task.setGroup("org.apache.commons");
-//                task.setName("commons-collections4");
-//                task.setName("4.2");
-//                task.setDescription("Download artifact from a repository.");
-            });
-//            tasks.register("DownloadArtifactTask", DownloadArtifactTask.class, task -> {
-//                task.setGroup("org.apache.commons");
-//                task.setName("commons-collections4");
-//                task.setName("4.2");
-//                task.setDescription("Download artifact from a repository.");
-//            });
+
+
         });
     }
 
