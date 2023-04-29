@@ -3,7 +3,7 @@ package nju.lab.DSchecker.core.model;
 import java.util.List;
 import java.util.Set;
 
-public interface IDepJars {
+public interface IDepJars<T extends IDepJar> {
 
     /**
      * Get all the jar file paths used by the host project.
@@ -12,16 +12,16 @@ public interface IDepJars {
     /**
      * Get all the jar files used by the host project.
      */
-    public Set<IDepJar> getUsedDepJars();
+    public Set<T> getUsedDepJars();
 
     /**
-    * Get the jar file of the given name;
-    */
-    public IDepJar getSelectedDepJarById(String componentId);
-
-    /**
-        Get all the jar files of the given project.
+     * Get the jar file of the given name;
      */
-    public Set<IDepJar> getAllDepJar();
+    public T getSelectedDepJarById(String componentId);
+
+    /**
+     Get all the jar files of the given project.
+     */
+    public Set<T> getAllDepJar();
 
 }

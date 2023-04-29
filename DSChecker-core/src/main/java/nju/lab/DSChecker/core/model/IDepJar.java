@@ -11,4 +11,6 @@ public interface IDepJar {
 
     int getDepth();
     List<String> getJarFilePaths();
+
+    boolean isSelected();
 }

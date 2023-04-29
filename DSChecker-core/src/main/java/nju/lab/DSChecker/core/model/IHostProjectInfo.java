@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public abstract class IHostProjectInfo  {
 
-    protected IDepJars depJars;
+    protected IDepJars<? extends IDepJar> depJars;
     protected ICallGraph callGraph;
     private File buildDir;
 

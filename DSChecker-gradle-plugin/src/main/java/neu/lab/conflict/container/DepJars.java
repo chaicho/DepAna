@@ -1,13 +1,15 @@
 package neu.lab.conflict.container;
 
 import neu.lab.conflict.util.MyLogger;
+import nju.lab.DSchecker.core.model.IDepJar;
+import nju.lab.DSchecker.core.model.IDepJars;
 import nju.lab.DSchecker.model.DepJar;
 import nju.lab.DSchecker.model.NodeAdapter;
 
 import java.io.File;
 import java.util.*;
 
-public class DepJars {
+public class DepJars implements IDepJars<DepJar> {
     private static DepJars instance;
     private Set<DepJar> container;
 
