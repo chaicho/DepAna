@@ -1,5 +1,6 @@
 package nju.lab.DSchecker.analyze;
 
+import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.model.DepJar;
 import nju.lab.DSchecker.model.HostProjectInfo;
 
@@ -11,9 +12,9 @@ public class ClassConflictSmell implements BaseSmell {
     public void detect(){
         Collection<String> duplicateClassNames = HostProjectInfo.i().getDuplicateClassNames();
         for(String className : duplicateClassNames){
-            Collection<DepJar> depJars = HostProjectInfo.i().getUsedDepFromClass(className);
+            Collection<IDepJar> depJars = HostProjectInfo.i().getUsedDepFromClass(className);
             System.out.println("Duplicate Class Smell: " + className);
-            for(DepJar depJar : depJars){
+            for(IDepJar depJar : depJars){
                System.out.println(   "in " + depJar.getName());
             }
         }

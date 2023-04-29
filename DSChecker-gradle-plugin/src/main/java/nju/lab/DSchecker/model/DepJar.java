@@ -10,9 +10,11 @@ import neu.lab.conflict.container.DepJars;
 import neu.lab.conflict.util.GradleUtil;
 import neu.lab.conflict.util.MyLogger;
 import neu.lab.conflict.util.SootUtil;
+import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.util.soot.JarAna;
 import neu.lab.conflict.vo.GlobalVar;
 import neu.lab.conflict.vo.MethodVO;
+
 
 import java.io.File;
 import java.util.*;
@@ -20,7 +22,7 @@ import java.util.*;
 @Data
 @Getter
 @Setter
-public class DepJar {
+public class DepJar implements IDepJar {
     private final int depth;
     private String groupId;
     private String artifactId;// artifactId

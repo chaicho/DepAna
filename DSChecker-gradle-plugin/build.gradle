@@ -25,8 +25,9 @@ gradlePlugin {
 }
 
 dependencies {
-    implementation 'org.ow2.asm:asm:8.0.1'
+    implementation project(":DSChecker-core")
 
+    implementation 'org.ow2.asm:asm:8.0.1'
     compileOnly 'org.projectlombok:lombok:1.18.22'
     implementation 'com.kiwigrid.maven.enforce:pom-release-rules:1.0.3'
     implementation 'com.github.kwart.jd:jd-lib:1.2.1'

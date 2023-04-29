@@ -1,5 +1,6 @@
 package nju.lab.DSchecker.analyze.Conflict;
 
+import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.model.DepJar;
 
 import java.util.HashMap;
@@ -9,8 +10,8 @@ import java.util.Arrays;
 
 public class ConflictJars {
 
-    HashMap<String, Set<DepJar>> conflictJars;
-    HashMap<String, DepJar> selectedJar;
+    HashMap<String, Set<IDepJar>> conflictJars;
+    HashMap<String, IDepJar> selectedJar;
 
     private static ConflictJars instance;
     private ConflictJars() {
@@ -24,7 +25,7 @@ public class ConflictJars {
         return instance;
     }
 
-    public void addConflictJar(DepJar selectedDepJar, DepJar conflictJar) {
+    public void addConflictJar(IDepJar selectedDepJar, IDepJar conflictJar) {
         if (!selectedJar.containsKey(selectedDepJar.getName())) {
             selectedJar.put(selectedDepJar.getName(), selectedDepJar);
             conflictJars.put(selectedDepJar.getName(), new HashSet<>(Arrays.asList(selectedDepJar, conflictJar)));

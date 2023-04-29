@@ -1,7 +1,9 @@
 package nju.lab.DSchecker.analyze;
 
 import neu.lab.conflict.container.DepJars;
+import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.model.DepJar;
+import nju.lab.DSchecker.model.HostProjectInfo;
 import nju.lab.DSchecker.model.Method;
 import nju.lab.DSchecker.model.callgraph.MyCallGraph;
 
@@ -13,7 +15,7 @@ public class BloatedSmell implements BaseSmell{
     public void detect() {
         // Compare the dependency tree with the Call graph
         // If the dependency tree is "larger" than the call graph, then the project is bloated
-        Set<DepJar> reachableDepJars = MyCallGraph.i().getReachableJars();
+        Set<IDepJar> reachableDepJars = HostProjectInfo.i().getReachableJars();
         Set<DepJar> declaredDepJars = DepJars.i().getUsedDepJars();
         for (DepJar dep : declaredDepJars) {
             if (!reachableDepJars.contains(dep)) {

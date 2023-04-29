@@ -3,6 +3,10 @@ package nju.lab.DSchecker.model;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import neu.lab.conflict.container.DepJars;
+import nju.lab.DSchecker.core.model.ICallGraph;
+import nju.lab.DSchecker.core.model.IDepJar;
+import nju.lab.DSchecker.core.model.IDepJars;
+import nju.lab.DSchecker.core.model.IHostProjectInfo;
 import soot.SourceLocator;
 
 import java.io.File;
@@ -10,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class HostProjectInfo {
+public class HostProjectInfo extends IHostProjectInfo {
     private static HostProjectInfo instance;
     private Set<String> apiDepJars = new HashSet<>();
 
@@ -27,7 +31,7 @@ public class HostProjectInfo {
     private final Multimap<String, DepJar> usedDependenciesPerClass = ArrayListMultimap.create();
     private File buildDir;
     private String buildPath;
-//    compileSrcFiles represents the source files of the project;
+  //    compileSrcFiles represents the source files of the project;
     private Set<File> compileSrcFiles ;
     //   compileSrcDirs represents the source paths of the project;
     private Set<String> compileSrcDirs = new HashSet<>();
@@ -54,55 +58,22 @@ public class HostProjectInfo {
         }
 
     }
-    public Collection<String> getDuplicateClassNames(){
-        return usedDependenciesPerClass.keySet()
-                .stream()
-                .filter(className -> usedDependenciesPerClass.get(className).size() > 1)
-                .collect(Collectors.toList());
-    }
-    public Collection<DepJar> getUsedDepFromClass(String className) {
-        if(usedDependenciesPerClass.get(className).size() == 0)
-            return Collections.emptyList();
-        return usedDependenciesPerClass.get(className);
-    }
-    public DepJar getSingleUsedDepFromClass(String className){
-        if(usedDependenciesPerClass.get(className).size() > 1 || usedDependenciesPerClass.get(className).size() == 0)
-            return null;
-        return usedDependenciesPerClass.get(className).iterator().next();
-    }
-    public Set<File> getCompileSrcFiles() {
-        return compileSrcFiles;
-    }
-    public void setCompileSrcFiles(Set<File> compileSrcFiles) {
-        this.compileSrcFiles = compileSrcFiles;
-        this.compileSrcDirs = compileSrcFiles.stream()
-                                             .map(File::getAbsolutePath)
-                                             .collect(Collectors.toSet());
-    }
-    public Set<String> getCompileSrcDirs() {
 
-        return compileSrcDirs;
-    }
-    public String getCompileSrcCp(){
-        return String.join(";", getCompileSrcDirs());
-    }
 //    void public addABItype
-    public void setBuildDir(File buildDir) {
-        this.buildDir = buildDir;
-        this.buildPath = buildDir.getAbsolutePath();
-    }
-    public String getBuildCp() {
-        return buildPath + File.separator + "classes" + File.separator + "java" + File.separator + "main";
-    }
 
+
+    public void init(ICallGraph callGraph, IDepJars depJars){
+       this.callGraph  = callGraph;
+       this.depJars = depJars;
+    }
     public void addABIClasses(Set<String> ABInames) {
         ABIClasses.addAll(ABInames);
 //        System.out.println("ABIClasses: " + ABIClasses);
     }
-    public Set<DepJar> getABIDepJars(){
-        Set<DepJar> depJars = new HashSet<>();
+    public Set<IDepJar> getABIDepJars(){
+        Set<IDepJar> depJars = new HashSet<>();
         for(String ABIName : ABIClasses){
-            DepJar dep = getSingleUsedDepFromClass(ABIName);
+            DepJar dep = (DepJar) getSingleUsedDepFromClass(ABIName);
             if(dep != null)
                 depJars.add(dep);
         }

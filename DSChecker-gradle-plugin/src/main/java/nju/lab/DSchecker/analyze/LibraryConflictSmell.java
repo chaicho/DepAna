@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 //import org.aw.asm;
 import neu.lab.conflict.container.DepJars;
 import nju.lab.DSchecker.analyze.Conflict.ConflictJars;
+import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.model.DepJar;
 
 
@@ -16,13 +17,13 @@ public class LibraryConflictSmell implements BaseSmell{
 //                .stream()
 //                .filter( nodeAdapter -> { return !nodeAdapter.isNodeSelected();})
 //                .collect(Collectors.toSet());
-        Set<DepJar> conflictingDepJars = DepJars.i().getAllDepJar()
+        Set<IDepJar> conflictingDepJars = DepJars.i().getAllDepJar()
                 .stream()
                 .filter(depJar -> {
                     return !depJar.isSelected();
                 })
                 .collect(Collectors.toSet());
-        for (DepJar depJar : conflictingDepJars) {
+        for (IDepJar depJar : conflictingDepJars) {
 //            System.out.println(depJar.getJarFilePaths());
 //            System.out.println(DepJars.i().getUsedJarPathsSeqForRisk(depJar));
             DepJar selectedJar = DepJars.i().getSelectedDepJarById(depJar.getName());

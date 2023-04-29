@@ -6,7 +6,9 @@ import neu.lab.conflict.container.NodeAdapters;
 import neu.lab.conflict.util.MyLogger;
 import nju.lab.DSchecker.analyze.LibraryScopeSmell;
 import nju.lab.DSchecker.analyze.SmellFactory;
+import nju.lab.DSchecker.core.model.IDepJars;
 import nju.lab.DSchecker.model.HostProjectInfo;
+import nju.lab.DSchecker.model.callgraph.MyCallGraph;
 import nju.lab.DSchecker.util.soot.TypeAna;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
@@ -185,6 +187,7 @@ public abstract class BaseConflictTask extends DefaultTask {
 
         HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
         HostProjectInfo.i().setBuildDir(buildDir);
+        HostProjectInfo.i().init(MyCallGraph.i(), (IDepJars) DepJars.i());
         HostProjectInfo.i().buildDepClassMap();
 
         TypeAna.i().analyze(DepJars.i().getUsedJarPaths());

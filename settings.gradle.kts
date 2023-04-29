@@ -1,2 +1,2 @@
-include(":DSchecker-gradle-plugin")
-include(":DSchecker-core")
+include(":DSChecker-gradle-plugin")
+include(":DSChecker-core")

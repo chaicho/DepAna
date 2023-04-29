@@ -2,6 +2,8 @@ package nju.lab.DSchecker.analyze;
 
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.ConstPool;
+import nju.lab.DSchecker.core.model.IDepJar;
+import nju.lab.DSchecker.core.model.IDepJars;
 import nju.lab.DSchecker.model.DepJar;
 import nju.lab.DSchecker.model.HostProjectInfo;
 
@@ -26,7 +28,7 @@ public class UnDeclaredSmell implements BaseSmell {
 
         for (String refClass : referencedClasses) {
             /* Get the dependency jar containing the refed class */
-            Collection<DepJar> dep = HostProjectInfo.i().getUsedDepFromClass(refClass);
+            Collection<IDepJar> dep = HostProjectInfo.i().getUsedDepFromClass(refClass);
 
            if(dep.size() == 0){
 //               ERROR: Unable to find jar containing class.
@@ -35,8 +37,8 @@ public class UnDeclaredSmell implements BaseSmell {
            }
 
            /* Since there are possibly several Depjars containing the same class ,we select the closest one */
-           DepJar closestDep =  dep.stream()
-                    .min(Comparator.comparingInt(DepJar::getDepth))
+           IDepJar closestDep =  dep.stream()
+                    .min(Comparator.comparingInt(IDepJar::getDepth))
                     .orElse(null); // 如果dep集合为空，则返回null
 
             if(closestDep != null ){
