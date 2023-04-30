@@ -1,0 +1,15 @@
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\core\analyze\LibraryScopeSmell.java
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\core\analyze\UnDeclaredSmell.java
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\util\javassist\GetRefedClasses.java
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\core\analyze\HostClassSmell.java
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\core\model\IDepJar.java
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\core\analyze\LibraryConflictSmell.java
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\core\analyze\BloatedSmell.java
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\core\model\ICallGraph.java
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\core\analyze\SmellFactory.java
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\core\analyze\BaseSmell.java
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\core\model\IHostProjectInfo.java
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\core\model\IDepJars.java
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\core\analyze\Conflict\ConflictClasses.java
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\core\analyze\ClassConflictSmell.java
+D:\Pathtodoc\dependency-graph-as-task-inputs\DSchecker\DSChecker-core\src\main\java\nju\lab\DSchecker\core\analyze\Conflict\ConflictJars.java

@@ -1,0 +1,20 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>nju.lab</groupId>
+    <artifactId>DSchecker-maven-composite</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <parent>
+        <!-- inherit from the composite project -->
+        <groupId>com.example</groupId>
+        <artifactId>composite-project</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modules>
+        <!-- list app and libs projects as modules -->
+        <module>DSChecker-core</module>
+        <module>DSChecker-maven-plugin</module>
+    </modules>
+
+</project>
