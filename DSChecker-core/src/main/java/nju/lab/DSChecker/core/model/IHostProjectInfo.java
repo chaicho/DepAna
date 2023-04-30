@@ -17,9 +17,13 @@ public abstract class IHostProjectInfo  {
     private File buildDir;
 
     private String buildPath;
-    //    compileSrcFiles represents the source files of the project;
+    /**
+    compileSrcFiles represents the source files of the project;
+    */
     private Set<File> compileSrcFiles ;
-    //   compileSrcDirs represents the source paths of the project;
+    /**
+     * compileSrcDirs represents the source paths of the project;
+     */
     private Set<String> compileSrcDirs = new HashSet<>();
     private final Multimap<String, IDepJar> usedDependenciesPerClass = ArrayListMultimap.create();
 
@@ -111,4 +115,7 @@ public abstract class IHostProjectInfo  {
         return ret;
     }
 
+    abstract public Set<IDepJar> getABIDepJars();
+
+    abstract public Set<String> getApiDepJars();
 }

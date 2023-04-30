@@ -1,34 +1,26 @@
-package nju.lab.DSchecker.analyze;
+package nju.lab.DSchecker.core.analyze;
 
-import javassist.bytecode.ClassFile;
-import javassist.bytecode.ConstPool;
 import nju.lab.DSchecker.core.model.IDepJar;
-import nju.lab.DSchecker.core.model.IDepJars;
-import nju.lab.DSchecker.model.DepJar;
-import nju.lab.DSchecker.model.HostProjectInfo;
+import nju.lab.DSchecker.util.javassist.GetRefedClasses;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+//import nju.lab.DSchecker.core;
+
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Set;
 
-import  nju.lab.DSchecker.util.soot.javassist.GetRefedClasses;
-
-public class UnDeclaredSmell implements BaseSmell {
+public class UnDeclaredSmell extends BaseSmell {
 
 
     @Override
     public void detect(){
+        System.out.println("UnDeclaredSmell detect");
 //        Get the classes from the build directory of Host Project and analyze the refed classes of them.
-        Set<String> referencedClasses =  GetRefedClasses.analyzeReferencedClasses(HostProjectInfo.i().getBuildCp());
+        Set<String> referencedClasses =  GetRefedClasses.analyzeReferencedClasses(hostProjectInfo.getBuildCp());
 
         for (String refClass : referencedClasses) {
             /* Get the dependency jar containing the refed class */
-            Collection<IDepJar> dep = HostProjectInfo.i().getUsedDepFromClass(refClass);
+            Collection<IDepJar> dep = hostProjectInfo.getUsedDepFromClass(refClass);
 
            if(dep.size() == 0){
 //               ERROR: Unable to find jar containing class.

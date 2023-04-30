@@ -39,14 +39,9 @@ public class HostProjectInfo extends IHostProjectInfo {
 
     private Set<String> ABIClasses = new HashSet<>();
 
+    @Override
     public void buildDepClassMap() {
-        for (DepJar depJar : DepJars.i().getUsedDepJars()) {
-            System.out.println("DepJars: " + depJar.getName());
-            for (String className : depJar.getAllCls()) {
-                usedDependenciesPerClass.put(className, depJar);
-//                System.out.println(className + " " + depJar.getName());
-            }
-        }
+        super.buildDepClassMap();
         for ( String compileSrcDir: compileSrcDirs){
             consumerClasses.addAll(SourceLocator.v().getClassesUnder(compileSrcDir)
                     .stream()
@@ -82,7 +77,7 @@ public class HostProjectInfo extends IHostProjectInfo {
 
     public void setApiDepJars(Set<String> apiArtifacts) {
         this.apiDepJars = apiArtifacts;
-        System.out.println(apiArtifacts);
+//        System.out.println(apiArtifacts);
     }
     public Set<String> getApiDepJars() {
         return apiDepJars;

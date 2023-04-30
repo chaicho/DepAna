@@ -13,4 +13,6 @@ public interface IDepJar {
     List<String> getJarFilePaths();
 
     boolean isSelected();
+
+    String getDisplayName();
 }

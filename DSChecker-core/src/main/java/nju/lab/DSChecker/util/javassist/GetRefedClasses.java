@@ -1,4 +1,4 @@
-package nju.lab.DSchecker.util.soot.javassist;
+package nju.lab.DSchecker.util.javassist;
 
 import java.io.DataInputStream;
 import java.io.File;

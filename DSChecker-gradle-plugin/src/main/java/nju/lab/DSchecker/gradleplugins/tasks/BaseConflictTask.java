@@ -4,8 +4,7 @@ import lombok.Getter;
 import neu.lab.conflict.container.DepJars;
 import neu.lab.conflict.container.NodeAdapters;
 import neu.lab.conflict.util.MyLogger;
-import nju.lab.DSchecker.analyze.LibraryScopeSmell;
-import nju.lab.DSchecker.analyze.SmellFactory;
+import nju.lab.DSchecker.core.analyze.SmellFactory;
 import nju.lab.DSchecker.core.model.IDepJars;
 import nju.lab.DSchecker.model.HostProjectInfo;
 import nju.lab.DSchecker.model.callgraph.MyCallGraph;
@@ -187,14 +186,15 @@ public abstract class BaseConflictTask extends DefaultTask {
 
         HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
         HostProjectInfo.i().setBuildDir(buildDir);
+        TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
+
         HostProjectInfo.i().init(MyCallGraph.i(), DepJars.i());
         HostProjectInfo.i().buildDepClassMap();
 
-        TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
-
 //        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
-
-        SmellFactory.detectAll();
+        SmellFactory smellFactory = new SmellFactory();
+        smellFactory.init(HostProjectInfo.i(), DepJars.i(), MyCallGraph.i());
+        smellFactory.detectAll();
 
 //        UnUsedSmell.i().detect();
 //        System.out.println(DepJars.i().getUsedJarPaths());

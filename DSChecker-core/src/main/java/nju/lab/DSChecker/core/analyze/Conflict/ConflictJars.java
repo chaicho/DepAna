@@ -1,12 +1,11 @@
-package nju.lab.DSchecker.analyze.Conflict;
+package nju.lab.DSchecker.core.analyze.Conflict;
 
 import nju.lab.DSchecker.core.model.IDepJar;
-import nju.lab.DSchecker.model.DepJar;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Arrays;
 
 public class ConflictJars {
 
