@@ -2,14 +2,14 @@
 //
 //import abandon.neu.lab.conflict.statics.DupClsJarPair;
 //import neu.lab.conflict.util.JVMUtil;
-//import neu.lab.conflict.util.MyLogger;
+//import nju.lab.DSchecker.util.GradleUtil.MyLogger;
 //import neu.lab.conflict.vo.GlobalVar;
-//import neu.lab.conflict.container.DepJars;
+//import nju.lab.DSchecker.model.DepJars;
 //import neu.lab.conflict.graph.*;
 //import neu.lab.conflict.graph.reverse.ReverseGraph4Reachability;
 //import neu.lab.conflict.util.risk.DepJarJRisk;
 //import neu.lab.conflict.util.soot.tf.JRiskCgTf;
-//import neu.lab.conflict.util.SootUtil;
+//import nju.lab.DSchecker.util.SootUtil;
 //import nju.lab.DSchecker.model.DepJar;
 //import neu.lab.conflict.vo.GsonEdgeVO;
 //import neu.lab.conflict.vo.MethodCall;

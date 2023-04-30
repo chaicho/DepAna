@@ -1,11 +1,8 @@
 package nju.lab.DSchecker.gradleplugins.tasks;
 
 import lombok.Getter;
-import neu.lab.conflict.container.DepJars;
-import neu.lab.conflict.container.NodeAdapters;
-import neu.lab.conflict.util.MyLogger;
+import nju.lab.DSchecker.model.DepJars;
 import nju.lab.DSchecker.core.analyze.SmellFactory;
-import nju.lab.DSchecker.core.model.IDepJars;
 import nju.lab.DSchecker.model.HostProjectInfo;
 import nju.lab.DSchecker.model.callgraph.MyCallGraph;
 import nju.lab.DSchecker.util.soot.TypeAna;
@@ -21,7 +18,7 @@ import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.*;
-import neu.lab.conflict.util.GradleUtil;
+import nju.lab.DSchecker.util.GradleUtil;
 import nju.lab.DSchecker.model.DepJar;
 
 import java.io.File;
@@ -120,7 +117,7 @@ public abstract class BaseConflictTask extends DefaultTask {
         }
 
         allJarNum = DepJars.i().getAllDepJar().size();
-        MyLogger.i().warn("tree size:" + DepJars.i().getAllDepJar().size() + ", used size:" + systemSize
+        GradleUtil.MyLogger.i().warn("tree size:" + DepJars.i().getAllDepJar().size() + ", used size:" + systemSize
                 + ", usedFile size:" + systemFileSize / 1000);
         //		if (DepJars.i().getAllDepJar().size() <= 50||systemFileSize / 1000>20000) {
         //			throw new Exception("project size error.");
@@ -173,10 +170,10 @@ public abstract class BaseConflictTask extends DefaultTask {
     @TaskAction
     void execute() throws Exception {
         initGlobalValues();
-        MyLogger.init(getLogger());
+        GradleUtil.MyLogger.init(getLogger());
         GradleUtil.init(this);
-        NodeAdapters.init(getRootComponent().get(),artifactMap);
-        DepJars.init(NodeAdapters.i());
+        DepJars.NodeAdapters.init(getRootComponent().get(),artifactMap);
+        DepJars.init(DepJars.NodeAdapters.i());
         validateSysSize();
 //        System.out.println("Calculate classes");
 

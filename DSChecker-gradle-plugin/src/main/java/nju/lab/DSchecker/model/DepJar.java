@@ -1,19 +1,12 @@
 package nju.lab.DSchecker.model;
 
-import javassist.ClassPool;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import neu.lab.conflict.container.AllCls;
-import neu.lab.conflict.container.AllRefedCls;
-import neu.lab.conflict.container.DepJars;
-import neu.lab.conflict.util.GradleUtil;
-import neu.lab.conflict.util.MyLogger;
-import neu.lab.conflict.util.SootUtil;
+import nju.lab.DSchecker.util.GradleUtil;
+import nju.lab.DSchecker.util.SootUtil;
 import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.util.soot.JarAna;
-import neu.lab.conflict.vo.GlobalVar;
-import neu.lab.conflict.vo.MethodVO;
 
 
 import java.io.File;
@@ -96,11 +89,7 @@ public class DepJar implements IDepJar {
 
     synchronized public Set<String> getAllCls() {
         if (allCls == null) {
-            if (!GlobalVar.i().useAllClsBuffer) {
-                allCls =  getAllClsRealTime(true);
-            } else {
-                allCls =  getAllClsWithBuffer(true);
-            }
+            allCls =  getAllClsRealTime(true);
         }
         return allCls;
     }
@@ -112,15 +101,11 @@ public class DepJar implements IDepJar {
                 clsTb = new HashMap<String, ClassVO>(0);
                 GradleUtil.i().getLogger().warn("can't find jarFile for:" + toString());
             } else {
-                if (GlobalVar.i().sootProcess) {
-//                    TODO()
-//                    clsTb = neu.lab.conflict.sootprocess.JarAna.i().deconstruct(this.getJarFilePaths(true));
-                }
-                else {
-                    clsTb = JarAna.i().deconstruct(this.getJarFilePaths(true));
-                }
+
+                clsTb = JarAna.i().deconstruct(this.getJarFilePaths(true));
+
                 if (clsTb.size() == 0) {
-                    MyLogger.i().warn("get empty clsTb for " + getDisplayName());
+                    GradleUtil.MyLogger.i().warn("get empty clsTb for " + getDisplayName());
 //                    GradleUtil.i().getLogger().warn("get empty clsTb for " + toString());
                 }
                 for (ClassVO clsVO : clsTb.values()) {
@@ -138,7 +123,7 @@ public class DepJar implements IDepJar {
 
     synchronized public Set<String> getAllClsRealTime(boolean useTarget) {
         if (allCls == null) {
-            allCls = SootUtil.getInstance().getJarsClasses(this.getJarFilePaths(useTarget));
+            allCls = SootUtil.getJarsClasses(this.getJarFilePaths(useTarget));
         }
         //System.out.println("allCls:" + allCls);
         return allCls;
@@ -247,92 +232,6 @@ public class DepJar implements IDepJar {
         return false;
     }
 
-    public String getJarFilePath() {
-        if (GlobalVar.i().isTest && this.isHost() && !jarFilePaths.get(0).endsWith("test-classes")) {
-            List<String> ret= new ArrayList<>(1);
-            ret.add("");
-            ret.set(0, jarFilePaths.get(0).substring(0, jarFilePaths.get(0).lastIndexOf("classes")) + "test-classes");
-            MyLogger.i().info("ret depjarget" + ret);
-            return ret.get(0);
-        }
-        return jarFilePaths.get(0);
-    }
-
-    public Map<String, Collection<String>> getRefedCls() {
-        if (allRefedCls == null) {
-            if (!GlobalVar.i().useRefedClsBuffer) {
-                return getRefedClsRealTime();
-            }
-            else {
-//                TODO
-                return getRefedClsWithBuffer();
-            }
-        }
-        return allRefedCls;
-    }
-
-    private Map<String, Collection<String>> getRefedClsWithBuffer() {
-//        TODO
-        return null;
-    }
-
-    private Map<String, Collection<String>> getRefedClsRealTime(){
-        Map<String, Collection<String>> ret = new HashMap<>();
-        try {
-            ClassPool pool = new ClassPool();
-            pool.appendClassPath(this.getJarFilePath());
-            for (String cls : this.getAllCls()) {
-                if (pool.getOrNull(cls) != null) {
-                    if (!ret.containsKey(cls)) {
-                        ret.put(cls, new LinkedList<>());
-                    }
-                    for (String refedCls : pool.get(cls).getRefClasses()) {
-                        if (!SootUtil.getInstance().isJavaLibraryClass(refedCls)) {
-                            ret.get(cls).add(refedCls);
-                        }
-                    }
-                } else {
-                    MyLogger.i().warn("can't find " + cls + " in pool when form reference.");
-                }
-            }
-        }
-        catch (Exception e) { System.err.println("Caught Exception!");
-            MyLogger.i().error("get refed classes error for jar:" + this.getSig() + e);
-        }
-        return ret;
-    }
-
-    public Map<String, Collection<String>> getClassesRefedClsWhenTest() {
-        Map<String, Collection<String>> ret = new HashMap<>();
-        try {
-            ClassPool pool = new ClassPool();
-            pool.appendClassPath(this.getJarFilePath().replace("test-classes", "classes"));
-            List<String> tmpclasspaths = new ArrayList<>();
-            tmpclasspaths.add(this.getJarFilePath().replace("test-classes", "classes"));
-            for (String cls : SootUtil.getInstance().getJarsClasses(tmpclasspaths)) {
-                if (pool.getOrNull(cls) != null) {
-//					System.out.println();
-                    //ret.addAll(pool.get(cls).getRefClasses());
-                    if (!ret.containsKey(cls)) {
-                        ret.put(cls, new LinkedList<>());
-                    }
-                    for (String refedCls : pool.get(cls).getRefClasses()) {
-                        if (!SootUtil.getInstance().isJavaLibraryClass(refedCls)) {
-                            ret.get(cls).add(refedCls);
-                        }
-                    }
-                    //pool.get(cls).getM
-                } else {
-                    MyLogger.i().warn("can't find " + cls + " in pool when form reference.");
-                }
-            }
-        }
-        catch (Exception e) { System.err.println("Caught Exception!");
-            MyLogger.i().error("get refed classes error for jar:" + this.getSig() + e);
-            //e.printStackTrace();
-        }
-        return ret;
-    }
 
     /**
      * 没有比较Classifier, 比较groupId, artifactId, version
@@ -361,67 +260,7 @@ public class DepJar implements IDepJar {
         }
         return riskClasses;
     }
-    public Set<String> getAllMthd() {
-        if (allMthd == null) {
-            allMthd = new HashSet<String>();
-            /**
-             * add this synchronize for multiprocess get callgraph
-             */
-            synchronized (this){
-                for (ClassVO cls : getClsTb().values()) {
-                    for (MethodVO mthd : cls.getMthds()) {
-                        allMthd.add(mthd.getMthdSig());
-                    }
-                }
-            }
-        }
-        return allMthd;
-    }
 
-    public Set<String> getRiskMthds(Collection<String> testMthds) {
-        Set<String> riskMthds = new HashSet<String>();
-        System.out.println("DepJar.getRiskMthds begin");
-        for (String testMthd : testMthds) {
-            if (!this.containsMthd(testMthd) && (
-                    (GlobalVar.i().refReachable && AllRefedCls.iReachable().contains(SootUtil.getInstance().mthdSig2cls(testMthd))) ||
-                            (!GlobalVar.i().refReachable && AllRefedCls.i().contains(SootUtil.getInstance().mthdSig2cls(testMthd)))
-            )
-            ) {
-                // don't have method,and class is used. 使用这个类，但是没有方法
-                if (this.containsCls(SootUtil.getInstance().mthdSig2cls(testMthd))) {
-                    // has class.don't have method.	有这个类，没有方法
-                    riskMthds.add(testMthd);
-                } else if (!AllCls.i().contains(SootUtil.getInstance().mthdSig2cls(testMthd))) {
-                    // This jar don't have class,and all jar don't have class.	这个jar没有这个class，所有加载的jar都没有
-                    riskMthds.add(testMthd);
-                }
-            }
-        }
-        System.out.println("DepJar.getRiskMthds end");
-        return riskMthds;
-    }
-    public boolean containsMthd(String mthd) {
-        return getAllMthd().contains(mthd);
-    }
-    public Set<String> getRiskRefedClasses(Collection<String> testClasses) {
-        Set<String> riskClasses = new HashSet<String>();
-        System.out.println("DepJar.getRiskClasses begin, class detect ref reachable:" + GlobalVar.i().classDetectRefReachable);
-        for (String testClass : testClasses) {
-            /**
-             * never open refReachable(has bug)
-             */
-            if (!this.containsCls(testClass) &&
-                    ((!GlobalVar.i().classDetectRefReachable && AllRefedCls.iNotReachable().contains(testClass)) ||
-                            (GlobalVar.i().classDetectRefReachable && AllRefedCls.iReachable().contains(testClass))
-                    )) {
-                if (!AllCls.i().contains(testClass)) {
-                    riskClasses.add(testClass);
-                }
-            }
-        }
-        System.out.println("DepJar.getRiskClasses end");
-        return riskClasses;
-    }
 
     public List<DepJar> getReplaceJarList() throws Exception {
         List<DepJar> depJars = new ArrayList<>();
@@ -430,7 +269,7 @@ public class DepJar implements IDepJar {
         for (DepJar usedDepJar : DepJars.i().getUsedDepJars()) {
             if (this.isSameLib(usedDepJar)) {// used depJar instead of usedDepJar.
                 if (hasRepalce) {
-                    MyLogger.i().warn("when cg, find multiple usedLib for " + toString());	//有重复的使用路径
+                    GradleUtil.MyLogger.i().warn("when cg, find multiple usedLib for " + toString());	//有重复的使用路径
                     throw new Exception("when cg, find multiple usedLib for " + toString());
                 }
                 hasRepalce = true;
@@ -439,7 +278,7 @@ public class DepJar implements IDepJar {
             }
         }
         if (!hasRepalce) {
-            MyLogger.i().warn("when cg,can't find mutiple usedLib for " + toString());
+            GradleUtil.MyLogger.i().warn("when cg,can't find mutiple usedLib for " + toString());
             throw new Exception("when cg,can't find mutiple usedLib for " + toString());
         }
         return depJars;
@@ -459,7 +298,7 @@ public class DepJar implements IDepJar {
         for (DepJar usedDepJar : DepJars.i().getUsedDepJars()) {
             if (this.isSameLib(usedDepJar)) {// used depJar instead of usedDepJar.
                 if (hasRepalce) {
-                    MyLogger.i().warn("when cg, find multiple usedLib for " + toString());	//有重复的使用路径
+                    GradleUtil.MyLogger.i().warn("when cg, find multiple usedLib for " + toString());	//有重复的使用路径
                     throw new Exception("when cg, find multiple usedLib for " + toString());
                 }
                 hasRepalce = true;
@@ -470,7 +309,7 @@ public class DepJar implements IDepJar {
             }
         }
         if (!hasRepalce) {
-            MyLogger.i().warn("when cg,can't find mutiple usedLib for " + toString());
+            GradleUtil.MyLogger.i().warn("when cg,can't find mutiple usedLib for " + toString());
             throw new Exception("when cg,can't find mutiple usedLib for " + toString());
         }
         return paths;
@@ -502,36 +341,6 @@ public class DepJar implements IDepJar {
         }
         return fatherJars;
     }
-    /**
-     * get only father jar class paths, used in pruning
-     * 只获取父节点，剪枝时使用
-     * @param includeSelf : include self
-     * @return Set<String> fatherJarCps
-     */
-    public Set<String> getOnlyFatherJarCps4Scene6(boolean includeSelf) {
-        Set<String> fatherJarCps = new HashSet<String>();
-        for (NodeAdapter node : this.nodeAdapters) {
-//            fatherJarCps.addAll(node.getImmediateAncestorJarCps4Scene6(includeSelf));
-        }
-        return fatherJarCps;
-    }
-    public Set<DepJar> getOnlyFatherJars4Scene6(boolean includeSelf) {
-        Set<DepJar> fatherJars = new HashSet<>();
-        for (NodeAdapter node : this.nodeAdapters) {
-//            fatherJars.addAll(node.getImmediateAncestorJars4Scene6(includeSelf));
-        }
-        return fatherJars;
-    }
 
-    public Set<String> getUsedMthds() {
-        Set<String> allMethods = getAllMthd();
-        Set<String> usedMethods = new HashSet<>();
-        for (String method : allMethods) {
-            if (AllRefedCls.i().contains(SootUtil.getInstance().mthdSig2cls(method))) {
-                usedMethods.add(method);
-            }
-        }
-        return usedMethods;
-    }
 }
 

@@ -1,6 +1,6 @@
 package nju.lab.DSchecker.util.soot.tf;
 
-import neu.lab.conflict.util.SootUtil;
+import nju.lab.DSchecker.util.SootUtil;
 import nju.lab.DSchecker.model.ClassVO;
 import soot.SceneTransformer;
 

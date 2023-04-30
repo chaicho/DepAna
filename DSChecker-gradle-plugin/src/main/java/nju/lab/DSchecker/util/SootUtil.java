@@ -1,6 +1,7 @@
-package neu.lab.conflict.util;
+package nju.lab.DSchecker.util;
+
 import nju.lab.DSchecker.model.ClassVO;
-import neu.lab.conflict.vo.MethodVO;
+import nju.lab.DSchecker.model.MethodVO;
 import soot.Scene;
 import soot.SootClass;
 import soot.SootMethod;
@@ -75,7 +76,7 @@ public class SootUtil {
      * @param paths
      * @return
      */
-    public Set<String> getJarsClasses(List<String> paths) {
+    public static Set<String> getJarsClasses(List<String> paths) {
         Set<String> allCls = new HashSet<String>();
         for (String path : paths) {
             allCls.addAll(getJarClasses(path));
@@ -99,7 +100,7 @@ public class SootUtil {
      * @param path 指定jar包路径或指定目录路径
      * @return
      */
-    public List<String> getJarClasses(String path) {
+    public static List<String> getJarClasses(String path) {
         if (new File(path).exists()) {
             if ((new File(path).isFile() && path.endsWith("jar")) || new File(path).isDirectory()) {
                 return SourceLocator.v().getClassesUnder(path);
@@ -140,20 +141,11 @@ public class SootUtil {
             SootClass sootClass = Scene.v().getSootClass(clsSig);
             ClassVO clsVO = new ClassVO(sootClass.getName());
             clsTb.put(sootClass.getName(), clsVO);
-            if (Conf.getInstance().ONLY_GET_SIMPLE) {// only add simple method in simple class
-                if (isSimpleCls(sootClass)) {
-                    for (SootMethod sootMethod : sootClass.getMethods()) {
-                        if (sootMethod.getParameterCount() == 0) {
-                            clsVO.addMethod(new MethodVO(sootMethod.getSignature(), clsVO));
-                        }
-                    }
-                }
-            } else {// add all method
-                for (SootMethod sootMethod : sootClass.getMethods()) {
+            for (SootMethod sootMethod : sootClass.getMethods()) {
                     clsVO.addMethod(new MethodVO(sootMethod.getSignature(), clsVO));
-                }
             }
         }
+
         return clsTb;
     }
     /**
@@ -168,19 +160,11 @@ public class SootUtil {
             SootClass sootClass = Scene.v().getSootClass(clsSig);
             ClassVO clsVO = new ClassVO(sootClass.getName());
             clsTb.put(sootClass.getName(), clsVO);
-            if (Conf.getInstance().ONLY_GET_SIMPLE) {// only add simple method in simple class
-                if (isSimpleCls(sootClass)) {
-                    for (SootMethod sootMethod : sootClass.getMethods()) {
-                        if (sootMethod.getParameterCount() == 0) {
-                            clsVO.addMethod(new MethodVO(sootMethod.getSignature(), clsVO));
-                        }
-                    }
-                }
-            } else {// add all method
-                for (SootMethod sootMethod : sootClass.getMethods()) {
+             // add all method
+            for (SootMethod sootMethod : sootClass.getMethods()) {
                     clsVO.addMethod(new MethodVO(sootMethod.getSignature(), clsVO));
-                }
             }
+
         }
         return clsTb;
     }

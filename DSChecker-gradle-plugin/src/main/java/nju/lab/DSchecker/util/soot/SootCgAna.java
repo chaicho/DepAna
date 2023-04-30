@@ -3,14 +3,14 @@
 //import abandon.neu.lab.conflict.statics.DupClsJarPair;
 //import neu.lab.conflict.GlobalVar;
 //import neu.lab.conflict.container.AllRefedCls;
-//import neu.lab.conflict.container.DepJars;
+//import nju.lab.DSchecker.model.DepJars;
 //import neu.lab.conflict.risk.jar.DepJarJRisk;
 //import neu.lab.conflict.soot.tf.AddEntryTransformer;
 //import neu.lab.conflict.util.ClassPackageTreeUtil;
 //import neu.lab.conflict.util.MavenUtil;
-//import neu.lab.conflict.util.MyLogger;
+//import nju.lab.DSchecker.util.GradleUtil.MyLogger;
 //import neu.lab.conflict.util.OSinfo;
-//import neu.lab.conflict.util.SootUtil;
+//import nju.lab.DSchecker.util.SootUtil;
 //import neu.lab.conflict.util.risk.DepJarJRisk;
 //import neu.lab.conflict.util.soot.tf.AddEntryTransformer;
 //import nju.lab.DSchecker.model.DepJar;

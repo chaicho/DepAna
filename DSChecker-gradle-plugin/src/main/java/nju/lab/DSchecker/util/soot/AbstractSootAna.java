@@ -1,8 +1,7 @@
 package nju.lab.DSchecker.util.soot;
 
-import neu.lab.conflict.util.MyLogger;
 import nju.lab.DSchecker.model.HostProjectInfo;
-import soot.options.Options;
+import nju.lab.DSchecker.util.GradleUtil;
 
 import java.io.File;
 import java.util.*;
@@ -105,10 +104,10 @@ public abstract class AbstractSootAna {
 					argsList.add("-process-dir");
 					argsList.add(jarFilePath);
 				}else {
-					MyLogger.i().warn("add classpath error:can't analysis file " + jarFilePath);
+					GradleUtil.MyLogger.i().warn("add classpath error:can't analysis file " + jarFilePath);
 				}
 			} else {
-				MyLogger.i().warn("add classpath error:doesn't exist file " + jarFilePath);
+				GradleUtil.MyLogger.i().warn("add classpath error:doesn't exist file " + jarFilePath);
 			}
 		}
 	}
@@ -131,10 +130,10 @@ public abstract class AbstractSootAna {
 					classPath += File.pathSeparator + jarFilePath;
 //					if(File.)
 				}else {
-					MyLogger.i().warn("add classpath error:can't analysis file " + jarFilePath);
+					GradleUtil.MyLogger.i().warn("add classpath error:can't analysis file " + jarFilePath);
 				}
 			} else {
-				MyLogger.i().warn("add classpath error:doesn't exist file " + jarFilePath);
+				GradleUtil.MyLogger.i().warn("add classpath error:doesn't exist file " + jarFilePath);
 			}
 		}
 		argsList.add(classPath);

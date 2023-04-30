@@ -1,10 +1,15 @@
-package neu.lab.conflict.container;
+package nju.lab.DSchecker.model;
 
-import neu.lab.conflict.util.MyLogger;
-import nju.lab.DSchecker.core.model.IDepJar;
+import nju.lab.DSchecker.util.GradleUtil;
 import nju.lab.DSchecker.core.model.IDepJars;
-import nju.lab.DSchecker.model.DepJar;
-import nju.lab.DSchecker.model.NodeAdapter;
+import org.gradle.api.artifacts.ResolvedArtifact;
+import org.gradle.api.artifacts.component.ComponentIdentifier;
+import org.gradle.api.artifacts.component.ComponentSelector;
+import org.gradle.api.artifacts.component.ModuleComponentSelector;
+import org.gradle.api.artifacts.component.ProjectComponentSelector;
+import org.gradle.api.artifacts.result.DependencyResult;
+import org.gradle.api.artifacts.result.ResolvedComponentResult;
+import org.gradle.api.artifacts.result.ResolvedDependencyResult;
 
 import java.io.File;
 import java.util.*;
@@ -61,9 +66,9 @@ public class DepJars implements IDepJars<DepJar> {
                     nodeAdapter.setDepJar(existingDepJar);
                 }
                 else{
-                    MyLogger.i().warn("Empty jar in container: " + addDepJar.toString());
+                    GradleUtil.MyLogger.i().warn("Empty jar in container: " + addDepJar.toString());
                 }
-                MyLogger.i().warn("duplicate jar: " + addDepJar.toString());
+                GradleUtil.MyLogger.i().warn("duplicate jar: " + addDepJar.toString());
             }
         }
     }
@@ -101,24 +106,7 @@ public class DepJars implements IDepJars<DepJar> {
         }
         return this.seqUsedDepJars;
     }
-    /**
-     * get dep jar belonged to hots
-     * @return DepJar hostDepJar
-     */
-    public DepJar getHostDepJar() {
-        if (hostDepJar == null) {
-            for (DepJar depJar : container) {
-                if (depJar.isHost()) {
-                    if (hostDepJar != null) {
-                        MyLogger.i().warn("multiple depjar for host ");
-                    }
-                    hostDepJar = depJar;
-                }
-            }
-            MyLogger.i().warn("depjar host is " + hostDepJar.toString()); //测试输出
-        }
-        return hostDepJar;
-    }
+
     /**
      * use groupId, artifactId, version and classifier to find the same DepJar
      * @return same depJar or null
@@ -129,7 +117,7 @@ public class DepJars implements IDepJars<DepJar> {
                 return dep;
             }
         }
-        MyLogger.i().warn("cant find dep:" + groupId + ":" + artifactId + ":" + version + ":" + classifier);
+        GradleUtil.MyLogger.i().warn("cant find dep:" + groupId + ":" + artifactId + ":" + version + ":" + classifier);
         return null;
     }
     /**
@@ -243,23 +231,7 @@ public class DepJars implements IDepJars<DepJar> {
         }
         return targetDepJar;
     }
-    /**
-     * for cp arguments, add jar.
-     * @param jar
-     * @return
-     */
-    public List<String> getUsedJarPathsSeqForRisk(DepJar jar) {
-        List<String> ret = new ArrayList<String>();
-        for (DepJar depJar : DepJars.i().getSeqUsedDepJars()) {
-            if (!depJar.isSameLib(jar)) {
-                for (String path : depJar.getJarFilePaths(true)) {
-                    ret.add(path);
-                }
-            }
-        }
-        ret.add(jar.getJarFilePath());
-        return ret;
-    }
+
     /**
      * when cg, depJars sequence matters. sortDepJars, make the jar relative order same as classpath
      * @param depJars
@@ -300,7 +272,7 @@ public class DepJars implements IDepJars<DepJar> {
                 return depJar;
             }
         }
-        MyLogger.i().warn("No used dep Jar for " + groupId + ":" + artifactId);
+        GradleUtil.MyLogger.i().warn("No used dep Jar for " + groupId + ":" + artifactId);
         return null;
     }
     public DepJar getSelectedDepJarById(String componentId) {
@@ -310,6 +282,88 @@ public class DepJars implements IDepJars<DepJar> {
             }
         }
         return null;
+    }
+
+    public static class NodeAdapters {
+        private static NodeAdapters instance;
+
+        public static NodeAdapters i() {
+            return instance;
+        }
+        private List<NodeAdapter> container;
+        public Map<ComponentIdentifier, ResolvedArtifact> artifactMap;
+        public NodeAdapter rootNodeAdapter;
+        private int NodeAdapterNum = 0;
+        private NodeAdapters() {
+            container = new ArrayList<NodeAdapter>();
+        }
+
+        public static void init(ResolvedComponentResult root, Map<ComponentIdentifier, Set<ResolvedArtifact>> newArtifactMap) {
+            if(instance == null) {
+                instance = new NodeAdapters();
+                Set<ResolvedComponentResult> seen = new HashSet<>();
+                walk(root,newArtifactMap,seen,0);
+            }
+
+        }
+        public void addNodeAdapter(NodeAdapter nodeAdapter) {
+            container.add(nodeAdapter);
+        }
+        private static void walk(ResolvedComponentResult component, Map<ComponentIdentifier, Set<ResolvedArtifact>> newArtifactMap, Set<ResolvedComponentResult> seen, int dep) {
+
+            if (seen.add(component)) {
+                for (DependencyResult dependency : component.getDependencies()) {
+                    if (dependency instanceof ResolvedDependencyResult) {
+                        ResolvedDependencyResult resolvedDependency = (ResolvedDependencyResult) dependency;
+                        ResolvedComponentResult selectedComponent = resolvedDependency.getSelected();
+                        Set<ResolvedArtifact> artifacts = newArtifactMap.get(selectedComponent.getId());
+
+                        NodeAdapter nodeAdapter =  new NodeAdapter(resolvedDependency.getSelected(),artifacts, resolvedDependency, dep, resolvedDependency.getRequested());
+                        i().container.add(nodeAdapter);
+                        if(nodeAdapter.isNodeSelected()) {
+                            walk(selectedComponent, newArtifactMap, seen, dep + 1);
+                        }
+                        else{
+    //                        Artifact Unresolved, the node is not selected.
+                            ComponentSelector selector = resolvedDependency.getRequested();
+                            if(selector instanceof ModuleComponentSelector){
+                                ModuleComponentSelector moduleComponentSelector = (ModuleComponentSelector) selector;
+                                GradleUtil.i().resolveArtifact(selector.getDisplayName(),nodeAdapter);
+                            } else if (selector instanceof ProjectComponentSelector) {
+
+                            }
+
+    //                        System.out.println("Not Selected : " + nodeAdapter );
+                        }
+                    }
+                    else {
+                        GradleUtil.MyLogger.i().warn("Unresolved artifact ");
+                    }
+                }
+            }
+            else{
+                System.out.println("cycle");
+            }
+        }
+
+
+        public List<NodeAdapter> getAllNodeAdapter() {
+            return container;
+        }
+
+        public void printAllNodeAdapter() {
+               for (NodeAdapter nodeAdapter : container) {
+                    System.out.println(nodeAdapter);
+                }
+        }
+        public NodeAdapter getConflictNodeAdapter(String groupId, String artifactId, String version) {
+            for (NodeAdapter nodeAdapter : container) {
+                if(nodeAdapter.getGroupId().equals(groupId) && nodeAdapter.getArtifactId().equals(artifactId) && nodeAdapter.getVersion().equals(version)){
+                    return nodeAdapter;
+                }
+            }
+            return null;
+        }
     }
 }
 

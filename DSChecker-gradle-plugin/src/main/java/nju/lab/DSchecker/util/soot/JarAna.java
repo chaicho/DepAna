@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import neu.lab.conflict.util.SootUtil;
+import nju.lab.DSchecker.util.SootUtil;
 import nju.lab.DSchecker.util.soot.tf.DsTransformer;
 
 import nju.lab.DSchecker.model.ClassVO;

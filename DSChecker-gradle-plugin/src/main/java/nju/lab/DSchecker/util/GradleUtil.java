@@ -1,4 +1,4 @@
-package neu.lab.conflict.util;
+package nju.lab.DSchecker.util;
 
 
 import nju.lab.DSchecker.gradleplugins.tasks.BaseConflictTask;
@@ -147,4 +147,28 @@ public class GradleUtil {
      * @param dependency the dependency to check
      * @return true if the dependency is a direct dependency; false otherwise
      */
+    public static class MyLogger {
+
+        private static MyLogger instance = null;
+        private Logger logger;
+
+        private MyLogger() {
+            logger = null;
+        }
+
+        public static void init(Logger taskLogger){
+            if(instance == null){
+                instance = new MyLogger();
+            }
+            instance.logger = taskLogger;
+        }
+
+        public static synchronized Logger i() {
+            return instance.logger;
+        }
+
+        public void log(String message) {
+            logger.info(message);
+        }
+    }
 }

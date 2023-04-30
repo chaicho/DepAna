@@ -1,7 +1,5 @@
 package nju.lab.DSchecker.model;
 
-import lombok.Getter;
-import neu.lab.conflict.vo.MethodVO;
 import soot.SootClass;
 
 import java.util.HashSet;
