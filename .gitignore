@@ -3,3 +3,5 @@
 .gradle
 build
 bin
+**/build
+**/target
