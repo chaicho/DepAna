@@ -1,6 +1,6 @@
 package nju.lab.DScheckerMaven.model;
 
-import neu.lab.conflict.util.MavenUtil;
+import nju.lab.DScheckerMaven.util.MavenUtil;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
@@ -128,7 +128,7 @@ public class ManageNodeAdapter extends NodeAdapter {
 		MavenUtil.getInstance().getLog().debug("node filepath for " + toString() + " : " + filePaths);
 		return filePaths;
 	}
-	@Override
+
 	public NodeAdapter getBeforeManagedNode() {
 		return beforeManagedNode;
 	}

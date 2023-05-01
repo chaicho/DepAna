@@ -1,7 +1,8 @@
 package nju.lab.DScheckerMaven.model;
 
-import neu.lab.conflict.util.MavenUtil;
-import neu.lab.conflict.vo.NodeAdapter;
+
+import lombok.extern.slf4j.Slf4j;
+import nju.lab.DSchecker.core.model.IDepJars;
 
 import java.io.File;
 import java.util.*;
@@ -9,7 +10,8 @@ import java.util.*;
 /**
  * 表征依赖树中所有节点jar包的全局变量
  */
-public class DepJars {
+@Slf4j
+public class DepJars implements IDepJars<DepJar> {
 	private static DepJars instance;
 	/**
 	 * 返回依赖树中所有结点的jar包
@@ -65,6 +67,12 @@ public class DepJars {
 		}
 		return this.usedDepJars;
 	}
+
+	@Override
+	public DepJar getSelectedDepJarById(String s) {
+		return null;
+	}
+
 	/**
 	 * 按加载优先级返回所有被加载的jar包
 	 * @return
@@ -90,12 +98,12 @@ public class DepJars {
 			for (DepJar depJar : container) {
 				if (depJar.isHost()) {
 					if (hostDepJar != null) {
-						MavenUtil.getInstance().getLog().warn("multiple depjar for host ");
+						log.warn("multiple depjar for host ");
 					}
 					hostDepJar = depJar;
 				}
 			}
-			MavenUtil.getInstance().getLog().warn("depjar host is " + hostDepJar.toString()); //测试输出
+			log.warn("depjar host is " + hostDepJar.toString()); //测试输出
 		}
 		return hostDepJar;
 	}
@@ -109,7 +117,7 @@ public class DepJars {
 				return dep;
 			}
 		}
-		MavenUtil.getInstance().getLog().warn("cant find dep:" + groupId + ":" + artifactId + ":" + version + ":" + classifier);
+		log.warn("cant find dep:" + groupId + ":" + artifactId + ":" + version + ":" + classifier);
 		return null;
 	}
 	/**
@@ -296,7 +304,7 @@ public class DepJars {
 				return depJar;
 			}
 		}
-		MavenUtil.getInstance().getLog().warn("No used dep Jar for " + groupId + ":" + artifactId);
+		log.warn("No used dep Jar for " + groupId + ":" + artifactId);
 		return null;
 	}
 }

@@ -1,8 +1,7 @@
 package nju.lab.DScheckerMaven.model;
 
-import neu.lab.conflict.util.MavenUtil;
-import neu.lab.conflict.util.NodeAdapterCollector;
-import neu.lab.conflict.vo.ManageNodeAdapter;
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.maven.shared.dependency.tree.DependencyNode;
 
 import java.util.ArrayList;
@@ -14,6 +13,7 @@ import java.util.Set;
  * @author asus
  * 依赖树节点适配器
  */
+@Slf4j
 public class NodeAdapters {
     private static NodeAdapters instance;
     /**
@@ -112,10 +112,10 @@ public class NodeAdapters {
         if (node != null) {
             if (!NodeAdapterCollector.getLongTimeLib().contains(
                     node.getArtifact().getGroupId() + ":" + node.getArtifact().getArtifactId())) {
-                MavenUtil.getInstance().getLog().warn("cant find nodeAdapter for node:" + node.toNodeString());
+                log.warn("cant find nodeAdapter for node:" + node.toNodeString());
             }
         } else {
-            MavenUtil.getInstance().getLog().warn("cant find nodeAdapter for node:" + "null");
+            log.warn("cant find nodeAdapter for node:" + "null");
         }
         return null;
     }
@@ -134,10 +134,10 @@ public class NodeAdapters {
         if (node != null) {
             if (!NodeAdapterCollector.getLongTimeLib().contains(
                     node.getArtifact().getGroupId() + ":" + node.getArtifact().getArtifactId())) {
-                MavenUtil.getInstance().getLog().warn("cant find nodeAdapter for node:" + node.toNodeString());
+                log.warn("cant find nodeAdapter for node:" + node.toNodeString());
             }
         } else {
-            MavenUtil.getInstance().getLog().warn("cant find nodeAdapter for node:" + "null");
+            log.warn("cant find nodeAdapter for node:" + "null");
         }
         return null;
     }
@@ -157,7 +157,7 @@ public class NodeAdapters {
             }
         }
         // TODO delete the log
-        MavenUtil.getInstance().getLog().warn("cant find nodeAdapter for management node:" + groupId2 + ":" + artifactId2 + ":"
+        log.warn("cant find nodeAdapter for management node:" + groupId2 + ":" + artifactId2 + ":"
                 + version2 + ":" + classifier2);
         return null;
     }
@@ -175,7 +175,7 @@ public class NodeAdapters {
             }
         }
         if (result.size() == 0) {
-            MavenUtil.getInstance().getLog().warn("cant find nodeAdapter for depJar:" + depJar.toString());
+            log.warn("cant find nodeAdapter for depJar:" + depJar.toString());
         }
         return result;
     }

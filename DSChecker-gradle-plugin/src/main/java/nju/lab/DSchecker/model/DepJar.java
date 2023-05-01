@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.ClassVO;
-import nju.lab.DSchecker.util.GradleUtil;
 import nju.lab.DSchecker.util.SootUtil;
 import nju.lab.DSchecker.core.model.IDepJar;
 
@@ -74,7 +73,6 @@ public class DepJar implements IDepJar {
     }
 
     public List<String> getJarFilePaths( ) {
-//        TODO
         return jarFilePaths;
     }
 
@@ -85,20 +83,15 @@ public class DepJar implements IDepJar {
 
     synchronized public Set<String> getAllCls() {
         if (allCls == null) {
-            allCls =  getAllClsRealTime(true);
+            allCls =  getAllClsRealTime();
         }
         return allCls;
     }
-    private Set<String> getAllClsWithBuffer(boolean useTarget) {
-//        TODO
-        return null;
-    }
 
-    synchronized public Set<String> getAllClsRealTime(boolean useTarget) {
+    synchronized public Set<String> getAllClsRealTime() {
         if (allCls == null) {
-            allCls = SootUtil.getJarsClasses(this.getJarFilePaths(useTarget));
+            allCls = SootUtil.getJarsClasses(this.getJarFilePaths());
         }
-        //System.out.println("allCls:" + allCls);
         return allCls;
     }
 

@@ -1,6 +1,7 @@
 package nju.lab.DScheckerMaven.util;
 
 
+import nju.lab.DSchecker.util.SootUtil;
 import nju.lab.DScheckerMaven.model.NodeAdapter;
 import nju.lab.DScheckerMaven.mojos.BaseMojo;
 import org.apache.commons.io.FileUtils;
@@ -44,7 +45,7 @@ public class MavenUtil {
 			hostClses = new HashSet<String>();
 			if (null != this.getSrcPaths()) {
 				for (String srcDir : this.getSrcPaths()) {
-					hostClses.addAll(SootUtil.getInstance().getJarClasses(srcDir));
+					hostClses.addAll(SootUtil.getJarClasses(srcDir));
 				}
 			}
 		}
@@ -215,39 +216,7 @@ public class MavenUtil {
 	public String getMvnRep() {
 		return this.mojo.localRepository.getBasedir() + File.separator;
 	}
-	/**
-	 * create maven temp file.
-	 * for different operating system.
-	 */
-	public File createMvnTempScriptFile(String line) {
-		File tempFile = null;
-		try{
-			if (OSinfo.getInstance().isLinux()) {
-				tempFile = File.createTempFile("mvncmdFile", ".sh");
-				// tempFile = File.createTempFile("mvncmdFile", ".sh");
-			}
-			else {
-				tempFile = File.createTempFile("mvncmdFile", ".bat");
-			}
-			tempFile.setExecutable(true);
-			tempFile.setReadable(true);
-			tempFile.setWritable(true);
-			tempFile.deleteOnExit();
-			BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-			if (OSinfo.getInstance().isLinux()) {
-				writer.write("#!/bin/bash\n");
-			}
-			writer.write(line + '\n');
-			writer.close();
-			MavenUtil.getInstance().getLog().info("mvn temp File content:" + FileUtils.readFileToString(tempFile));
-		}catch (Exception e) { System.err.println("Caught Exception!");
-			e.printStackTrace();
-		}
-		if (tempFile == null) {
-			System.err.println("[ERROR] temp file create failed");
-		}
-		return tempFile;
-	}
+
 	/**
 	 * 构建Maven虚拟环境（集成相关）
 	 * @param projDir
@@ -274,39 +243,6 @@ public class MavenUtil {
 		long endTime = System.currentTimeMillis();
 		System.out.println(("execute time: " + (endTime - startTime)));
 		return true;
-	}
-	/**
-	 * create maven temp file.
-	 * for different operating system.
-	 */
-	public File createMvnTempScriptFileNoLog(String line) {
-		File tempFile = null;
-		try{
-			if (OSinfo.getInstance().isLinux()) {
-				tempFile = File.createTempFile("mvncmdFile", ".sh");
-				// tempFile = File.createTempFile("mvncmdFile", ".sh");
-			}
-			else {
-				tempFile = File.createTempFile("mvncmdFile", ".bat");
-			}
-			tempFile.setExecutable(true);
-			tempFile.setReadable(true);
-			tempFile.setWritable(true);
-			tempFile.deleteOnExit();
-			BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-			if (OSinfo.getInstance().isLinux()) {
-				writer.write("#!/bin/bash\n");
-			}
-			writer.write(line + '\n');
-			writer.close();
-			System.err.println("mvn temp File content:" + FileUtils.readFileToString(tempFile));
-		}catch (Exception e) { System.err.println("Caught Exception!");
-			e.printStackTrace();
-		}
-		if (tempFile == null) {
-			System.err.println("[ERROR] temp file create failed");
-		}
-		return tempFile;
 	}
 	/**
 	 *

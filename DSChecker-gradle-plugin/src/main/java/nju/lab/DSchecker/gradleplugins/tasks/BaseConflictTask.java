@@ -3,6 +3,7 @@ package nju.lab.DSchecker.gradleplugins.tasks;
 import nju.lab.DSchecker.model.DepJars;
 import nju.lab.DSchecker.core.analyze.SmellFactory;
 import nju.lab.DSchecker.model.HostProjectInfo;
+import nju.lab.DSchecker.model.NodeAdapters;
 import nju.lab.DSchecker.model.callgraph.MyCallGraph;
 import nju.lab.DSchecker.util.soot.TypeAna;
 import org.gradle.api.DefaultTask;
@@ -174,8 +175,8 @@ public abstract class BaseConflictTask extends DefaultTask {
 //        log.warn("Executing");
         initGlobalValues();
         GradleUtil.init(this);
-        DepJars.NodeAdapters.init(getRootComponent().get(),artifactMap);
-        DepJars.init(DepJars.NodeAdapters.i());
+        NodeAdapters.i().init(getRootComponent().get(),artifactMap);
+        DepJars.init(NodeAdapters.i());
         validateSysSize();
 //        System.out.println("Calculate classes");
 
