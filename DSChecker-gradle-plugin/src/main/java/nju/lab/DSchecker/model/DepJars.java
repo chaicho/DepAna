@@ -1,5 +1,6 @@
 package nju.lab.DSchecker.model;
 
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.util.GradleUtil;
 import nju.lab.DSchecker.core.model.IDepJars;
 import org.gradle.api.artifacts.ResolvedArtifact;
@@ -14,6 +15,7 @@ import org.gradle.api.artifacts.result.ResolvedDependencyResult;
 import java.io.File;
 import java.util.*;
 
+@Slf4j
 public class DepJars implements IDepJars<DepJar> {
     private static DepJars instance;
     private Set<DepJar> container;
@@ -66,9 +68,9 @@ public class DepJars implements IDepJars<DepJar> {
                     nodeAdapter.setDepJar(existingDepJar);
                 }
                 else{
-                    GradleUtil.MyLogger.i().warn("Empty jar in container: " + addDepJar.toString());
+                    log.warn("Empty jar in container: " + addDepJar.toString());
                 }
-                GradleUtil.MyLogger.i().warn("duplicate jar: " + addDepJar.toString());
+                log.warn("duplicate jar: " + addDepJar.toString());
             }
         }
     }
@@ -117,7 +119,7 @@ public class DepJars implements IDepJars<DepJar> {
                 return dep;
             }
         }
-        GradleUtil.MyLogger.i().warn("cant find dep:" + groupId + ":" + artifactId + ":" + version + ":" + classifier);
+        log.warn("cant find dep:" + groupId + ":" + artifactId + ":" + version + ":" + classifier);
         return null;
     }
     /**
@@ -272,7 +274,7 @@ public class DepJars implements IDepJars<DepJar> {
                 return depJar;
             }
         }
-        GradleUtil.MyLogger.i().warn("No used dep Jar for " + groupId + ":" + artifactId);
+        log.warn("No used dep Jar for " + groupId + ":" + artifactId);
         return null;
     }
     public DepJar getSelectedDepJarById(String componentId) {
@@ -337,7 +339,7 @@ public class DepJars implements IDepJars<DepJar> {
                         }
                     }
                     else {
-                        GradleUtil.MyLogger.i().warn("Unresolved artifact ");
+                        log.warn("Unresolved artifact ");
                     }
                 }
             }

@@ -14,7 +14,7 @@ public class LibraryScopeSmell extends BaseSmell {
             if(ApiDepjars.contains(dep.getName()))
                 continue;
 //            This means that some ABI are used but not declared as api
-            System.out.println("LibraryScope Smell : " + dep.getName() + "should be declared as api");
+            log.warn("LibraryScope Smell : " + dep.getName() + "should be declared as api");
         }
     }
 }

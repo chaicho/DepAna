@@ -134,41 +134,5 @@ public class GradleUtil {
      */
 
 
-    /**
-     * Determines whether the given class is a host class (i.e., defined in the current project).
-     *
-     * @param className the fully-qualified class name
-     * @return true if the class is a host class; false otherwise
-     */
 
-    /**
-     * Determines whether the given dependency is a direct dependency of the current project.
-     *
-     * @param dependency the dependency to check
-     * @return true if the dependency is a direct dependency; false otherwise
-     */
-    public static class MyLogger {
-
-        private static MyLogger instance = null;
-        private Logger logger;
-
-        private MyLogger() {
-            logger = null;
-        }
-
-        public static void init(Logger taskLogger){
-            if(instance == null){
-                instance = new MyLogger();
-            }
-            instance.logger = taskLogger;
-        }
-
-        public static synchronized Logger i() {
-            return instance.logger;
-        }
-
-        public void log(String message) {
-            logger.info(message);
-        }
-    }
 }

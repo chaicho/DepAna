@@ -1,9 +1,10 @@
 package nju.lab.DSchecker.core.analyze;
 
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.IDepJar;
 
 import java.util.Set;
-
+@Slf4j
 public class BloatedSmell extends BaseSmell{
     @Override
     public void detect() {
@@ -13,7 +14,7 @@ public class BloatedSmell extends BaseSmell{
         Set<? extends IDepJar> declaredDepJars = depJars.getUsedDepJars();
         for (IDepJar dep : declaredDepJars) {
             if (!reachableDepJars.contains(dep)) {
-                System.out.println("Bloated Smell: " + dep.getDisplayName());
+                log.warn("Bloated Smell: " + dep.getDisplayName());
             }
         }
     }

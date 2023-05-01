@@ -1,5 +1,7 @@
 package nju.lab.DSchecker.util;
 
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.ClassVO;
 import nju.lab.DSchecker.core.model.MethodVO;
 import soot.Scene;
@@ -11,37 +13,23 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.*;
+//import org.apache.
 /**
  * @author asus
  * @author guoruijie
  */
+
+
+@Slf4j
 public class SootUtil {
-    private static class SootUtilHolder {
-        private static final SootUtil INSTANCE = new SootUtil();
-    }
-    private SootUtil() {
-    }
-    public static SootUtil getInstance() {
-        return SootUtilHolder.INSTANCE;
-    }
-    public void modifyLogOut() {
-        File outDir = GradleUtil.i().getBuildDir();
-        if (!outDir.exists()) {
-            outDir.mkdirs();
-        }
-        try {
-            soot.G.v().out = new PrintStream(new File(outDir.getAbsolutePath() + File.separator + "soot.log"));
-        } catch (FileNotFoundException e) { System.err.println("Caught Exception!");
-            soot.G.v().out = System.out;
-        }
-    }
+
     /**
      * @param mthdSig
      *            e.g.:<org.slf4j.event.SubstituteLoggingEvent: org.slf4j.event.Level
      *            getLevel()>
      * @return e.g.: org.slf4j.event.Level getLevel();
      */
-    public String mthdSig2name(String mthdSig) {
+    public static String mthdSig2name(String mthdSig) {
         return mthdSig.substring(mthdSig.indexOf(":") + 1, mthdSig.indexOf(")") + 1);
     }
     public String mthdSig2Onlyname(String mthdSig) {
@@ -83,18 +71,8 @@ public class SootUtil {
         }
         return allCls;
     }
-    /**
-     * 获取这些jar包中所有定义的类，不调用MavenLog
-     * @param paths
-     * @return
-     */
-    public Set<String> getJarsClassesNoLog(List<String> paths) {
-        Set<String> allCls = new HashSet<String>();
-        for (String path : paths) {
-            allCls.addAll(getJarClassesNoLog(path));
-        }
-        return allCls;
-    }
+
+
     /**
      * 获取指定jar包或目录下所有定义的类
      * @param path 指定jar包路径或指定目录路径
@@ -105,10 +83,11 @@ public class SootUtil {
             if ((new File(path).isFile() && path.endsWith("jar")) || new File(path).isDirectory()) {
                 return SourceLocator.v().getClassesUnder(path);
             } else {
-                GradleUtil.i().getLogger().warn(path + "is illegal classpath");
+                log.error(path + "is illegal classpath");
             }
+
         } else {
-            GradleUtil.i().getLogger().warn(path + "doesn't exist in local");
+            log.error(path + "doesn't exist in local");
         }
         return new ArrayList<String>();
     }
@@ -122,10 +101,10 @@ public class SootUtil {
             if (!path.endsWith("tar.gz") && !path.endsWith(".pom") && !path.endsWith(".war")) {
                 return SourceLocator.v().getClassesUnder(path);
             } else {
-                System.out.println(path + "is illegal path");
+                log.error(path + "is illegal path");
             }
         } else {
-            System.out.println(path + "doesn't exist in local");
+            log.error(path + "doesn't exist in local");
         }
         return new ArrayList<String>();
     }
@@ -135,9 +114,9 @@ public class SootUtil {
      * @return
      */
     @Deprecated
-    public Map<String, ClassVO> getClassTb(List<String> jarPaths) {
+    public static Map<String, ClassVO> getClassTb(List<String> jarPaths) {
         Map<String, ClassVO> clsTb = new HashMap<String, ClassVO>();
-        for (String clsSig : SootUtil.getInstance().getJarsClasses(jarPaths)) {
+        for (String clsSig : SootUtil.getJarsClasses(jarPaths)) {
             SootClass sootClass = Scene.v().getSootClass(clsSig);
             ClassVO clsVO = new ClassVO(sootClass.getName());
             clsTb.put(sootClass.getName(), clsVO);
@@ -154,7 +133,7 @@ public class SootUtil {
      * @param clsSigs
      * @return
      */
-    public Map<String, ClassVO> getClassTb(List<String> jarPaths, Set<String> clsSigs) {
+    public static Map<String, ClassVO> getClassTb(List<String> jarPaths, Set<String> clsSigs) {
         Map<String, ClassVO> clsTb = new HashMap<String, ClassVO>();
         for (String clsSig : clsSigs) {
             SootClass sootClass = Scene.v().getSootClass(clsSig);
@@ -245,7 +224,7 @@ public class SootUtil {
                     }
                 }
                 catch (StringIndexOutOfBoundsException e) {
-                    GradleUtil.i().getLogger().error("exception classpath is: " + x);
+//                    GradleUtil.i().getLogger().error("exception classpath is: " + x);
                 }
             }
             else {
@@ -276,7 +255,7 @@ public class SootUtil {
                 }
             }
             catch (StringIndexOutOfBoundsException e) {
-                GradleUtil.i().getLogger().error("exception classpath is: " + x);
+//                GradleUtil.i().getLogger().error("exception classpath is: " + x);
             }
         } else {
             return x;

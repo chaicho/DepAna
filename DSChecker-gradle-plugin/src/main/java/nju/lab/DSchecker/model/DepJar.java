@@ -3,16 +3,17 @@ package nju.lab.DSchecker.model;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.ClassVO;
 import nju.lab.DSchecker.util.GradleUtil;
 import nju.lab.DSchecker.util.SootUtil;
 import nju.lab.DSchecker.core.model.IDepJar;
-import nju.lab.DSchecker.util.soot.JarAna;
 
 
 import java.io.File;
 import java.util.*;
 
+@Slf4j
 @Data
 @Getter
 @Setter
@@ -58,12 +59,6 @@ public class DepJar implements IDepJar {
         return classifier;
     }
     public int getDepth() { return depth; }
-    public Map<String, ClassVO> getClsTb() {
-        if(clsTb==null){
-            clsTb = initClsTbRealTime();
-        }
-        return clsTb;
-    }
 
     /**
      * @param useTarget:
@@ -94,29 +89,6 @@ public class DepJar implements IDepJar {
         }
         return allCls;
     }
-
-    public Map<String, ClassVO> initClsTbRealTime() {
-        if (clsTb == null) {
-            if (null == this.getJarFilePaths(true)) {
-                // no file
-                clsTb = new HashMap<String, ClassVO>(0);
-                GradleUtil.i().getLogger().warn("can't find jarFile for:" + toString());
-            } else {
-
-                clsTb = JarAna.i().deconstruct(this.getJarFilePaths(true));
-
-                if (clsTb.size() == 0) {
-                    GradleUtil.MyLogger.i().warn("get empty clsTb for " + getDisplayName());
-//                    GradleUtil.i().getLogger().warn("get empty clsTb for " + toString());
-                }
-                for (ClassVO clsVO : clsTb.values()) {
-                    clsVO.setDepJar(this);
-                }
-            }
-        }
-        return clsTb;
-    }
-
     private Set<String> getAllClsWithBuffer(boolean useTarget) {
 //        TODO
         return null;
@@ -171,9 +143,7 @@ public class DepJar implements IDepJar {
         return groupId + ":" + artifactId;
     }
 
-    public ClassVO getClassVO(String clsSig) {
-        return getClsTb().get(clsSig);
-    }
+
     public String getAllDepPaths(){
         StringBuilder sb = new StringBuilder(toString() + ":");
         for (NodeAdapter node : getNodeAdapters()) {
@@ -270,7 +240,7 @@ public class DepJar implements IDepJar {
         for (DepJar usedDepJar : DepJars.i().getUsedDepJars()) {
             if (this.isSameLib(usedDepJar)) {// used depJar instead of usedDepJar.
                 if (hasRepalce) {
-                    GradleUtil.MyLogger.i().warn("when cg, find multiple usedLib for " + toString());	//有重复的使用路径
+                    log.warn("when cg, find multiple usedLib for " + toString());	//有重复的使用路径
                     throw new Exception("when cg, find multiple usedLib for " + toString());
                 }
                 hasRepalce = true;
@@ -279,7 +249,7 @@ public class DepJar implements IDepJar {
             }
         }
         if (!hasRepalce) {
-            GradleUtil.MyLogger.i().warn("when cg,can't find mutiple usedLib for " + toString());
+            log.warn("when cg,can't find mutiple usedLib for " + toString());
             throw new Exception("when cg,can't find mutiple usedLib for " + toString());
         }
         return depJars;
@@ -299,7 +269,7 @@ public class DepJar implements IDepJar {
         for (DepJar usedDepJar : DepJars.i().getUsedDepJars()) {
             if (this.isSameLib(usedDepJar)) {// used depJar instead of usedDepJar.
                 if (hasRepalce) {
-                    GradleUtil.MyLogger.i().warn("when cg, find multiple usedLib for " + toString());	//有重复的使用路径
+                    log.warn("when cg, find multiple usedLib for " + toString());	//有重复的使用路径
                     throw new Exception("when cg, find multiple usedLib for " + toString());
                 }
                 hasRepalce = true;
@@ -310,7 +280,7 @@ public class DepJar implements IDepJar {
             }
         }
         if (!hasRepalce) {
-            GradleUtil.MyLogger.i().warn("when cg,can't find mutiple usedLib for " + toString());
+            log.warn("when cg,can't find mutiple usedLib for " + toString());
             throw new Exception("when cg,can't find mutiple usedLib for " + toString());
         }
         return paths;

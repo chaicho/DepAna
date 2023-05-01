@@ -22,9 +22,9 @@ public class DsTransformer extends SceneTransformer {
     @Override
     protected void internalTransform(String phaseName, Map<String, String> options) {
         if (clsSigs != null) {
-            clsTb = SootUtil.getInstance().getClassTb(this.jarPaths, clsSigs);
+            clsTb = SootUtil.getClassTb(this.jarPaths, clsSigs);
         } else {
-            clsTb = SootUtil.getInstance().getClassTb(this.jarPaths);
+            clsTb = SootUtil.getClassTb(this.jarPaths);
         }
     }
     public Map<String, ClassVO> getClsTb() {

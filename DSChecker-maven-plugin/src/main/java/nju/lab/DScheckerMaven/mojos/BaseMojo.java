@@ -15,7 +15,7 @@ import org.apache.maven.project.MavenProject;
 import java.util.List;
 
 @Mojo(name = "testDSchecker",defaultPhase = LifecyclePhase.COMPILE)
-public class testMojo extends AbstractMojo {
+public class BaseMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     public MavenProject project;
     @Parameter(defaultValue = "${reactorProjects}", readonly = true, required = true)

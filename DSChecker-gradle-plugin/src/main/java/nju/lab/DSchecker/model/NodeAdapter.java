@@ -1,6 +1,7 @@
 package nju.lab.DSchecker.model;
 
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.util.GradleUtil;
 import org.gradle.api.artifacts.ResolvedArtifact;
 //import org.gradle.api.artifacts.result.Resol;
@@ -19,6 +20,7 @@ import static org.gradle.api.artifacts.result.ComponentSelectionCause.CONFLICT_R
 
 @Data
 @Setter
+@Slf4j
 public class NodeAdapter {
 
     private static int counter = 0;
@@ -67,7 +69,7 @@ public class NodeAdapter {
         else {
 
             if (displayName.split(":").length != 3) {
-                GradleUtil.MyLogger.i().warn("Wrong Display name");
+                log.warn("Wrong Display name");
                 this.group = displayName.split(":")[0];
                 this.name = displayName.split(":")[1];
                 this.version = "unspecified";
@@ -100,7 +102,7 @@ public class NodeAdapter {
              classifier = artifacts.iterator().next().getClassifier();
         }
         catch (Exception e){
-            GradleUtil.MyLogger.i().warn("No classifier");
+            log.warn("No classifier");
         };
         return classifier != null ? classifier : "";
     }

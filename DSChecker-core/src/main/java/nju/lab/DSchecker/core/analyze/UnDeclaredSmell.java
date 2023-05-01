@@ -1,5 +1,6 @@
 package nju.lab.DSchecker.core.analyze;
 
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.util.javassist.GetRefedClasses;
 
@@ -9,6 +10,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
 
+@Slf4j
 public class UnDeclaredSmell extends BaseSmell {
 
 
@@ -36,7 +38,7 @@ public class UnDeclaredSmell extends BaseSmell {
             if(closestDep != null ){
                 if(closestDep.getDepth() > 0){
                     /* If the closest dependency is not the directly Declared Dependency, then it is an undeclared dependency */
-                    System.out.println("UnDeclared Smell : " + refClass + " in " + closestDep.getName());
+                    log.warn("UnDeclared Smell : " + refClass + " in " + closestDep.getName());
                 }
             }
         }

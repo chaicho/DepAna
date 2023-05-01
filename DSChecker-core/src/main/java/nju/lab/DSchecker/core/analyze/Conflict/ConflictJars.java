@@ -1,5 +1,6 @@
 package nju.lab.DSchecker.core.analyze.Conflict;
 
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.IDepJar;
 
 import java.util.Arrays;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 public class ConflictJars {
 
     HashMap<String, Set<IDepJar>> conflictJars;
@@ -32,10 +34,10 @@ public class ConflictJars {
         this.conflictJars.get(selectedDepJar.getName()).add(conflictJar);
     }
     public void printAllConflictJars() {
-        System.out.println("Jar Conflict Smell:");
+        log.warn("Jar Conflict Smell:");
         for (String key : conflictJars.keySet()) {
-            System.out.println("selected jar: " + selectedJar.get(key).getJarFilePaths());
-            System.out.println("conflict jars: " + conflictJars.get(key));
+            log.warn("selected jar: " + selectedJar.get(key).getJarFilePaths());
+            log.warn("conflict jars: " + conflictJars.get(key));
         }
     }
 }

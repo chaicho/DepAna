@@ -1,5 +1,6 @@
 package nju.lab.DSchecker.util.soot;
 
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.model.HostProjectInfo;
 import nju.lab.DSchecker.util.GradleUtil;
 
@@ -9,7 +10,9 @@ import java.util.*;
 /**
  * add args which soot need to use
  * @author buriedpot
+ * @author chaicho
  */
+@Slf4j
 public abstract class AbstractSootAna {
 
 	static List<String> excludeList;
@@ -104,10 +107,10 @@ public abstract class AbstractSootAna {
 					argsList.add("-process-dir");
 					argsList.add(jarFilePath);
 				}else {
-					GradleUtil.MyLogger.i().warn("add classpath error:can't analysis file " + jarFilePath);
+					log.warn("add classpath error:can't analysis file " + jarFilePath);
 				}
 			} else {
-				GradleUtil.MyLogger.i().warn("add classpath error:doesn't exist file " + jarFilePath);
+				log.warn("add classpath error:doesn't exist file " + jarFilePath);
 			}
 		}
 	}
@@ -130,10 +133,10 @@ public abstract class AbstractSootAna {
 					classPath += File.pathSeparator + jarFilePath;
 //					if(File.)
 				}else {
-					GradleUtil.MyLogger.i().warn("add classpath error:can't analysis file " + jarFilePath);
+					log.warn("add classpath error:can't analysis file " + jarFilePath);
 				}
 			} else {
-				GradleUtil.MyLogger.i().warn("add classpath error:doesn't exist file " + jarFilePath);
+				log.warn("add classpath error:doesn't exist file " + jarFilePath);
 			}
 		}
 		argsList.add(classPath);
