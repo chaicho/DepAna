@@ -16,8 +16,8 @@ public class UnDeclaredSmell extends BaseSmell {
 
     @Override
     public void detect(){
-        System.out.println("UnDeclaredSmell detect");
-//        Get the classes from the build directory of Host Project and analyze the refed classes of them.
+
+        //        Get the classes from the build directory of Host Project and analyze the refed classes of them.
         Set<String> referencedClasses =  GetRefedClasses.analyzeReferencedClasses(hostProjectInfo.getBuildCp());
 
         for (String refClass : referencedClasses) {
@@ -36,7 +36,8 @@ public class UnDeclaredSmell extends BaseSmell {
                     .orElse(null); // 如果dep集合为空，则返回null
 
             if(closestDep != null ){
-                if(closestDep.getDepth() > 0){
+                log.debug("Closest Dependency : " + closestDep.getName() + " in " + refClass + " depth : " + closestDep.getDepth());
+                if(closestDep.getDepth() > 1){
                     /* If the closest dependency is not the directly Declared Dependency, then it is an undeclared dependency */
                     log.warn("UnDeclared Smell : " + refClass + " in " + closestDep.getName());
                 }

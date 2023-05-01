@@ -2,6 +2,7 @@ package nju.lab.DScheckerMaven.model;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.*;
 import soot.SourceLocator;
 
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class HostProjectInfo extends IHostProjectInfo {
     private static HostProjectInfo instance;
     private HostProjectInfo() {
@@ -26,17 +28,21 @@ public class HostProjectInfo extends IHostProjectInfo {
     @Override
     public void buildDepClassMap() {
         super.buildDepClassMap();
+        System.out.println("start buildDepClassMap") ;
         for ( String compileSrcDir: compileSrcDirs){
             consumerClasses.addAll(SourceLocator.v().getClassesUnder(compileSrcDir)
                     .stream()
                     .map(ClassVO::new)
                     .collect(Collectors.toSet()));
             consumerClasses.forEach(consumerClass -> {
-                System.out.println("consumerClass: " + consumerClass.getClsSig());
+                log.warn("consumerClass: " + consumerClass.getClsSig());
             });
         }
     }
-
+    @Override
+    public String getBuildCp() {
+        return buildPath + File.separator + "classes";
+    }
     public void setCompileSrcPaths(List<String> paths) {
             this.compileSrcDirs = paths.stream().map(String::trim).collect(Collectors.toSet());
             this.compileSrcFiles = compileSrcDirs.stream()

@@ -1,5 +1,6 @@
 package nju.lab.DSchecker.gradleplugins.tasks;
 
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.model.DepJars;
 import nju.lab.DSchecker.core.analyze.SmellFactory;
 import nju.lab.DSchecker.model.HostProjectInfo;
@@ -27,7 +28,7 @@ import java.io.PrintWriter;
 import java.util.*;
 
 
-//@Slf4j
+@Slf4j
 public abstract class BaseConflictTask extends DefaultTask {
 
 
@@ -107,7 +108,7 @@ public abstract class BaseConflictTask extends DefaultTask {
     private void validateSysSize() throws Exception {
         for (DepJar depJar : DepJars.i().getAllDepJar()) {
             if(!depJar.isSelected()){
-//                continue;
+                continue;
             }
             systemSize++;
             for(String filePath: depJar.getJarFilePaths(true)) {
@@ -118,8 +119,8 @@ public abstract class BaseConflictTask extends DefaultTask {
         }
 
         allJarNum = DepJars.i().getAllDepJar().size();
-//        log.warn("tree size:" + DepJars.i().getAllDepJar().size() + ", used size:" + systemSize
-//                + ", usedFile size:" + systemFileSize / 1000);
+        log.warn("tree size:" + DepJars.i().getAllDepJar().size() + ", used size:" + systemSize
+                + ", usedFile size:" + systemFileSize / 1000);
 
 
         //		if (DepJars.i().getAllDepJar().size() <= 50||systemFileSize / 1000>20000) {
@@ -192,6 +193,7 @@ public abstract class BaseConflictTask extends DefaultTask {
 
         HostProjectInfo.i().init(MyCallGraph.i(), DepJars.i());
         HostProjectInfo.i().buildDepClassMap();
+
 
 //        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
         SmellFactory smellFactory = new SmellFactory();

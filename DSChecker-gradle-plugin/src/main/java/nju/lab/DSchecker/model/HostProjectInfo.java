@@ -30,6 +30,7 @@ public class HostProjectInfo extends IHostProjectInfo {
     public void buildDepClassMap() {
         super.buildDepClassMap();
         for ( String compileSrcDir: compileSrcDirs){
+            System.out.println(compileSrcDir);
             consumerClasses.addAll(SourceLocator.v().getClassesUnder(compileSrcDir)
                     .stream()
                     .map(ClassVO::new)

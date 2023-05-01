@@ -235,7 +235,7 @@ public class NodeAdapter {
 	}
 
 	public int getNodeDepth() {
-		int depth = 1;
+		int depth = 0;
 		NodeAdapter father = getParent();
 		while (null != father) {
 			depth++;

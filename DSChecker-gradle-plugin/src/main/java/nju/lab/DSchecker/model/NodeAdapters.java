@@ -32,7 +32,7 @@ public class NodeAdapters {
         if(instance == null) {
             instance = new NodeAdapters();
             Set<ResolvedComponentResult> seen = new HashSet<>();
-            walk(root,newArtifactMap,seen,0);
+            walk(root,newArtifactMap,seen,1);
         }
 
     }
@@ -60,10 +60,9 @@ public class NodeAdapters {
                             ModuleComponentSelector moduleComponentSelector = (ModuleComponentSelector) selector;
                             GradleUtil.i().resolveArtifact(selector.getDisplayName(),nodeAdapter);
                         } else if (selector instanceof ProjectComponentSelector) {
-
+//                            TODO
                         }
 
-                        //                        System.out.println("Not Selected : " + nodeAdapter );
                     }
                 }
                 else {
@@ -72,7 +71,7 @@ public class NodeAdapters {
             }
         }
         else{
-            System.out.println("cycle");
+            log.debug("cycle");
         }
     }
 

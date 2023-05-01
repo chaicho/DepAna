@@ -12,11 +12,22 @@ public class LibraryScopeSmell extends BaseSmell {
         Set<IDepJar> ABIDepjars = hostProjectInfo.getABIDepJars();
         // Dependecies that are declared as api in the project
         Set<String> ApiDepjars = hostProjectInfo.getApiDepJars();
+        if (ApiDepjars.isEmpty()) {
+            log.info("No api dependencies");
+            return;
+        }
+        if (ABIDepjars.isEmpty()) {
+            log.info("No ABI dependencies");
+            return;
+        }
         for (IDepJar dep : ABIDepjars) {
-            if(ApiDepjars.contains(dep.getName()))
+            if (ApiDepjars.contains(dep.getName()))
                 continue;
 //            This means that some ABI are used but not declared as api
             log.warn("LibraryScope Smell : " + dep.getName() + "should be declared as api");
         }
+
+//        TODO : API that are not used as ABI
+
     }
 }

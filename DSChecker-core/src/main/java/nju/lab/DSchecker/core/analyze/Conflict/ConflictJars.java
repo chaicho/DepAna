@@ -34,6 +34,8 @@ public class ConflictJars {
         this.conflictJars.get(selectedDepJar.getName()).add(conflictJar);
     }
     public void printAllConflictJars() {
+        if(conflictJars.isEmpty())
+            return;
         log.warn("Jar Conflict Smell:");
         for (String key : conflictJars.keySet()) {
             log.warn("selected jar: " + selectedJar.get(key).getJarFilePaths());

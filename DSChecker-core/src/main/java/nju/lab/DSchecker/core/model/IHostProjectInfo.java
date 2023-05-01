@@ -14,9 +14,9 @@ public abstract class IHostProjectInfo  {
 
     protected IDepJars<? extends IDepJar> depJars;
     protected ICallGraph callGraph;
-    private File buildDir;
+    protected File buildDir;
 
-    private String buildPath;
+    protected String buildPath;
     /**
     compileSrcFiles represents the source files of the project;
     */
@@ -24,14 +24,14 @@ public abstract class IHostProjectInfo  {
     /**
      * compileSrcDirs represents the source paths of the project;
      */
-    private final Multimap<String, IDepJar> usedDependenciesPerClass = ArrayListMultimap.create();
+    protected final Multimap<String, IDepJar> usedDependenciesPerClass = ArrayListMultimap.create();
 
     protected Set<String> compileSrcDirs = new HashSet<>();
 
     protected Set<ClassVO> consumerClasses = new HashSet<>();
 
     protected Set<String> ABIClasses = new HashSet<>();
-    private Set<String> apiDepJars;
+    protected Set<String> apiDepJars = new HashSet<>();
 
 
     /**
@@ -41,7 +41,6 @@ public abstract class IHostProjectInfo  {
      */
     public void buildDepClassMap() {
         for (IDepJar depJar : depJars.getUsedDepJars()) {
-            System.out.println("DepJars: " + depJar.getName());
             for (String className : depJar.getAllCls()) {
                 usedDependenciesPerClass.put(className, depJar);
             }
@@ -128,6 +127,8 @@ public abstract class IHostProjectInfo  {
     }
     public void initABIDepjars(Set<String> ABInames) {
         ABIClasses.addAll(ABInames);
+        System.out.println("=========ABI========");
+        System.out.println(ABIClasses);
     }
     public Set<IDepJar> getABIDepJars(){
         Set<IDepJar> depJars = new HashSet<>();

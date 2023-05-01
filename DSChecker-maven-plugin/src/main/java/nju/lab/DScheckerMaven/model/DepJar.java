@@ -330,6 +330,11 @@ public class DepJar implements IDepJar {
 	public String getDisplayName(){
 		return getGroupId() +":" + getArtifactId() + ":" + getVersion() + ":" + getClassifier();
 	}
+
+	/**
+	 *
+	 * @return the depth of the node in the dependency tree. Note that the root project is not in the tree.
+	 */
 	@Override
 	public int getDepth(){
 		return nodeAdapters.stream().map(NodeAdapter::getNodeDepth).min(Integer::compareTo).get();

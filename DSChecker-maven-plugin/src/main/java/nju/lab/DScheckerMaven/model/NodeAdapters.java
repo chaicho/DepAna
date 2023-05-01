@@ -37,7 +37,9 @@ public class NodeAdapters {
         instance = new NodeAdapters();
         // add node in dependency tree
         NodeAdapterCollector visitor = new NodeAdapterCollector(instance);
+        System.out.println("visit start");
         root.accept(visitor);
+        System.out.println("visit end");
         // add management node
         List<NodeAdapter> manageNds = new ArrayList<NodeAdapter>();
         for (NodeAdapter nodeAdapter : instance.container) {

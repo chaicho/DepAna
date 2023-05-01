@@ -40,7 +40,6 @@ public class TypeAna extends AbstractSootAna{
         System.out.println(args);
         APITypeTransformer apiTypeTransformer = new APITypeTransformer();
         PackManager.v().getPack("wjtp").add(new Transform("wjtp.APIType", apiTypeTransformer));
-        hostProjectInfo.initABIDepjars(apiTypeTransformer.getABINames());
 
         try {
             soot.Main.main(args.toArray(new String[0]));
@@ -48,6 +47,7 @@ public class TypeAna extends AbstractSootAna{
         catch (Exception e){
             System.out.println(e);
         }
+        hostProjectInfo.initABIDepjars(apiTypeTransformer.getABINames());
 
         SootClass mainClass = Scene.v().getMainClass();
         System.out.println("------mainClass------");
@@ -60,13 +60,13 @@ public class TypeAna extends AbstractSootAna{
         System.out.println(Scene.v().getCallGraph().size());
         String callGraphString = Scene.v().getCallGraph().toString();
 
-        try {
-            FileWriter fileWriter = new FileWriter("CallGraph_Small.txt");
-            fileWriter.write(callGraphString);
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            FileWriter fileWriter = new FileWriter("CallGraph_Small.txt");
+//            fileWriter.write(callGraphString);
+//            fileWriter.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
