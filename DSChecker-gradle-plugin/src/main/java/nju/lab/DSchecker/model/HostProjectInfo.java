@@ -2,10 +2,7 @@ package nju.lab.DSchecker.model;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import nju.lab.DSchecker.core.model.ICallGraph;
-import nju.lab.DSchecker.core.model.IDepJar;
-import nju.lab.DSchecker.core.model.IDepJars;
-import nju.lab.DSchecker.core.model.IHostProjectInfo;
+import nju.lab.DSchecker.core.model.*;
 import soot.SourceLocator;
 
 import java.io.File;

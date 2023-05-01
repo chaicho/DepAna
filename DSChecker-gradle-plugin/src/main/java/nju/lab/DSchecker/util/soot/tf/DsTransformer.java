@@ -1,7 +1,7 @@
 package nju.lab.DSchecker.util.soot.tf;
 
 import nju.lab.DSchecker.util.SootUtil;
-import nju.lab.DSchecker.model.ClassVO;
+import nju.lab.DSchecker.core.model.ClassVO;
 import soot.SceneTransformer;
 
 import java.util.List;

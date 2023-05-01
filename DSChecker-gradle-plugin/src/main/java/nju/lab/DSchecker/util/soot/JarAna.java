@@ -9,7 +9,7 @@ import java.util.Set;
 import nju.lab.DSchecker.util.SootUtil;
 import nju.lab.DSchecker.util.soot.tf.DsTransformer;
 
-import nju.lab.DSchecker.model.ClassVO;
+import nju.lab.DSchecker.core.model.ClassVO;
 import soot.G;
 import soot.Main;
 import soot.PackManager;

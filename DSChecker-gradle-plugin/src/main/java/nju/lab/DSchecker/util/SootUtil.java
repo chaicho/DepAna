@@ -1,7 +1,7 @@
 package nju.lab.DSchecker.util;
 
-import nju.lab.DSchecker.model.ClassVO;
-import nju.lab.DSchecker.model.MethodVO;
+import nju.lab.DSchecker.core.model.ClassVO;
+import nju.lab.DSchecker.core.model.MethodVO;
 import soot.Scene;
 import soot.SootClass;
 import soot.SootMethod;

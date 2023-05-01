@@ -1,4 +1,4 @@
-package nju.lab.DSchecker.model;
+package nju.lab.DSchecker.core.model;
 
 import java.util.HashSet;
 import java.util.Set;

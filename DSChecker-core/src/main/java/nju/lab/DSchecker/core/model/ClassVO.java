@@ -1,4 +1,4 @@
-package nju.lab.DSchecker.model;
+package nju.lab.DSchecker.core.model;
 
 import soot.SootClass;
 
@@ -14,7 +14,7 @@ public class ClassVO {
     private Set<MethodVO> mthds;// methods in class
 
     private SootClass sootClass;
-    private DepJar depJar;//所属的jar
+    private IDepJar depJar;//所属的jar
     /**
      * 构造函数
      * @param clsSig 类全限定名
@@ -33,14 +33,14 @@ public class ClassVO {
      * get
      * @return
      */
-    public DepJar getDepJar() {
+    public IDepJar getDepJar() {
         return depJar;
     }
     /**
      * set
      * @param depJar
      */
-    public void setDepJar(DepJar depJar) {
+    public void setDepJar(IDepJar depJar) {
         this.depJar = depJar;
     }
     /**

@@ -3,6 +3,7 @@ package nju.lab.DSchecker.model;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import nju.lab.DSchecker.core.model.ClassVO;
 import nju.lab.DSchecker.util.GradleUtil;
 import nju.lab.DSchecker.util.SootUtil;
 import nju.lab.DSchecker.core.model.IDepJar;
