@@ -20,14 +20,19 @@ public abstract class IHostProjectInfo  {
     /**
     compileSrcFiles represents the source files of the project;
     */
-    private Set<File> compileSrcFiles ;
+    protected Set<File> compileSrcFiles ;
     /**
      * compileSrcDirs represents the source paths of the project;
      */
-    private Set<String> compileSrcDirs = new HashSet<>();
     private final Multimap<String, IDepJar> usedDependenciesPerClass = ArrayListMultimap.create();
 
-    public abstract void init(ICallGraph callGraph, IDepJars depJars);
+    protected Set<String> compileSrcDirs = new HashSet<>();
+
+    protected Set<ClassVO> consumerClasses = new HashSet<>();
+
+    protected Set<String> ABIClasses = new HashSet<>();
+    private Set<String> apiDepJars;
+
 
     /**
      * Construct the class to Depjar map.
@@ -91,6 +96,8 @@ public abstract class IHostProjectInfo  {
                 .collect(Collectors.toSet());
     }
 
+
+
     public void setBuildDir(File buildDir) {
         this.buildDir = buildDir;
         this.buildPath = buildDir.getAbsolutePath();
@@ -114,8 +121,30 @@ public abstract class IHostProjectInfo  {
         }
         return ret;
     }
-    abstract public void initABIDepjars(Set<String> ABInames);
-    abstract public Set<IDepJar> getABIDepJars();
 
-    abstract public Set<String> getApiDepJars();
+    public void init(ICallGraph callGraph, IDepJars depJars){
+        this.callGraph  = callGraph;
+        this.depJars = depJars;
+    }
+    public void initABIDepjars(Set<String> ABInames) {
+        ABIClasses.addAll(ABInames);
+    }
+    public Set<IDepJar> getABIDepJars(){
+        Set<IDepJar> depJars = new HashSet<>();
+        for(String ABIName : ABIClasses){
+            IDepJar dep = getSingleUsedDepFromClass(ABIName);
+            if(dep != null)
+                depJars.add(dep);
+        }
+        return depJars;
+    }
+
+    public void setApiDepJars(Set<String> apiArtifacts) {
+        this.apiDepJars = apiArtifacts;
+//        System.out.println(apiArtifacts);
+    }
+    public Set<String> getApiDepJars() {
+        return apiDepJars;
+    }
+
 }

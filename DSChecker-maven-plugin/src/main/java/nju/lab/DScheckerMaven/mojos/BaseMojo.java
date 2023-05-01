@@ -2,7 +2,9 @@ package nju.lab.DScheckerMaven.mojos;
 
 
 import nju.lab.DSchecker.core.model.IDepJar;
-import nju.lab.DScheckerMaven.util.MavenUtil;
+import nju.lab.DScheckerMaven.model.CallGraphMaven;
+import nju.lab.DScheckerMaven.model.DepJars;
+import nju.lab.DScheckerMaven.model.HostProjectInfo;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.handler.manager.ArtifactHandlerManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -38,6 +40,7 @@ public class BaseMojo extends AbstractMojo {
     public ArtifactResolver resolver;
     @Parameter(defaultValue = "${project.build.directory}", required = true)
     public File buildDir;
+
     public boolean ignoreProvidedScope = true;
     public boolean ignoreTestScope = true;
     public boolean ignoreTestClassifier = true;
@@ -48,11 +51,11 @@ public class BaseMojo extends AbstractMojo {
         IDepJar depJar = null;
         System.out.println("Hello World2!");
         System.out.println(project);
-        System.out.println(reactorProjects);
-        System.out.println(remoteRepositories);
         System.out.println(localRepository);
         System.out.println(compileSourceRoots);
-        System.out.println(artifactHandlerManager);
-
+        System.out.println(buildDir);
+        HostProjectInfo.i().init(CallGraphMaven.i(), DepJars.i());
+        HostProjectInfo.i().setBuildDir(buildDir);
+        HostProjectInfo.i().setCompileSrcPaths(compileSourceRoots);
     }
 }
