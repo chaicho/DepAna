@@ -1,7 +1,5 @@
 package nju.lab.DSchecker.gradleplugins.tasks;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.model.DepJars;
 import nju.lab.DSchecker.core.analyze.SmellFactory;
 import nju.lab.DSchecker.model.HostProjectInfo;
@@ -28,8 +26,7 @@ import java.io.PrintWriter;
 import java.util.*;
 
 
-@Slf4j
-@Getter
+//@Slf4j
 public abstract class BaseConflictTask extends DefaultTask {
 
 
@@ -120,8 +117,10 @@ public abstract class BaseConflictTask extends DefaultTask {
         }
 
         allJarNum = DepJars.i().getAllDepJar().size();
-        log.warn("tree size:" + DepJars.i().getAllDepJar().size() + ", used size:" + systemSize
-                + ", usedFile size:" + systemFileSize / 1000);
+//        log.warn("tree size:" + DepJars.i().getAllDepJar().size() + ", used size:" + systemSize
+//                + ", usedFile size:" + systemFileSize / 1000);
+
+
         //		if (DepJars.i().getAllDepJar().size() <= 50||systemFileSize / 1000>20000) {
         //			throw new Exception("project size error.");
         //		}
@@ -172,6 +171,7 @@ public abstract class BaseConflictTask extends DefaultTask {
     }
     @TaskAction
     void execute() throws Exception {
+//        log.warn("Executing");
         initGlobalValues();
         GradleUtil.init(this);
         DepJars.NodeAdapters.init(getRootComponent().get(),artifactMap);
@@ -185,6 +185,8 @@ public abstract class BaseConflictTask extends DefaultTask {
 
         HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
         HostProjectInfo.i().setBuildDir(buildDir);
+
+        TypeAna.i().setHostProjectInfo(HostProjectInfo.i());
         TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
 
         HostProjectInfo.i().init(MyCallGraph.i(), DepJars.i());

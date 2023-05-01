@@ -57,9 +57,9 @@ public class HostProjectInfo extends IHostProjectInfo {
        this.callGraph  = callGraph;
        this.depJars = depJars;
     }
-    public void addABIClasses(Set<String> ABInames) {
+    @Override
+    public void initABIDepjars(Set<String> ABInames) {
         ABIClasses.addAll(ABInames);
-//        System.out.println("ABIClasses: " + ABIClasses);
     }
     public Set<IDepJar> getABIDepJars(){
         Set<IDepJar> depJars = new HashSet<>();

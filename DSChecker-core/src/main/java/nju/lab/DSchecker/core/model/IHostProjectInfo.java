@@ -114,7 +114,7 @@ public abstract class IHostProjectInfo  {
         }
         return ret;
     }
-
+    abstract public void initABIDepjars(Set<String> ABInames);
     abstract public Set<IDepJar> getABIDepJars();
 
     abstract public Set<String> getApiDepJars();

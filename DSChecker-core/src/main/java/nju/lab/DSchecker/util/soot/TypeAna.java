@@ -1,18 +1,9 @@
 package nju.lab.DSchecker.util.soot;
 
-import nju.lab.DSchecker.model.HostProjectInfo;
 import nju.lab.DSchecker.util.soot.tf.APITypeTransformer;
-import org.gradle.model.dsl.internal.transform.SourceLocation;
 import soot.*;
-import soot.jimple.toolkits.callgraph.ReachableMethods;
-import soot.options.Options;
-import soot.util.queue.QueueReader;
-
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.util.Arrays;
 import java.util.List;
 
 public class TypeAna extends AbstractSootAna{
@@ -28,11 +19,9 @@ public class TypeAna extends AbstractSootAna{
         return instance;
     }
 
-
     /*
     Use the APITypeTransformer to get the ABI type of the AnalyzedClass
-     */
-
+    */
     public void getABIType(List<String> JarPaths) {
         List<String> args = this.getArgsWithHostNoCg(JarPaths);
         APITypeTransformer apiTypeTransformer = new APITypeTransformer();
@@ -51,6 +40,7 @@ public class TypeAna extends AbstractSootAna{
         System.out.println(args);
         APITypeTransformer apiTypeTransformer = new APITypeTransformer();
         PackManager.v().getPack("wjtp").add(new Transform("wjtp.APIType", apiTypeTransformer));
+        hostProjectInfo.initABIDepjars(apiTypeTransformer.getABINames());
 
         try {
             soot.Main.main(args.toArray(new String[0]));

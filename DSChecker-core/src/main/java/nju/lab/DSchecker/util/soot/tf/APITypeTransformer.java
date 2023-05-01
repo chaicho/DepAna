@@ -1,7 +1,6 @@
 package nju.lab.DSchecker.util.soot.tf;
 
 import lombok.Setter;
-import nju.lab.DSchecker.model.HostProjectInfo;
 import soot.*;
 import soot.util.Chain;
 
@@ -15,8 +14,11 @@ public class APITypeTransformer extends SceneTransformer {
     private Set<Type> typesUsedInSuperClasses;
     private Set<Type> typesUsedInPublicFields;
     private Set<Type> typesUsedInPublicMethodParameters;
+    private Set<String> ABInames = new HashSet<>();
 
-
+    public Set<String> getABINames(){
+        return ABInames;
+    }
     @Override
     protected void internalTransform(String phaseName, Map<String, String> options) {
         Chain<SootClass> classesToBeAnalyzed = Scene.v().getApplicationClasses();
@@ -83,7 +85,6 @@ public class APITypeTransformer extends SceneTransformer {
         System.out.println("TypesUsedInPublicFields = " + typesUsedInPublicFields);
 
         Set<Type> allABItypes = new HashSet<>();
-        Set<String> ABInames = new HashSet<>();
         allABItypes.addAll(typesUsedInSuperClasses);
         allABItypes.addAll(typesUsedInPublicMethodParameters);
         allABItypes.addAll(typesUsedInPublicFields);
@@ -94,6 +95,5 @@ public class APITypeTransformer extends SceneTransformer {
             }
         }
 //        System.out.println("AllABITypes = " + allABItypes);
-        HostProjectInfo.i().addABIClasses(ABInames);
     }
 }

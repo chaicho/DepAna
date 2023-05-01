@@ -1,8 +1,7 @@
 package nju.lab.DSchecker.util.soot;
 
 import lombok.extern.slf4j.Slf4j;
-import nju.lab.DSchecker.model.HostProjectInfo;
-import nju.lab.DSchecker.util.GradleUtil;
+import nju.lab.DSchecker.core.model.IHostProjectInfo;
 
 import java.io.File;
 import java.util.*;
@@ -15,6 +14,10 @@ import java.util.*;
 @Slf4j
 public abstract class AbstractSootAna {
 
+	IHostProjectInfo hostProjectInfo;
+	public void setHostProjectInfo(IHostProjectInfo hostProjectInfo){
+		this.hostProjectInfo = hostProjectInfo;
+	}
 	static List<String> excludeList;
 	private static Collection<String> excludeList()
 	{
@@ -89,7 +92,7 @@ public abstract class AbstractSootAna {
 //		}
 
 		argsList.add("-process-dir");
-		argsList.add(HostProjectInfo.i().getBuildCp());
+		argsList.add(hostProjectInfo.getBuildCp());
 
 	}
 
@@ -121,7 +124,7 @@ public abstract class AbstractSootAna {
 		String jredir = System.getProperty("java.home")+"/lib/rt.jar";
 //		String jce = System.getProperty("java.home")+"/lib/jce.jar";
 
-		String classPath = HostProjectInfo.i().getBuildCp();
+		String classPath = hostProjectInfo.getBuildCp();
 
 		classPath = classPath + File.pathSeparator + jredir;
 		argsList.add("-cp");

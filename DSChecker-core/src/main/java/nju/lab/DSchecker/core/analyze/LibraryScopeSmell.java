@@ -1,9 +1,11 @@
 package nju.lab.DSchecker.core.analyze;
 
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.IDepJar;
 
 import java.util.Set;
 
+@Slf4j
 public class LibraryScopeSmell extends BaseSmell {
     @Override
     public void detect() {
