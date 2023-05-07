@@ -1,6 +1,9 @@
 plugins {
     id("java-gradle-plugin")
+    id("maven-publish")
 }
+group = 'nju.lab' // set the group ID
+version = '1.0.0' // set the version
 
 repositories {
     maven {
@@ -11,21 +14,15 @@ repositories {
 }
 gradlePlugin {
     plugins {
-        create("test") {
-            id = "nju.lab.DSchecker"
-            implementationClass = "nju.lab.DSchecker.gradleplugins.TestPlugin"
-        }
-    }
-    plugins {
-        create("testnew") {
-            id = "test.newplugin"
-            implementationClass = "nju.lab.DSchecker.gradleplugins.GradlePlugin"
+        create("DScheckerGradle"){
+            id = "nju.lab.DScheckerGradle"
+            implementationClass = "nju.lab.DScheckerGradle.gradleplugins.DSchecker"
         }
     }
 }
 
 dependencies {
-    implementation project(":DSChecker-core")
+    implementation "nju.lab:DSchecker-core:1.0.0"
 
     implementation 'org.ow2.asm:asm:8.0.1'
     compileOnly 'org.projectlombok:lombok:1.18.22'
@@ -53,4 +50,23 @@ dependencies {
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
+}
+publishing {
+    repositories {
+        maven {
+            name = 'localPluginRepository'
+            url = 'D://localPluginRepo'
+        }
+        mavenLocal()
+    }
+
+    publications {
+        myPlugin(MavenPublication) {
+            from components.java // use the java component
+            groupId 'nju.lab' // set the group ID
+            artifactId 'DScheckerGradle' // set the artifact ID
+            version '1.0.0' // set the version
+        }
+    }
+
 }

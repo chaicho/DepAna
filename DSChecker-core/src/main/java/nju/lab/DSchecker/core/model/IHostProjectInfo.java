@@ -96,14 +96,15 @@ public abstract class IHostProjectInfo  {
     }
 
 
-
     public void setBuildDir(File buildDir) {
         this.buildDir = buildDir;
         this.buildPath = buildDir.getAbsolutePath();
     }
-    public String getBuildCp() {
-        return buildPath + File.separator + "classes" + File.separator + "java" + File.separator + "main";
-    }
+    /**
+     * Get the  path of the host project which contains the .classes files.
+     * @return
+     */
+    abstract public String getBuildCp();
 
     /**
      * Get all the jar files reachable by the host project.

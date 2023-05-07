@@ -1,4 +1,4 @@
-package nju.lab.DSchecker.model;
+package nju.lab.DScheckerGradle.model;
 
 import lombok.Data;
 import lombok.Getter;

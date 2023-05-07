@@ -80,9 +80,9 @@ public class APITypeTransformer extends SceneTransformer {
         // Perform analysis using typesUsedInInternalClasses
         // ... (rest of the analysis code here)
 
-        System.out.println("TypesUsedInSuperClasses = " + typesUsedInSuperClasses);
-        System.out.println("TypesUsedInPublicMethodParameters = " + typesUsedInPublicMethodParameters);
-        System.out.println("TypesUsedInPublicFields = " + typesUsedInPublicFields);
+//        System.out.println("TypesUsedInSuperClasses = " + typesUsedInSuperClasses);
+//        System.out.println("TypesUsedInPublicMethodParameters = " + typesUsedInPublicMethodParameters);
+//        System.out.println("TypesUsedInPublicFields = " + typesUsedInPublicFields);
 
         Set<Type> allABItypes = new HashSet<>();
         allABItypes.addAll(typesUsedInSuperClasses);

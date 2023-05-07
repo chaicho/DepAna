@@ -1,11 +1,9 @@
-package nju.lab.DSchecker.model;
+package nju.lab.DScheckerGradle.model;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 import nju.lab.DSchecker.core.model.*;
+import org.gradle.api.file.FileCollection;
 import soot.SourceLocator;
 
-import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -13,6 +11,7 @@ import java.util.stream.Collectors;
 public class HostProjectInfo extends IHostProjectInfo {
     private static HostProjectInfo instance;
     private Set<String> apiDepJars = new HashSet<>();
+    private FileCollection classesDirs;
 
     private HostProjectInfo() {
     }
@@ -39,10 +38,14 @@ public class HostProjectInfo extends IHostProjectInfo {
                 System.out.println("consumerClass: " + consumerClass.getClsSig());
             });
         }
-
     }
 
+    @Override
+    public String getBuildCp() {
+        return classesDirs.getAsPath();
+    }
 
-
-
+    public void setClassesDirs(FileCollection classesDirs) {
+        this.classesDirs = classesDirs;
+    }
 }

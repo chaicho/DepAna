@@ -14,5 +14,8 @@ public abstract class BaseSmell {
     IHostProjectInfo hostProjectInfo;
     ICallGraph  callGraph;
     IDepJars<? extends IDepJar> depJars;
+
+
+
     public abstract void detect();
 }

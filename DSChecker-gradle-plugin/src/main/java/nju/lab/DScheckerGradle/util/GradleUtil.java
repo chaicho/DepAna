@@ -1,8 +1,8 @@
-package nju.lab.DSchecker.util;
+package nju.lab.DScheckerGradle.util;
 
 
-import nju.lab.DSchecker.gradleplugins.tasks.BaseConflictTask;
-import nju.lab.DSchecker.model.NodeAdapter;
+import nju.lab.DScheckerGradle.gradleplugins.tasks.BaseConflictTask;
+import nju.lab.DScheckerGradle.model.NodeAdapter;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ResolvedArtifact;

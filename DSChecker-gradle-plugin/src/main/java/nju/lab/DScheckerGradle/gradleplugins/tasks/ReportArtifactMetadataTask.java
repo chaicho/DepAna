@@ -1,4 +1,4 @@
-package nju.lab.DSchecker.gradleplugins.tasks;
+package nju.lab.DScheckerGradle.gradleplugins.tasks;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.artifacts.component.ComponentArtifactIdentifier;

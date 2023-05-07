@@ -1,9 +1,11 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
 
 group 'nju.lab'
 version '1.0.0'
+archivesBaseName = 'DSchecker-core'
 
 repositories {
     mavenLocal()
@@ -32,4 +34,24 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = 'localPluginRepository'
+            url = 'D://localPluginRepo'
+        }
+        mavenLocal()
+    }
+
+    publications {
+        myPlugin(MavenPublication) {
+            from components.java // use the java component
+            groupId 'nju.lab' // set the group ID
+            artifactId 'DScheckerCore' // set the artifact ID
+            version '1.0' // set the version
+        }
+    }
+
 }

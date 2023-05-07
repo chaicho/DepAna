@@ -1,7 +1,7 @@
-package nju.lab.DSchecker.model;
+package nju.lab.DScheckerGradle.model;
 
 import lombok.extern.slf4j.Slf4j;
-import nju.lab.DSchecker.util.GradleUtil;
+import nju.lab.DScheckerGradle.util.GradleUtil;
 import org.gradle.api.artifacts.ResolvedArtifact;
 import org.gradle.api.artifacts.component.ComponentIdentifier;
 import org.gradle.api.artifacts.component.ComponentSelector;

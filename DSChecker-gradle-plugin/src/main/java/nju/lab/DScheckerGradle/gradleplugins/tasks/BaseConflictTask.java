@@ -1,11 +1,11 @@
-package nju.lab.DSchecker.gradleplugins.tasks;
+package nju.lab.DScheckerGradle.gradleplugins.tasks;
 
 import lombok.extern.slf4j.Slf4j;
-import nju.lab.DSchecker.model.DepJars;
+import nju.lab.DScheckerGradle.model.DepJars;
 import nju.lab.DSchecker.core.analyze.SmellFactory;
-import nju.lab.DSchecker.model.HostProjectInfo;
-import nju.lab.DSchecker.model.NodeAdapters;
-import nju.lab.DSchecker.model.callgraph.MyCallGraph;
+import nju.lab.DScheckerGradle.model.HostProjectInfo;
+import nju.lab.DScheckerGradle.model.NodeAdapters;
+import nju.lab.DScheckerGradle.model.callgraph.MyCallGraph;
 import nju.lab.DSchecker.util.soot.TypeAna;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
@@ -19,8 +19,8 @@ import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.*;
-import nju.lab.DSchecker.util.GradleUtil;
-import nju.lab.DSchecker.model.DepJar;
+import nju.lab.DScheckerGradle.util.GradleUtil;
+import nju.lab.DScheckerGradle.model.DepJar;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -31,6 +31,10 @@ import java.util.*;
 @Slf4j
 public abstract class BaseConflictTask extends DefaultTask {
 
+
+    private SourceSet mainSourceSet;
+    private SourceSetOutput mainOutput;
+    private FileCollection classesDirs;
 
     @Input
     public abstract ListProperty<ComponentArtifactIdentifier> getArtifactIdentifiers();
@@ -119,10 +123,8 @@ public abstract class BaseConflictTask extends DefaultTask {
         }
 
         allJarNum = DepJars.i().getAllDepJar().size();
-        log.warn("tree size:" + DepJars.i().getAllDepJar().size() + ", used size:" + systemSize
-                + ", usedFile size:" + systemFileSize / 1000);
-
-
+//        log.warn("tree size:" + DepJars.i().getAllDepJar().size() + ", used size:" + systemSize
+//                + ", usedFile size:" + systemFileSize / 1000);
         //		if (DepJars.i().getAllDepJar().size() <= 50||systemFileSize / 1000>20000) {
         //			throw new Exception("project size error.");
         //		}
@@ -151,11 +153,16 @@ public abstract class BaseConflictTask extends DefaultTask {
         fileCollection = artifactCollection.getArtifactFiles();
         resolvedArtifactResults = artifactCollection.getArtifacts();
 
-        buildDir = project.getBuildDir();
+        mainSourceSet = project.getExtensions().getByType(SourceSetContainer.class)
+                    .getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 
-        compileSrcDirs = project.getExtensions().getByType(SourceSetContainer.class)
-                            .getByName("main").getAllJava().getSrcDirs();
-//                                            .getByName("main").getAllJava().get()
+        compileSrcDirs = mainSourceSet.getAllJava().getSrcDirs();
+
+        // Get the output of the main source set
+        mainOutput = mainSourceSet.getOutput();
+
+        // Get the classes directories of the main output
+        classesDirs = mainOutput.getClassesDirs();
 
         artifactMap = initMapArtifactByIdentifiers();
 
@@ -184,9 +191,8 @@ public abstract class BaseConflictTask extends DefaultTask {
 //        AllCls.i().init(DepJars.i());
         getApiElements();
 
-
         HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
-        HostProjectInfo.i().setBuildDir(buildDir);
+        HostProjectInfo.i().setClassesDirs(classesDirs);
 
         TypeAna.i().setHostProjectInfo(HostProjectInfo.i());
         TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
