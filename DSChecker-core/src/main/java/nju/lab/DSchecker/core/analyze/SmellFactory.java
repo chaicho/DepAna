@@ -39,7 +39,7 @@ public class SmellFactory {
     public void detectAll() {
         List<BaseSmell> smells = createSmells();
         for (BaseSmell smell : smells) {
-            smell.detect();
+            smell.detectSmell();
         }
     }
 

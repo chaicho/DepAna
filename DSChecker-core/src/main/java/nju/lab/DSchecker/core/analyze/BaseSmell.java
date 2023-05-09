@@ -30,5 +30,21 @@ public abstract class BaseSmell {
         }
     }
 
+    public void detectSmell(){
+        try {
+            detect();
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+            output("ERRROR");
+            output("gg");
+            output(e.getMessage());
+            output(getClass().toString());
+            // Output the stacktrace to the file
+            for (StackTraceElement element : e.getStackTrace()) {
+                output(element.toString());
+            }
+        }
+    }
     public abstract void detect();
 }

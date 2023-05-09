@@ -45,13 +45,13 @@ publishing {
         mavenLocal()
     }
 
-    publications {
-        myPlugin(MavenPublication) {
-            from components.java // use the java component
-            groupId 'nju.lab' // set the group ID
-            artifactId 'DScheckerCore' // set the artifact ID
-            version '1.0' // set the version
-        }
-    }
+//    publications {
+//        myPlugin(MavenPublication) {
+//            from components.java // use the java component
+//            groupId 'nju.lab' // set the group ID
+//            artifactId 'DScheckerCore' // set the artifact ID
+//            version '1.0' // set the version
+//        }
+//    }
 
 }

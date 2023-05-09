@@ -19,10 +19,17 @@ public class LibraryConflictSmell extends BaseSmell{
         super();
         conflictJars = new HashMap<>();
         selectedJar = new HashMap<>();
-//        System.out.println("Initial");
     }
     public void addConflictJar(IDepJar selectedDepJar, IDepJar conflictJar) {
-
+        if(selectedJar == null) {
+            output("selectedJar is null");
+        } else if (conflictJars == null) {
+            output("conflictJars is null");
+            return;
+        }
+        if (selectedDepJar == null || conflictJar ==null){
+            return;
+        }
         if (!selectedJar.containsKey(selectedDepJar.getName())) {
             selectedJar.put(selectedDepJar.getName(), selectedDepJar);
             conflictJars.put(selectedDepJar.getName(), new HashSet<>(Arrays.asList(selectedDepJar, conflictJar)));
@@ -39,20 +46,27 @@ public class LibraryConflictSmell extends BaseSmell{
             output("conflict jars: " + conflictJars.get(key));
         }
     }
+    @Override
     public void detect() {
-        output("========LibraryConflictSmell========");
-        log.warn("=======Jar Conflict Smell========");
-        Set<IDepJar> conflictingDepJars = depJars.getAllDepJar()
-                .stream()
-                .filter(depJar -> {
-                    return !depJar.isSelected();
-                })
-                .collect(Collectors.toSet());
-        for (IDepJar depJar : conflictingDepJars) {
-            IDepJar selectedJar = depJars.getSelectedDepJarById(depJar.getName());
-            addConflictJar(selectedJar, depJar);
-        }
-        printAllConflictJars();
+            output("========LibraryConflictSmell========");
+            log.warn("=======Jar Conflict Smell========");
+            Set<IDepJar> conflictingDepJars = depJars.getAllDepJar()
+                    .stream()
+                    .filter(depJar -> {
+                        return !depJar.isSelected();
+                    })
+                    .collect(Collectors.toSet());
+            if(conflictingDepJars.isEmpty()){
+                return;
+            }
+            for (IDepJar depJar : conflictingDepJars) {
+                IDepJar selectedJar = depJars.getSelectedDepJarById(depJar.getName());
+                addConflictJar(selectedJar, depJar);
+            }
+            printAllConflictJars();
+
+
+
     }
 }
 
