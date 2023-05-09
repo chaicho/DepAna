@@ -40,6 +40,11 @@ public class HostProjectInfo extends IHostProjectInfo {
         }
     }
     @Override
+    public String getWrapperPath(){
+        return rootDir.getPath() + File.separator + ".mwn";
+    }
+
+    @Override
     public String getBuildCp() {
         return buildPath + File.separator + "classes";
     }

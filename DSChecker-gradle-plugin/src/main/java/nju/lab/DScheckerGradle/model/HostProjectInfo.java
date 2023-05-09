@@ -4,6 +4,7 @@ import nju.lab.DSchecker.core.model.*;
 import org.gradle.api.file.FileCollection;
 import soot.SourceLocator;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,10 @@ public class HostProjectInfo extends IHostProjectInfo {
             });
         }
     }
-
+    @Override
+    public String getWrapperPath(){
+        return rootDir.getPath() + File.separator + ".gradle";
+    }
     @Override
     public String getBuildCp() {
         return classesDirs.getAsPath();

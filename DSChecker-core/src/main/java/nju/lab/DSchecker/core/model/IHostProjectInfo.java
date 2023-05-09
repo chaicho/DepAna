@@ -16,7 +16,7 @@ public abstract class IHostProjectInfo  {
     protected ICallGraph callGraph;
     protected File buildDir;
 
-    public File rootDir;
+    protected File rootDir;
 
     protected File outputFile;
     protected String buildPath;
@@ -51,6 +51,21 @@ public abstract class IHostProjectInfo  {
         }
     }
 
+    /**
+     * Set the root directory of the project.
+      * @param dir
+     */
+     public void setRootDir(File dir){
+         this.rootDir = dir;
+     }
+
+    /**
+     * Get the root directory of the project.
+     * @return
+     */
+    public File getRootDir(){
+         return rootDir;
+     }
     /**
      * Get the duplicate class names.
      * @return the class names that are used by more than one jar.
@@ -171,4 +186,6 @@ public abstract class IHostProjectInfo  {
     public File getOutputFile(){
         return outputFile;
     }
+
+    abstract public String getWrapperPath();
 }

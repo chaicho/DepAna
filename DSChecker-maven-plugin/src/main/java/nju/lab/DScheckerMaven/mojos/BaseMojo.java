@@ -11,6 +11,7 @@ import nju.lab.DScheckerMaven.util.MavenUtil;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.handler.manager.ArtifactHandlerManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
@@ -36,6 +37,10 @@ public class BaseMojo extends AbstractMojo {
     public List<MavenProject> reactorProjects;
     @Parameter(defaultValue = "${project.remoteArtifactRepositories}", readonly = true, required = true)
     public List<ArtifactRepository> remoteRepositories;
+
+    @Parameter(defaultValue = "${session}", readonly = true)
+    private MavenSession mavenSession;
+
     @Parameter(defaultValue = "${localRepository}", readonly = true)
     public ArtifactRepository localRepository;
 
@@ -85,7 +90,7 @@ public class BaseMojo extends AbstractMojo {
         HostProjectInfo.i().init(CallGraphMaven.i(), DepJars.i());
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().setCompileSrcPaths(compileSourceRoots);
-
+        HostProjectInfo.i().setRootDir(new File(mavenSession.getExecutionRootDirectory()));
         //初始化所有的类集合
 //        log.info("寻找有多版本的artifact...");
 
