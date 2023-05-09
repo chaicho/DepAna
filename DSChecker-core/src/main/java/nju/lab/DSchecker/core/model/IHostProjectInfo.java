@@ -2,13 +2,13 @@ package nju.lab.DSchecker.core.model;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import soot.SourceLocator;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static soot.jbco.IJbcoTransform.output;
 
 public abstract class IHostProjectInfo  {
 
@@ -16,6 +16,9 @@ public abstract class IHostProjectInfo  {
     protected ICallGraph callGraph;
     protected File buildDir;
 
+    public File rootDir;
+
+    protected File outputFile;
     protected String buildPath;
     /**
     compileSrcFiles represents the source files of the project;
@@ -32,6 +35,7 @@ public abstract class IHostProjectInfo  {
 
     protected Set<String> ABIClasses = new HashSet<>();
     protected Set<String> apiDepJars = new HashSet<>();
+    protected List<String> hostClasses;
 
 
     /**
@@ -56,6 +60,13 @@ public abstract class IHostProjectInfo  {
                 .stream()
                 .filter(className -> usedDependenciesPerClass.get(className).size() > 1)
                 .collect(Collectors.toList());
+    }
+
+    public List<String> getHostClasses(){
+        if(hostClasses == null) {
+            hostClasses = SourceLocator.v().getClassesUnder(buildPath);
+        }
+        return hostClasses;
     }
 
     /**
@@ -99,6 +110,14 @@ public abstract class IHostProjectInfo  {
     public void setBuildDir(File buildDir) {
         this.buildDir = buildDir;
         this.buildPath = buildDir.getAbsolutePath();
+        this.outputFile =new File(buildDir, "DScheckerResult.txt");
+        if(!outputFile.exists()){
+            try {
+                outputFile.createNewFile();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
     /**
      * Get the  path of the host project which contains the .classes files.
@@ -149,4 +168,7 @@ public abstract class IHostProjectInfo  {
         return apiDepJars;
     }
 
+    public File getOutputFile(){
+        return outputFile;
+    }
 }

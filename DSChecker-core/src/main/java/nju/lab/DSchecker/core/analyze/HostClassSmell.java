@@ -1,9 +1,26 @@
 package nju.lab.DSchecker.core.analyze;
 
+import lombok.extern.slf4j.Slf4j;
+import nju.lab.DSchecker.core.model.IDepJar;
+
+import java.util.Collection;
+import java.util.List;
+
+@Slf4j
 public class HostClassSmell extends BaseSmell{
 
     @Override
     public void detect(){
-        //TODO
+        output("=======HostClassSmell=======");
+        List<String> hostClasses= hostProjectInfo.getHostClasses();
+        for(String className : hostClasses){
+            Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(className);
+            log.warn("Duplicate Class Smell: " + className);
+            output("Duplicate Class Smell: " + className);
+            for(IDepJar depJar : depJars){
+                log.warn(   "in " + depJar.getName());
+                output("in " + depJar.getName());
+            }
+        }
     }
 }

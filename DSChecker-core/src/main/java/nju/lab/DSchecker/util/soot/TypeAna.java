@@ -37,7 +37,6 @@ public class TypeAna extends AbstractSootAna{
 
         addExcludeArgs(args);
 //        args.add("-no-bodies-for-excluded");
-        System.out.println(args);
         APITypeTransformer apiTypeTransformer = new APITypeTransformer();
         PackManager.v().getPack("wjtp").add(new Transform("wjtp.APIType", apiTypeTransformer));
 
@@ -45,28 +44,22 @@ public class TypeAna extends AbstractSootAna{
             soot.Main.main(args.toArray(new String[0]));
         }
         catch (Exception e){
+            System.out.println("-------------Reset-----------");
+            G.reset();
             System.out.println(e);
         }
         hostProjectInfo.initABIDepjars(apiTypeTransformer.getABINames());
 
-        SootClass mainClass = Scene.v().getMainClass();
-        System.out.println("------mainClass------");
-        System.out.println(mainClass);
-        System.out.println("-----------EntryPoints-------------");
-        System.out.println(Scene.v().getEntryPoints());
-        System.out.println("---------------ArgumentClasses-------------");
-        System.out.println(Scene.v().getApplicationClasses());
-        System.out.println("---------------CallGraph-------------");
-        System.out.println(Scene.v().getCallGraph().size());
-        String callGraphString = Scene.v().getCallGraph().toString();
+//        SootClass mainClass = Scene.v().getMainClass();
+//        System.out.println("------mainClass------");
+//        System.out.println(mainClass);
+//        System.out.println("-----------EntryPoints-------------");
+//        System.out.println(Scene.v().getEntryPoints());
+//        System.out.println("---------------ArgumentClasses-------------");
+//        System.out.println(Scene.v().getApplicationClasses());
+//        System.out.println("---------------CallGraph-------------");
+//        System.out.println(Scene.v().getCallGraph().size());
 
-//        try {
-//            FileWriter fileWriter = new FileWriter("CallGraph_Small.txt");
-//            fileWriter.write(callGraphString);
-//            fileWriter.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     @Override

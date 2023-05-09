@@ -23,6 +23,7 @@ gradlePlugin {
 
 dependencies {
     implementation "nju.lab:DSchecker-core:1.0.0"
+//    project(":DSChecker-core")
 
     implementation 'org.ow2.asm:asm:8.0.1'
     compileOnly 'org.projectlombok:lombok:1.18.22'

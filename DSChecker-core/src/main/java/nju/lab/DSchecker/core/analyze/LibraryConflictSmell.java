@@ -1,14 +1,47 @@
 package nju.lab.DSchecker.core.analyze;
 
-import nju.lab.DSchecker.core.analyze.Conflict.ConflictJars;
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.IDepJar;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 
+@Slf4j
 public class LibraryConflictSmell extends BaseSmell{
+    HashMap<String, Set<IDepJar>> conflictJars = new HashMap<>() ;
+    HashMap<String, IDepJar> selectedJar = new HashMap<>();
+
+    public LibraryConflictSmell() {
+        super();
+        conflictJars = new HashMap<>();
+        selectedJar = new HashMap<>();
+//        System.out.println("Initial");
+    }
+    public void addConflictJar(IDepJar selectedDepJar, IDepJar conflictJar) {
+
+        if (!selectedJar.containsKey(selectedDepJar.getName())) {
+            selectedJar.put(selectedDepJar.getName(), selectedDepJar);
+            conflictJars.put(selectedDepJar.getName(), new HashSet<>(Arrays.asList(selectedDepJar, conflictJar)));
+        }
+        this.conflictJars.get(selectedDepJar.getName()).add(conflictJar);
+    }
+    public void printAllConflictJars() {
+        if(conflictJars.isEmpty())
+            return;
+        for (String key : conflictJars.keySet()) {
+            log.warn("selected jar: " + selectedJar.get(key).getJarFilePaths());
+            log.warn("conflict jars: " + conflictJars.get(key));
+            output("selected jar: " + selectedJar.get(key).getJarFilePaths());
+            output("conflict jars: " + conflictJars.get(key));
+        }
+    }
     public void detect() {
+        output("========LibraryConflictSmell========");
+        log.warn("=======Jar Conflict Smell========");
         Set<IDepJar> conflictingDepJars = depJars.getAllDepJar()
                 .stream()
                 .filter(depJar -> {
@@ -16,12 +49,10 @@ public class LibraryConflictSmell extends BaseSmell{
                 })
                 .collect(Collectors.toSet());
         for (IDepJar depJar : conflictingDepJars) {
-//            System.out.println(depJar.getJarFilePaths());
-//            System.out.println(DepJars.i().getUsedJarPathsSeqForRisk(depJar));
             IDepJar selectedJar = depJars.getSelectedDepJarById(depJar.getName());
-            ConflictJars.i().addConflictJar(selectedJar, depJar);
+            addConflictJar(selectedJar, depJar);
         }
-        ConflictJars.i().printAllConflictJars();
+        printAllConflictJars();
     }
 }
 

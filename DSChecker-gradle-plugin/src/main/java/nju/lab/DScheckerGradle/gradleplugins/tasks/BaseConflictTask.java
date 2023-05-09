@@ -166,6 +166,7 @@ public abstract class BaseConflictTask extends DefaultTask {
 
         artifactMap = initMapArtifactByIdentifiers();
 
+        buildDir = project.getBuildDir();
     }
 
     public void getApiElements(){
@@ -193,6 +194,8 @@ public abstract class BaseConflictTask extends DefaultTask {
 
         HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
         HostProjectInfo.i().setClassesDirs(classesDirs);
+        HostProjectInfo.i().setBuildDir(buildDir);
+
 
         TypeAna.i().setHostProjectInfo(HostProjectInfo.i());
         TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
