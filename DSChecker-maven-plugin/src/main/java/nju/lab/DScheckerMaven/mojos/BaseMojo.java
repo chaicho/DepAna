@@ -147,10 +147,7 @@ public class BaseMojo extends AbstractMojo {
             System.out.println("initGlobalVar error");
             throw new RuntimeException(e);
         }
-        System.out.println("---UsedJarPaths---");
-        System.out.println(DepJars.i().getUsedJarPaths());
         System.out.println("----analyze----");
-
         TypeAna.i().setHostProjectInfo(HostProjectInfo.i());
         TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
 

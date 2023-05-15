@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static soot.jbco.IJbcoTransform.output;
+
 
 @Slf4j
 public class LibraryConflictSmell extends BaseSmell{
@@ -63,6 +65,9 @@ public class LibraryConflictSmell extends BaseSmell{
             }
             for (IDepJar depJar : conflictingDepJars) {
                 IDepJar selectedJar = depJars.getSelectedDepJarById(depJar.getName());
+                if (selectedJar == null){
+                    output("ERROR");
+                }
                 addConflictJar(selectedJar, depJar);
             }
             printAllConflictJars();

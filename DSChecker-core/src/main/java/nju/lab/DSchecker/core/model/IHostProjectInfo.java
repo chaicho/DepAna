@@ -80,7 +80,7 @@ public abstract class IHostProjectInfo  {
 
     public List<String> getHostClasses(){
         if(hostClasses == null) {
-            hostClasses = SourceLocator.v().getClassesUnder(buildPath);
+            hostClasses = SourceLocator.v().getClassesUnder(getBuildCp());
         }
         return hostClasses;
     }

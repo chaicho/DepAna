@@ -13,6 +13,8 @@ public class HostClassSmell extends BaseSmell{
     public void detect(){
         output("=======HostClassSmell=======");
         List<String> hostClasses= hostProjectInfo.getHostClasses();
+        output("Host Classes : " + hostClasses);
+        output(hostProjectInfo.getBuildCp());
 //        log.warn("DepJars : " + depJars.getUsedDepJars());
 //        IDepJar firstDepJar = depJars.getUsedDepJars().stream().findFirst().get();
 //        log.warn("FirstClasses :  " +firstDepJar.getAllCls());
