@@ -56,6 +56,8 @@ public class LibraryConflictSmell extends BaseSmell{
                         return !depJar.isSelected();
                     })
                     .collect(Collectors.toSet());
+            output("========UnSelectedJars======== ");
+            output(conflictingDepJars.toString());
             if(conflictingDepJars.isEmpty()){
                 return;
             }

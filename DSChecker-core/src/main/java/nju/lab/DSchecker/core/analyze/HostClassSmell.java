@@ -13,13 +13,18 @@ public class HostClassSmell extends BaseSmell{
     public void detect(){
         output("=======HostClassSmell=======");
         List<String> hostClasses= hostProjectInfo.getHostClasses();
+//        log.warn("DepJars : " + depJars.getUsedDepJars());
+//        IDepJar firstDepJar = depJars.getUsedDepJars().stream().findFirst().get();
+//        log.warn("FirstClasses :  " +firstDepJar.getAllCls());
         for(String className : hostClasses){
             Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(className);
-            log.warn("Duplicate Class Smell: " + className);
-            output("Duplicate Class Smell: " + className);
-            for(IDepJar depJar : depJars){
-                log.warn(   "in " + depJar.getName());
-                output("in " + depJar.getName());
+            if(!depJars.isEmpty()) {
+                log.warn("Duplicate Class Smell: " + className);
+                output("Duplicate Class Smell: " + className);
+                for (IDepJar depJar : depJars) {
+                    log.warn("in " + depJar.getName());
+                    output("in " + depJar.getName());
+                }
             }
         }
     }

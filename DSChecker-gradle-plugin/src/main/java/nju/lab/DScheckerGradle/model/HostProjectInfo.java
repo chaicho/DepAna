@@ -44,12 +44,29 @@ public class HostProjectInfo extends IHostProjectInfo {
     public String getWrapperPath(){
         return rootDir.getPath() + File.separator + ".gradle";
     }
+
+    /**
+     * Get the compiled classes path of the sources of the project, separated by commas.
+     * @return
+     */
     @Override
     public String getBuildCp() {
         return classesDirs.getAsPath();
     }
 
+    /**
+     * Set the compiled classes path of the sources of the project.
+     * @param classesDirs
+     */
     public void setClassesDirs(FileCollection classesDirs) {
         this.classesDirs = classesDirs;
     }
+    @Override
+    public List<String> getHostClasses(){
+        if(hostClasses == null) {
+            hostClasses = SourceLocator.v().getClassesUnder(getBuildCp());
+        }
+        return hostClasses;
+    }
+
 }

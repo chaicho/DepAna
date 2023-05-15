@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
-@Mojo(name = "testDSchecker",defaultPhase = LifecyclePhase.COMPILE)
+@Mojo(name = "DScheck",defaultPhase = LifecyclePhase.COMPILE)
 public class BaseMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     public MavenProject project;

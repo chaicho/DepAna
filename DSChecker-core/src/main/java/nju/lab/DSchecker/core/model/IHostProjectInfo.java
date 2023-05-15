@@ -77,6 +77,7 @@ public abstract class IHostProjectInfo  {
                 .collect(Collectors.toList());
     }
 
+
     public List<String> getHostClasses(){
         if(hostClasses == null) {
             hostClasses = SourceLocator.v().getClassesUnder(buildPath);
