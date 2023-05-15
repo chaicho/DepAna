@@ -28,7 +28,7 @@ public class GetRefedClasses{
     public static Set<String> analyzeReferencedClasses(String inputDir) {
         Set<String> referencedClasses = new HashSet<>();
 
-        // Iterate over .class files in the input directory
+        // Iterate over .class files and subdirectories in the input directory
         File dir = new File(inputDir);
         if (dir.exists() && dir.isDirectory()) {
             for (File file : dir.listFiles()) {
@@ -59,10 +59,14 @@ public class GetRefedClasses{
                             }
                         }
                     }
+                } else if (file.isDirectory()) {
+                    // Recursively analyze the subdirectory and add its result to the set
+                    referencedClasses.addAll(analyzeReferencedClasses(file.getPath()));
                 }
             }
         }
 
         return referencedClasses;
     }
+
 }

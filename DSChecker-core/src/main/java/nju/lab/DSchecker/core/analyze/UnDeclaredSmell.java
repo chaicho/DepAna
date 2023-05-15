@@ -19,11 +19,12 @@ public class UnDeclaredSmell extends BaseSmell {
         output("========UnDeclaredSmell========");
         //        Get the classes from the build directory of Host Project and analyze the refed classes of them.
         Set<String> referencedClasses =  GetRefedClasses.analyzeReferencedClasses(hostProjectInfo.getBuildCp());
-        log.info(hostProjectInfo.getBuildCp());
-        output(hostProjectInfo.getBuildCp());
+//        log.info(hostProjectInfo.getBuildCp());
+//        output(hostProjectInfo.getBuildCp());
+
         for (String refClass : referencedClasses) {
-            output("========RefedClass=====");
-            output(refClass);
+//            output("========RefedClass=====");
+//            output(refClass);
             /* Get the dependency jar containing the refed class */
             Collection<IDepJar> dep = hostProjectInfo.getUsedDepFromClass(refClass);
 
