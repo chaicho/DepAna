@@ -22,11 +22,11 @@ public class LibraryScopeSmell extends BaseSmell {
             return;
         }
         for (IDepJar dep : ABIDepjars) {
-            if (ApiDepjars.contains(dep.getName()))
+            if (ApiDepjars.contains(dep.getSig()))
                 continue;
 //            This means that some ABI are used but not declared as api
-            log.warn("LibraryScope Smell : " + dep.getName() + "should be declared as api");
-            output("LibraryScope Smell : " + dep.getName() + "should be declared as api");
+            log.warn("LibraryScope Smell : " + dep.getSig() + "should be declared as api");
+            output("LibraryScope Smell : " + dep.getSig() + "should be declared as api");
         }
 
 //        TODO : API that are not used as ABI

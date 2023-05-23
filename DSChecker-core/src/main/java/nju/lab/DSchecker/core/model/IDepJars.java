@@ -15,7 +15,7 @@ public interface IDepJars<T extends IDepJar> {
     public Set<T> getUsedDepJars();
 
     /**
-     * Get the jar file of the given name;
+     * Get the jar file of the given groupId and the artifactId;
      */
     public T getSelectedDepJarById(String componentId);
 

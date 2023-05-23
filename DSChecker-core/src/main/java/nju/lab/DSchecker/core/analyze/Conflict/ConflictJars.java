@@ -27,11 +27,11 @@ public class ConflictJars {
     }
 
     public void addConflictJar(IDepJar selectedDepJar, IDepJar conflictJar) {
-        if (!selectedJar.containsKey(selectedDepJar.getName())) {
-            selectedJar.put(selectedDepJar.getName(), selectedDepJar);
-            conflictJars.put(selectedDepJar.getName(), new HashSet<>(Arrays.asList(selectedDepJar, conflictJar)));
+        if (!selectedJar.containsKey(selectedDepJar.getSig())) {
+            selectedJar.put(selectedDepJar.getSig(), selectedDepJar);
+            conflictJars.put(selectedDepJar.getSig(), new HashSet<>(Arrays.asList(selectedDepJar, conflictJar)));
         }
-        this.conflictJars.get(selectedDepJar.getName()).add(conflictJar);
+        this.conflictJars.get(selectedDepJar.getSig()).add(conflictJar);
     }
     public void printAllConflictJars() {
         if(conflictJars.isEmpty())

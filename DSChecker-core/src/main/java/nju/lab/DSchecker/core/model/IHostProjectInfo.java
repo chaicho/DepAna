@@ -8,8 +8,6 @@ import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static soot.jbco.IJbcoTransform.output;
-
 public abstract class IHostProjectInfo  {
 
     protected IDepJars<? extends IDepJar> depJars;

@@ -121,13 +121,13 @@ public class DepJar implements IDepJar {
     }
     @Override
     public String toString() {
-        return groupId + ":" + artifactId + ":" + version + ":" + classifier;
+        return getGroupId() + ":" + getArtifactId() + ":" + getVersion() + ":" + getClassifier();
     }
     /**
      * @return groupId:artifactId:version
      */
     public String getSig() {
-        return groupId + ":" + artifactId + ":" + version;
+        return getGroupId() + ":" + getArtifactId() + ":" + getVersion() + ":" + getClassifier();
     }
     /**
      * @return groupId:artifactId

@@ -70,6 +70,11 @@ public class DepJars implements IDepJars<DepJar> {
 
 	@Override
 	public DepJar getSelectedDepJarById(String s) {
+		for (DepJar depJar : container) {
+			if (depJar.isSelected() && depJar.getName().equals(s)) {
+				return depJar;
+			}
+		}
 		return null;
 	}
 

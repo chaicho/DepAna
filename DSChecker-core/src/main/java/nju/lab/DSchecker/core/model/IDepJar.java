@@ -5,8 +5,15 @@ import java.util.Set;
 
 public interface IDepJar {
 
-    String getName();
+    /**
+     * Get the signature of the jar file (groupId:artifactId:version:classifier)
+     * @return
+     */
+    String getSig();
 
+    String getGroupId();
+    String getArtifactId();
+    String getName();
     Set<String> getAllCls();
 
     int getDepth();

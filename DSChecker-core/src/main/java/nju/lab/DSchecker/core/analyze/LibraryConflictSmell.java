@@ -9,8 +9,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static soot.jbco.IJbcoTransform.output;
-
 
 @Slf4j
 public class LibraryConflictSmell extends BaseSmell{
@@ -32,11 +30,11 @@ public class LibraryConflictSmell extends BaseSmell{
         if (selectedDepJar == null || conflictJar ==null){
             return;
         }
-        if (!selectedJar.containsKey(selectedDepJar.getName())) {
-            selectedJar.put(selectedDepJar.getName(), selectedDepJar);
-            conflictJars.put(selectedDepJar.getName(), new HashSet<>(Arrays.asList(selectedDepJar, conflictJar)));
+        if (!selectedJar.containsKey(selectedDepJar.getSig())) {
+            selectedJar.put(selectedDepJar.getSig(), selectedDepJar);
+            conflictJars.put(selectedDepJar.getSig(), new HashSet<>(Arrays.asList(selectedDepJar, conflictJar)));
         }
-        this.conflictJars.get(selectedDepJar.getName()).add(conflictJar);
+        this.conflictJars.get(selectedDepJar.getSig()).add(conflictJar);
     }
     public void printAllConflictJars() {
         if(conflictJars.isEmpty())
@@ -52,12 +50,15 @@ public class LibraryConflictSmell extends BaseSmell{
     public void detect() {
             output("========LibraryConflictSmell========");
             log.warn("=======Jar Conflict Smell========");
+//
+//            output("===All DepJar===");
+//            output(depJars.getAllDepJar().toString());
             Set<IDepJar> conflictingDepJars = depJars.getAllDepJar()
-                    .stream()
-                    .filter(depJar -> {
-                        return !depJar.isSelected();
-                    })
-                    .collect(Collectors.toSet());
+                .stream()
+                .filter(depJar -> {
+                    return !depJar.isSelected();
+                })
+                .collect(Collectors.toSet());
             output("========UnSelectedJars======== ");
             output(conflictingDepJars.toString());
             if(conflictingDepJars.isEmpty()){

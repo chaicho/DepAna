@@ -40,11 +40,11 @@ public class UnDeclaredSmell extends BaseSmell {
                     .orElse(null); // 如果dep集合为空，则返回null
 
             if(closestDep != null ){
-                log.debug("Closest Dependency : " + closestDep.getName() + " in " + refClass + " depth : " + closestDep.getDepth());
+                log.debug("Closest Dependency : " + closestDep.getSig() + " in " + refClass + " depth : " + closestDep.getDepth());
                 if(closestDep.getDepth() > 1){
                     /* If the closest dependency is not the directly Declared Dependency, then it is an undeclared dependency */
-                    log.warn("UnDeclared Smell : " + refClass + " in " + closestDep.getName());
-                    output("UnDeclared Smell : " + refClass + " in " + closestDep.getName());
+                    log.warn("UnDeclared Smell : " + refClass + " in " + closestDep.getSig());
+                    output("UnDeclared Smell : " + refClass + " in " + closestDep.getSig());
                     output("Pulled in By" + closestDep.getDepTrail());
                     output("ggggg");
                 }

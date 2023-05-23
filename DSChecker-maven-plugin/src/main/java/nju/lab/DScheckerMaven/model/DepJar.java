@@ -189,7 +189,7 @@ public class DepJar implements IDepJar {
 	 * @return groupId:artifactId:version
 	 */
 	public String getSig() {
-		return groupId + ":" + artifactId + ":" + version;
+		return groupId + ":" + artifactId + ":" + version + ":" + classifier;
 	}
 	/**
 	 * @return groupId:artifactId

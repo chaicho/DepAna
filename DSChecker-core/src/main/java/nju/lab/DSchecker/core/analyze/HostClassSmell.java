@@ -24,8 +24,8 @@ public class HostClassSmell extends BaseSmell{
                 log.warn("Duplicate Class Smell: " + className);
                 output("Duplicate Class Smell: " + className);
                 for (IDepJar depJar : depJars) {
-                    log.warn("in " + depJar.getName());
-                    output("in " + depJar.getName());
+                    log.warn("in " + depJar.getSig());
+                    output("in " + depJar.getSig());
                 }
             }
         }

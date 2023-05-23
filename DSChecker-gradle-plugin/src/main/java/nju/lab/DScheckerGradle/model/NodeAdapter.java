@@ -92,7 +92,6 @@ public class NodeAdapter {
         return version;
     }
     public String getClassifier() {
-//        com
         String classifier = "";
         if(artifacts == null){
             return  classifier;
