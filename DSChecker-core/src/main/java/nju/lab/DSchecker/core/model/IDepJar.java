@@ -15,4 +15,5 @@ public interface IDepJar {
     boolean isSelected();
 
     String getDisplayName();
+
 }
