@@ -24,6 +24,8 @@ public class NodeAdapter {
 
     private static int counter = 0;
 
+
+
     public static int incCnt() {
         return  counter++;
     }
@@ -51,6 +53,7 @@ public class NodeAdapter {
     private String version;
     private String group;
     private String name;
+
 
     public NodeAdapter(ResolvedComponentResult component, Set<ResolvedArtifact> artifact, ResolvedDependencyResult dep, int depth, ComponentSelector selector) {
         this.artifacts = artifact;
@@ -80,6 +83,11 @@ public class NodeAdapter {
         }
 
     }
+    public NodeAdapter(ResolvedComponentResult selected, Set<ResolvedArtifact> artifacts, ResolvedDependencyResult resolvedDependency, int dep, ComponentSelector requested, NodeAdapter parent) {
+        this(selected, artifacts, resolvedDependency, dep, requested);
+        this.parent = parent;
+    }
+    public NodeAdapter parent;
 
     public String getGroupId() {
         return group;
@@ -131,7 +139,8 @@ public class NodeAdapter {
         return depth;
     }
     public String getValidDepPath() {
-//        TODO
+        StringBuilder sb = new StringBuilder();
+
 
         return toString();
     }
@@ -178,8 +187,13 @@ public class NodeAdapter {
     }
 
     public String getWholePath() {
-//       TODO
-        return "";
+        StringBuilder sb = new StringBuilder(getDisplayName());
+        NodeAdapter father = getParent();
+        while (null != father) {
+            sb.insert(0, father.getDisplayName() + " -> ");
+            father = father.getParent();
+        }
+        return sb.toString();
     }
 
     public int getPriority() {
@@ -191,4 +205,6 @@ public class NodeAdapter {
     public DepJar getDepJar() {
         return depJar;
     }
+
+
 }

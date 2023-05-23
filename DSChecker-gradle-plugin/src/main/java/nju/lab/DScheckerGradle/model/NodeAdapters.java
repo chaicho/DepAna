@@ -32,14 +32,14 @@ public class NodeAdapters {
         if(instance == null) {
             instance = new NodeAdapters();
             Set<ResolvedComponentResult> seen = new HashSet<>();
-            walk(root,newArtifactMap,seen,1);
+            walk(root,newArtifactMap,seen,1,null);
         }
 
     }
     public void addNodeAdapter(NodeAdapter nodeAdapter) {
         container.add(nodeAdapter);
     }
-    private static void walk(ResolvedComponentResult component, Map<ComponentIdentifier, Set<ResolvedArtifact>> newArtifactMap, Set<ResolvedComponentResult> seen, int dep) {
+    private static void walk(ResolvedComponentResult component, Map<ComponentIdentifier, Set<ResolvedArtifact>> newArtifactMap, Set<ResolvedComponentResult> seen, int dep,NodeAdapter parent) {
 
         if (seen.add(component)) {
             for (DependencyResult dependency : component.getDependencies()) {
@@ -47,11 +47,10 @@ public class NodeAdapters {
                     ResolvedDependencyResult resolvedDependency = (ResolvedDependencyResult) dependency;
                     ResolvedComponentResult selectedComponent = resolvedDependency.getSelected();
                     Set<ResolvedArtifact> artifacts = newArtifactMap.get(selectedComponent.getId());
-
-                    NodeAdapter nodeAdapter =  new NodeAdapter(resolvedDependency.getSelected(),artifacts, resolvedDependency, dep, resolvedDependency.getRequested());
+                    NodeAdapter nodeAdapter =  new NodeAdapter(resolvedDependency.getSelected(),artifacts, resolvedDependency, dep, resolvedDependency.getRequested(),parent);
                     i().container.add(nodeAdapter);
                     if(nodeAdapter.isNodeSelected()) {
-                        walk(selectedComponent, newArtifactMap, seen, dep + 1);
+                        walk(selectedComponent, newArtifactMap, seen, dep + 1, nodeAdapter);
                     }
                     else{
                         //                        Artifact Unresolved, the node is not selected.
