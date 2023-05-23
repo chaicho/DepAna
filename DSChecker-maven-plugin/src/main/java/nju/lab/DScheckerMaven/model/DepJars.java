@@ -308,12 +308,6 @@ public class DepJars implements IDepJars<DepJar> {
 		return null;
 	}
 
-	/**
-	 * Return the trail in dependency tree that a jar file is selected;
-	 * @param displayName
-	 * @return path in dependency tree
-	 */
-//	public String getDepJarTrail(String displayName) {
-//
-//	}
+
+
 }

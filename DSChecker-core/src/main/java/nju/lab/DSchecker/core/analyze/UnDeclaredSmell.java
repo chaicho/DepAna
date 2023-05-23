@@ -45,6 +45,8 @@ public class UnDeclaredSmell extends BaseSmell {
                     /* If the closest dependency is not the directly Declared Dependency, then it is an undeclared dependency */
                     log.warn("UnDeclared Smell : " + refClass + " in " + closestDep.getName());
                     output("UnDeclared Smell : " + refClass + " in " + closestDep.getName());
+                    output("Pulled in By" + closestDep.getDepTrail());
+                    output("ggggg");
                 }
             }
         }

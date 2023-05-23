@@ -243,5 +243,28 @@ public class NodeAdapter {
 		}
 		return depth;
 	}
-
+	@Override
+	public String toString() {
+		String scope = getScope();
+		if (null == scope) {
+			scope = "";
+		}
+		return getGroupId() + ":" + getArtifactId() + ":" + getVersion() + ":" + getClassifier() + ":" + scope + " priority : " + priority;
+	}
+	public String getDisplayName() {
+		String scope = getScope();
+		if (null == scope) {
+			scope = "";
+		}
+		return getGroupId() + ":" + getArtifactId() + ":" + getVersion() + ":" + getClassifier()+":" + scope;
+	}
+	public String getWholePath() {
+		StringBuilder sb = new StringBuilder(getDisplayName());
+		NodeAdapter father = getParent();
+		while (null != father) {
+			sb.insert(0, father.getDisplayName() + " -> ");
+			father = father.getParent();
+		}
+		return sb.toString();
+	}
 }

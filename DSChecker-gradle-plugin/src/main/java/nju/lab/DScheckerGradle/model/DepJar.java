@@ -149,7 +149,7 @@ public class DepJar implements IDepJar {
     /**
      * @return the import path of depJar.
      */
-    public String getValidDepPath() {
+    public String getDepTrail() {
         StringBuilder sb = new StringBuilder(toString() + ":");
         for (NodeAdapter node : getNodeAdapters()) {
             if (node.isNodeSelected()) {

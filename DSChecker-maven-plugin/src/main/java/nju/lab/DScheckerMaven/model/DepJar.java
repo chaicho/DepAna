@@ -30,16 +30,18 @@ public class DepJar implements IDepJar {
 	private Map<String, ClassVO> clsTb;// all class in jar
 	//private Set<String> clsSigs;// only all class signatures defined in jars
 	private Set<String> phantomClsSet;// all phantom classes in jar
-	private Set<NodeAdapter> nodeAdapters;// all
+	/**
+	 * Nodes in Dependency tree that this jar is connected to.
+	 */
+	private Set<NodeAdapter> nodeAdapters;
+
 	private Set<String> allMthd;
 	private Set<String> allCls;
 	private Map<String, Collection<String>> allRefedCls;
-	private Set<String> allMthdAfterFilter;
 	private boolean canUseFilterBuffer = false;
 	private Map<String, ClassVO> allClass;// all class in jar
 	private int priority;
-	private CallGraph jarCg;//与该Cg相关的Cg。
-	private CallGraph singleJarCg;//该jar自身的cg
+
 	/**
 	 * 初始化
 	 * @param groupId
@@ -338,5 +340,22 @@ public class DepJar implements IDepJar {
 	@Override
 	public int getDepth(){
 		return nodeAdapters.stream().map(NodeAdapter::getNodeDepth).min(Integer::compareTo).get();
+	}
+
+	/**
+	 * Return the trail in dependency tree that a jar file is selected;
+	 * @return path in dependency tree
+	 */
+	@Override
+	public String getDepTrail() {
+		StringBuilder sb = new StringBuilder(toString() + ":");
+		for (NodeAdapter node : getNodeAdapters()) {
+			if (node.isNodeSelected()) {
+				sb.append("  [");
+				sb.append(node.getWholePath());
+				sb.append("]");
+			}
+		}
+		return sb.toString();
 	}
 }
