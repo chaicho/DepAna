@@ -46,7 +46,7 @@ public class UnDeclaredSmell extends BaseSmell {
                     log.warn("UnDeclared Smell : " + refClass + " in " + closestDep.getSig());
                     output("UnDeclared Smell : " + refClass + " in " + closestDep.getSig());
                     output("Pulled in By" + closestDep.getDepTrail());
-                    output("ggggg");
+//                    output("ggggg");
                 }
             }
         }

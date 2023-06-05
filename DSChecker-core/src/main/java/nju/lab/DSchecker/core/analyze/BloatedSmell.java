@@ -18,6 +18,7 @@ public class BloatedSmell extends BaseSmell{
             if (!reachableDepJars.contains(dep)) {
                 log.warn("Bloated Smell: " + dep.getDisplayName());
                 output("Bloated Smell: " + dep.getDisplayName());
+                output(dep.getDepTrail());
             }
         }
     }
