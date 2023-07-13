@@ -211,11 +211,6 @@ public abstract class BaseConflictTask extends DefaultTask {
         smellFactory.init(HostProjectInfo.i(), DepJars.i(), MyCallGraph.i());
         smellFactory.detectAll();
 
-//        UnUsedSmell.i().detect();
-//        System.out.println(DepJars.i().getUsedJarPaths());
-//        System.out.println(buildDir.getAbsolutePath());
-//        System.out.println("comilesrc"+ compileSrcDirs);
-
 
 
 
