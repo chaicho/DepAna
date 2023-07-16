@@ -15,7 +15,7 @@ public class BloatedSmell extends BaseSmell{
         // If the dependency tree is "larger" than the call graph, then the project is bloated
         //        Runtime dependencies
         Set<String> importPaths = new HashSet<String>();
-        Set<IDepJar> usedDepJars = new HashSet<>();
+        Set<IDepJar> actualUsedDepJars = new HashSet<>();
         Set<IDepJar> reachableRuntimeDepJars = hostProjectInfo.getReachableJars();
         //        Compile time dependencies
         Set<IDepJar> reachableCompileDepJars = new HashSet<>();
@@ -26,18 +26,17 @@ public class BloatedSmell extends BaseSmell{
             Collection<IDepJar> dep = hostProjectInfo.getUsedDepFromClass(refClass);
             reachableCompileDepJars.addAll(dep);
         }
-        usedDepJars.addAll(reachableCompileDepJars);
-        usedDepJars.addAll(reachableRuntimeDepJars);
+        actualUsedDepJars.addAll(reachableCompileDepJars);
+        actualUsedDepJars.addAll(reachableRuntimeDepJars);
 
         Set<? extends IDepJar> declaredDepJars = depJars.getUsedDepJars();
         output("========BloatedSmell========");
         for (IDepJar dep : declaredDepJars) {
-            if (!usedDepJars.contains(dep)) {
+            if (!actualUsedDepJars.contains(dep)) {
                 log.warn("Bloated Smell: " + dep.getDisplayName());
                 output("Bloated Smell: " + dep.getDisplayName());
                 output(dep.getDepTrail());
-                Set<String> depTrails = dep.getDepTrails();
-                importPaths.addAll(depTrails);
+                importPaths.add(dep.getDepTrail());
             }
         }
         return;
