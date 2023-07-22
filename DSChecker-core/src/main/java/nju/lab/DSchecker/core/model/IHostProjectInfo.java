@@ -173,7 +173,9 @@ public abstract class IHostProjectInfo  {
         }
         return depJars;
     }
-
+    public Set<String> getABIClasses(){
+        return ABIClasses;
+    }
     public void setApiDepJars(Set<String> apiArtifacts) {
         this.apiDepJars = apiArtifacts;
 //        System.out.println(apiArtifacts);
