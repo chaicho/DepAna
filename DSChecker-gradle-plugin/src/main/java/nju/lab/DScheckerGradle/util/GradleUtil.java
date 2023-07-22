@@ -77,7 +77,6 @@ public class GradleUtil {
 
         File file = config.getSingleFile();
         nodeAdapter.setArtifacts(resolvedConfig.getResolvedArtifacts());
-//        System.out.println(file.getAbsolutePath());
     }
 //    public Set<String> getHostClasses() {
 //        if (hostClasses == null) {

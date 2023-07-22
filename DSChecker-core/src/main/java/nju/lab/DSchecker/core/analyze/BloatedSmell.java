@@ -30,12 +30,12 @@ public class BloatedSmell extends BaseSmell{
         actualUsedDepJars.addAll(reachableRuntimeDepJars);
 
         Set<? extends IDepJar> declaredDepJars = depJars.getUsedDepJars();
-        output("========BloatedSmell========");
+        appendToResult("========BloatedSmell========");
         for (IDepJar dep : declaredDepJars) {
             if (!actualUsedDepJars.contains(dep)) {
                 log.warn("Bloated Smell: " + dep.getDisplayName());
-                output("Bloated Smell: " + dep.getDisplayName());
-                output(dep.getDepTrail());
+                appendToResult("Bloated Smell: " + dep.getDisplayName());
+                appendToResult(dep.getDepTrail());
                 importPaths.add(dep.getDepTrail());
             }
         }

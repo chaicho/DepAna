@@ -9,7 +9,7 @@ import java.util.Set;
 public class LibraryScopeSmell extends BaseSmell {
     @Override
     public void detect() {
-        output("========LibraryScopeSmell========");
+        appendToResult("========LibraryScopeSmell========");
         Set<IDepJar> ABIDepjars = hostProjectInfo.getABIDepJars();
         // Dependecies that are declared as api in the project
         Set<String> ApiDepjars = hostProjectInfo.getApiDepJars();
@@ -26,7 +26,7 @@ public class LibraryScopeSmell extends BaseSmell {
                 continue;
 //            This means that some ABI are used but not declared as api
             log.warn("LibraryScope Smell : " + dep.getSig() + "should be declared as api");
-            output("LibraryScope Smell : " + dep.getSig() + "should be declared as api");
+            appendToResult("LibraryScope Smell : " + dep.getSig() + "should be declared as api");
         }
 
 //        TODO : API that are not used as ABI

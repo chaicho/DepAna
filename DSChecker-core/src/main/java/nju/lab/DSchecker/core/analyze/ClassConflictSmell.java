@@ -9,16 +9,23 @@ import java.util.Collection;
 public class ClassConflictSmell extends BaseSmell {
 
     @Override
-    public void detect(){
-        output("========ClassConflictSmell========");
+    public void detect() {
+        appendToResult("========ClassConflictSmell========");
         Collection<String> duplicateClassNames = hostProjectInfo.getDuplicateClassNames();
-        for(String className : duplicateClassNames){
+        for (String className : duplicateClassNames) {
             Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(className);
+            if (depJars.size() == 1 && containsHost(depJars)) {
+//                  The conflicting classes are in host jar, not in dependency.
+                continue;
+            }
             log.warn("Duplicate Class Smell: " + className);
-            output("Duplicate Class Smell: " + className);
+            appendToResult("Duplicate Class Smell: " + className);
             for(IDepJar depJar : depJars){
-               log.warn(   "in " + depJar.getSig());
-               output("in " + depJar.getSig());
+                if(depJar.isHost()){
+                    continue;
+                }
+                log.warn(   "in " + depJar.getSig());
+                appendToResult("in " + depJar.getSig());
             }
         }
     }

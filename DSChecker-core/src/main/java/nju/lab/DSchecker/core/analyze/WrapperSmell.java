@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +13,7 @@ public class WrapperSmell extends BaseSmell{
 
     @Override
     public void detect() {
-        output("=======WrapperSmell=======");
+        appendToResult("=======WrapperSmell=======");
         File rootPath = hostProjectInfo.getRootDir();
         String wrapperPath = hostProjectInfo.getWrapperPath();
         File gitignore = new File(rootPath.getAbsolutePath() + ".gitignore");
@@ -31,7 +30,7 @@ public class WrapperSmell extends BaseSmell{
                 if (!wrapperLines.isEmpty()) {
                     // Wrapper jar is ignored, report a smell
                     log.warn("Wrapper jar is ignored in the .gitignore file. This may cause conflict in the build process.");
-                    output("Wrapper jar is ignored in the .gitignore file. This may cause conflict in the build process.");
+                    appendToResult("Wrapper jar is ignored in the .gitignore file. This may cause conflict in the build process.");
                 }
             } catch (IOException e) {
                 // handle the exception
@@ -39,7 +38,7 @@ public class WrapperSmell extends BaseSmell{
             }
         } else {
             // report a smell if the gitignore file does not exist or is not readable
-            output("The .gitignore file does not exist or is not readable. This may cause unwanted files to be tracked by version control.");
+            appendToResult("The .gitignore file does not exist or is not readable. This may cause unwanted files to be tracked by version control.");
         }
 
         // check if the wrapperPath is a valid directory
@@ -56,7 +55,7 @@ public class WrapperSmell extends BaseSmell{
                         // get the name of the file without the extension
                         String name = file.getName().substring(0, file.getName().lastIndexOf("-"));
                         // output the name of the wrapper
-                        output(name + " wrapper exists in the wrapper path. This is good practice.");
+                        appendToResult(name + " wrapper exists in the wrapper path. This is good practice.");
                         // set the boolean variable to true
                         wrapperFound = true;
                     }
@@ -64,12 +63,12 @@ public class WrapperSmell extends BaseSmell{
                 // check if the boolean variable is false
                 if (!wrapperFound) {
                     // report a smell if no wrapper file is found
-                    output("No wrapper file exists in the wrapper path. This may cause inconsistency in the project.");
+                    appendToResult("No wrapper file exists in the wrapper path. This may cause inconsistency in the project.");
                 }
             }
         } else {
             // report a smell if the wrapperPath is not a valid directory
-            output("The wrapper path is not a valid directory. This may cause problems in the project.");
+            appendToResult("The wrapper path is not a valid directory. This may cause problems in the project.");
         }
     }
 }

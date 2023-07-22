@@ -22,9 +22,9 @@ public class LibraryConflictSmell extends BaseSmell{
     }
     public void addConflictJar(IDepJar selectedDepJar, IDepJar conflictJar) {
         if(selectedJar == null) {
-            output("selectedJar is null");
+            appendToResult("selectedJar is null");
         } else if (conflictJars == null) {
-            output("conflictJars is null");
+            appendToResult("conflictJars is null");
             return;
         }
         if (selectedDepJar == null || conflictJar ==null){
@@ -42,13 +42,13 @@ public class LibraryConflictSmell extends BaseSmell{
         for (String key : conflictJars.keySet()) {
             log.warn("selected jar: " + selectedJar.get(key).getJarFilePaths());
             log.warn("conflict jars: " + conflictJars.get(key));
-            output("selected jar: " + selectedJar.get(key).getJarFilePaths());
-            output("conflict jars: " + conflictJars.get(key));
+            appendToResult("selected jar: " + selectedJar.get(key).getJarFilePaths());
+            appendToResult("conflict jars: " + conflictJars.get(key));
         }
     }
     @Override
     public void detect() {
-            output("========LibraryConflictSmell========");
+            appendToResult("========LibraryConflictSmell========");
             log.warn("=======Jar Conflict Smell========");
 //
 //            output("===All DepJar===");
@@ -59,15 +59,15 @@ public class LibraryConflictSmell extends BaseSmell{
                     return !depJar.isSelected();
                 })
                 .collect(Collectors.toSet());
-            output("========UnSelectedJars======== ");
-            output(conflictingDepJars.toString());
+            appendToResult("========UnSelectedJars======== ");
+            appendToResult(conflictingDepJars.toString());
             if(conflictingDepJars.isEmpty()){
                 return;
             }
             for (IDepJar depJar : conflictingDepJars) {
                 IDepJar selectedJar = depJars.getSelectedDepJarById(depJar.getName());
                 if (selectedJar == null){
-                    output("ERROR");
+                    appendToResult("ERROR");
                 }
                 addConflictJar(selectedJar, depJar);
             }

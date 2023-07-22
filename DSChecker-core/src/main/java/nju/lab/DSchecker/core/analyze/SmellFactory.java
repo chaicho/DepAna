@@ -40,6 +40,7 @@ public class SmellFactory {
         List<BaseSmell> smells = createSmells();
         for (BaseSmell smell : smells) {
             smell.detectSmell();
+            smell.outputResult();
         }
     }
 

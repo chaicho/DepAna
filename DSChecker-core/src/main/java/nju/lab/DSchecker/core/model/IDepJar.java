@@ -21,6 +21,8 @@ public interface IDepJar {
 
     boolean isSelected();
 
+    boolean isHost();
+
     String getDisplayName();
 
     String getDepTrail();
