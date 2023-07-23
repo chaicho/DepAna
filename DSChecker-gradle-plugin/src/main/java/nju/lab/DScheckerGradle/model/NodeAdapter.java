@@ -176,7 +176,10 @@ public class NodeAdapter {
     }
 
     public boolean isNodeSelected() {
-        boolean containsConflictResolution = dependencyResult.getSelected().getSelectionReason().getDescriptions()
+        boolean containsConflictResolution = dependencyResult
+                .getSelected()
+                .getSelectionReason()
+                .getDescriptions()
                 .stream()
                 .filter(desc -> desc.getCause() != null)
                 .anyMatch(desc -> desc.getCause().equals(CONFLICT_RESOLUTION));

@@ -52,8 +52,9 @@ public class DepJars implements IDepJars<DepJar> {
 //                TODO: 2023/3/28 重复的jar
                 DepJar existingDepJar = container.stream()
                         .filter(depJar -> depJar.equals(addDepJar))
-                        .findFirst().
-                        orElse(null);
+                        .findFirst()
+                        .orElse(null);
+                existingDepJar.setDepth(Math.min(existingDepJar.getDepth(), nodeAdapter.getDepth()));
                 if (existingDepJar != null) {
                     existingDepJar.addNodeAdapter(nodeAdapter);
                     nodeAdapter.setDepJar(existingDepJar);
@@ -75,8 +76,8 @@ public class DepJars implements IDepJars<DepJar> {
         if (this.usedDepJars == null) {
             Set<DepJar> usedDepJars = new HashSet<DepJar>();
             for (DepJar depJar : container) {
-                if (depJar.isSelected()) { //只要该jar没有被manage而且INCLUDED
-                    usedDepJars.add(depJar); //那就把这个jar加入Set准备返回吧
+                if (depJar.isSelected()) {
+                    usedDepJars.add(depJar);
                 }
             }
             this.usedDepJars = usedDepJars;

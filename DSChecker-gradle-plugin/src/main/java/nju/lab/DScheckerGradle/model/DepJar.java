@@ -17,7 +17,7 @@ import java.util.*;
 @Getter
 @Setter
 public class DepJar implements IDepJar {
-    private final int depth;
+    private int depth;
     private String groupId;
     private String artifactId;// artifactId
     private String version;// version
@@ -77,7 +77,11 @@ public class DepJar implements IDepJar {
     }
 
     public boolean isSelected() {
-//        TODO
+        for (NodeAdapter nodeAdapter : nodeAdapters) {
+            if (nodeAdapter.isNodeSelected()) {
+                return true;
+            }
+        }
         return nodeAdapters.iterator().next().isNodeSelected();
     }
 
