@@ -11,7 +11,7 @@ public class HostClassSmell extends BaseSmell{
 
     @Override
     public void detect(){
-        appendToResult("=======HostClassSmell=======");
+        appendToResult("========HostClassSmell========");
         List<String> hostClasses= hostProjectInfo.getHostClasses();
         for(String className : hostClasses){
             Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(className);
