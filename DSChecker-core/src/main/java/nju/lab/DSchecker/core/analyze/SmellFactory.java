@@ -26,6 +26,7 @@ public class SmellFactory {
         smells.add(new UnDeclaredSmell());
         smells.add(new BloatedSmell());
         smells.add(new WrapperJarMissingSmell());
+        smells.add(new WrapperConfMissingSmell());
         for (BaseSmell smell : smells) {
             smell.init(hostProjectInfo, callGraph, depJars);
         }
