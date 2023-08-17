@@ -27,6 +27,7 @@ public class SmellFactory {
         smells.add(new BloatedSmell());
         smells.add(new WrapperJarMissingSmell());
         smells.add(new WrapperConfMissingSmell());
+        smells.add(new WrapperJarAbnormalSmell());
         for (BaseSmell smell : smells) {
             smell.init(hostProjectInfo, callGraph, depJars);
         }
@@ -39,10 +40,11 @@ public class SmellFactory {
      * */
     public void detectAll() {
         List<BaseSmell> smells = createSmells();
-        for (BaseSmell smell : smells) {
-            smell.detectSmell();
-            smell.outputResult();
-        }
+        smells.get(8).detectSmell();
+//        for (BaseSmell smell : smells) {
+//            smell.detectSmell();
+//            smell.outputResult();
+//        }
     }
 
     public void init(IHostProjectInfo hostProjectInfo, IDepJars depJars, ICallGraph callGraph) {

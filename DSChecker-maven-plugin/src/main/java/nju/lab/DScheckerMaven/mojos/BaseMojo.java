@@ -4,6 +4,7 @@ package nju.lab.DScheckerMaven.mojos;
 import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.analyze.SmellFactory;
 import nju.lab.DSchecker.core.model.IDepJar;
+import nju.lab.DSchecker.util.monitor.PerformanceMonitor;
 import nju.lab.DSchecker.util.soot.TypeAna;
 import nju.lab.DScheckerMaven.model.*;
 import nju.lab.DScheckerMaven.util.Conf;
@@ -77,25 +78,36 @@ public class BaseMojo extends AbstractMojo {
      */
     protected void initGlobalVar() throws Exception {
         initGlobalValues();
-        //初始化NodeAdapters
-        NodeAdapters.init(root);
-        long startTime = System.currentTimeMillis();//
-        /**
-         * 对全部被使用的(isNodeSelected依赖节点，找到他们的pom路径，然后检查他们是不是exclude了一些依赖，
-         * 把这些被exclude掉的依赖放进Conf.i().dependencyMap(通过对每个依赖的pom都调用detectExclude(localPomPath, node))
-         */
-        //初始化DepJars
-        DepJars.init(NodeAdapters.i());// occur jar in tree
-        validateSysSize();
-        HostProjectInfo.i().init(CallGraphMaven.i(), DepJars.i());
+        PerformanceMonitor.initialize(buildDir.getAbsolutePath() + File.separator + "supportData.xml");
+//        validateSysSize();
+        // 项目信息处理
+        PerformanceMonitor.start();
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().setCompileSrcPaths(compileSourceRoots);
         HostProjectInfo.i().setRootDir(new File(mavenSession.getExecutionRootDirectory()));
-        //初始化所有的类集合
-//        log.info("寻找有多版本的artifact...");
+        PerformanceMonitor.stop("initHostProjectInfo");
 
-        //Artifacts.init(NodeAdapters.i());// all depJars, with all versions occured
-    }
+        // 依赖树处理
+        PerformanceMonitor.start();
+        root = dependencyTreeBuilder.buildDependencyTree(project, localRepository, null);
+        NodeAdapters.init(root);
+        PerformanceMonitor.stop("initDependencyTree");
+
+        // 依赖库处理
+        PerformanceMonitor.start();
+        DepJars.init(NodeAdapters.i());
+        PerformanceMonitor.stop("initDepJars");
+
+        // 调用图处理
+        PerformanceMonitor.start();
+        TypeAna.i().setHostProjectInfo(HostProjectInfo.i());
+        TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
+        PerformanceMonitor.stop("initCallGraph");
+
+
+        HostProjectInfo.i().init(CallGraphMaven.i(), DepJars.i());
+        HostProjectInfo.i().buildDepClassMap();
+   }
 
     private void validateSysSize() throws Exception {
         long systemSize = 0;
@@ -114,51 +126,27 @@ public class BaseMojo extends AbstractMojo {
     }
     @Override
     public void execute() throws MojoExecutionException {
-        IDepJar depJar = null;
-        System.out.println("Hello World4!");
-//        System.out.println(project);
-//        System.out.println(localRepository);
-        System.out.println(compileSourceRoots);
-        System.out.println(buildDir);
+
         String pckType = project.getPackaging();	//得到项目的打包类型
         if ("jar".equals(pckType) || "war".equals(pckType) || "maven-plugin".equals(pckType)
                 || "bundle".equals(pckType)) {
-            try {
-                // project.
-                root = dependencyTreeBuilder.buildDependencyTree(project, localRepository, null);
-                //graphNode = dependencyGraphBuilder.buildDependencyGraph(project, null);
-            } catch (DependencyTreeBuilderException /*| DependencyGraphBuilderException*/ e) {
-                throw new MojoExecutionException(e.getMessage());
-            }
-            /**
-             * 接下来，初始化全局变量
-             */
             try {
                 initGlobalVar();
             } catch (Exception e) { System.err.println("Caught Exception!");
                 MavenUtil.getInstance().getLog().error(e);
                 throw new MojoExecutionException("project size error!");
             }
+
+//            HostProjectInfo.i().init(CallGraphMaven.i(), DepJars.i());
+//            HostProjectInfo.i().buildDepClassMap();
+
+            PerformanceMonitor.start();
+            SmellFactory smellFactory = new SmellFactory();
+            smellFactory.init(HostProjectInfo.i(), DepJars.i(), CallGraphMaven.i());
+            smellFactory.detectAll();
+            PerformanceMonitor.stop("detectSmells");
+
+            PerformanceMonitor.close();
         }
-
-        try {
-            initGlobalVar();
-        } catch (Exception e) {
-            System.out.println("initGlobalVar error");
-            throw new RuntimeException(e);
-        }
-        System.out.println("----analyze----");
-        TypeAna.i().setHostProjectInfo(HostProjectInfo.i());
-        TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
-
-        System.out.println("----buildDepClassMap----");
-
-        HostProjectInfo.i().init(CallGraphMaven.i(), DepJars.i());
-        HostProjectInfo.i().buildDepClassMap();
-
-
-        SmellFactory smellFactory = new SmellFactory();
-        smellFactory.init(HostProjectInfo.i(), DepJars.i(), CallGraphMaven.i());
-        smellFactory.detectAll();
     }
 }

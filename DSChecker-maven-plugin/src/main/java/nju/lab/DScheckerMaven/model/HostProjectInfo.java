@@ -28,7 +28,6 @@ public class HostProjectInfo extends IHostProjectInfo {
     @Override
     public void buildDepClassMap() {
         super.buildDepClassMap();
-        System.out.println("start buildDepClassMap") ;
         for ( String compileSrcDir: compileSrcDirs){
             consumerClasses.addAll(SourceLocator.v().getClassesUnder(compileSrcDir)
                     .stream()
@@ -41,7 +40,7 @@ public class HostProjectInfo extends IHostProjectInfo {
     }
     @Override
     public String getWrapperPath(){
-        return rootDir.getPath() + File.separator + ".mwn" + File.separator + "wrapper";
+        return rootDir.getPath() + File.separator + ".mvn" + File.separator + "wrapper";
     }
 
     @Override
@@ -55,7 +54,8 @@ public class HostProjectInfo extends IHostProjectInfo {
                                 .collect(Collectors.toSet());
 
     }
-//    @Override
-
-
+    @Override
+    public String getBuildTool() {
+        return "maven";
+    }
 }

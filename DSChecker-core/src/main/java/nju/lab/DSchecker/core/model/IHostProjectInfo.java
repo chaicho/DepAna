@@ -189,4 +189,6 @@ public abstract class IHostProjectInfo  {
     }
 
     abstract public String getWrapperPath();
+
+    public abstract String getBuildTool();
 }

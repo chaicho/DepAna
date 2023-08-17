@@ -50,9 +50,6 @@ public class LibraryConflictSmell extends BaseSmell{
     public void detect() {
             appendToResult("========LibraryConflictSmell========");
             log.warn("=======Jar Conflict Smell========");
-//
-//            output("===All DepJar===");
-//            output(depJars.getAllDepJar().toString());
             Set<IDepJar> conflictingDepJars = depJars.getAllDepJar()
                 .stream()
                 .filter(depJar -> {

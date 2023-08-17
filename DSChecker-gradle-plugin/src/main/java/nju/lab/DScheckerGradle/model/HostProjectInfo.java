@@ -69,4 +69,8 @@ public class HostProjectInfo extends IHostProjectInfo {
         return hostClasses;
     }
 
+    @Override
+    public String getBuildTool() {
+        return "gradle";
+    }
 }
