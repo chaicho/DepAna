@@ -12,13 +12,14 @@ public class SmellFactory {
     private IHostProjectInfo hostProjectInfo;
     private IDepJars depJars;
     private ICallGraph callGraph;
+
+    List<BaseSmell> smells = new ArrayList<>();
     /**
      * Creates a new instance of each smell implementation.
      *
      * @return a list of BaseSmell objects
      */
-    public  List<BaseSmell> createSmells() {
-        List<BaseSmell> smells = new ArrayList<>();
+    public void initSmells() {
         smells.add(new ClassConflictSmell());
         smells.add(new LibraryConflictSmell());
         smells.add(new HostClassSmell());
@@ -31,7 +32,6 @@ public class SmellFactory {
         for (BaseSmell smell : smells) {
             smell.init(hostProjectInfo, callGraph, depJars);
         }
-        return smells;
     }
 
     /**
@@ -39,18 +39,21 @@ public class SmellFactory {
      *
      * */
     public void detectAll() {
-        List<BaseSmell> smells = createSmells();
-        smells.get(8).detectSmell();
-//        for (BaseSmell smell : smells) {
-//            smell.detectSmell();
-//            smell.outputResult();
-//        }
+        for (BaseSmell smell : smells) {
+            smell.detectSmell();
+            smell.outputResult();
+        }
     }
 
+    public void addSmell(BaseSmell smell) {
+        smell.init(hostProjectInfo, callGraph, depJars);
+        smells.add(smell);
+    }
     public void init(IHostProjectInfo hostProjectInfo, IDepJars depJars, ICallGraph callGraph) {
         this.hostProjectInfo = hostProjectInfo;
         this.callGraph = callGraph;
         this.depJars = depJars;
+        initSmells();
     }
 
 }

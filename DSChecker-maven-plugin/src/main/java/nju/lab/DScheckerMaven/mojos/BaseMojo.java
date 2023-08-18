@@ -140,7 +140,7 @@ public class BaseMojo extends AbstractMojo {
 //            HostProjectInfo.i().init(CallGraphMaven.i(), DepJars.i());
 //            HostProjectInfo.i().buildDepClassMap();
 
-            PerformanceMonitor.start();
+            PerformanceMonitor.start("detectSmells");
             SmellFactory smellFactory = new SmellFactory();
             smellFactory.init(HostProjectInfo.i(), DepJars.i(), CallGraphMaven.i());
             smellFactory.detectAll();
