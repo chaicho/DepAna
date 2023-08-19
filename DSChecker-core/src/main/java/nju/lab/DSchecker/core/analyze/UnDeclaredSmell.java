@@ -21,30 +21,21 @@ public class UnDeclaredSmell extends BaseSmell {
         Set<String> referencedClasses =  GetRefedClasses.analyzeReferencedClasses(hostProjectInfo.getBuildCp());
 
         for (String refClass : referencedClasses) {
-//            output("========RefedClass=====");
-//            output(refClass);
-            /* Get the dependency jar containing the refed class */
             Collection<IDepJar> dep = hostProjectInfo.getUsedDepFromClass(refClass);
-
            if(dep.size() == 0){
-//               ERROR: Unable to find jar containing class.
-               // Mostly the case where standard Java libraries are used;
                continue;
            }
-
            /* Since there are possibly several Depjars containing the same class ,we select the closest one */
            IDepJar closestDep =  dep.stream()
                     .min(Comparator.comparingInt(IDepJar::getDepth))
                     .orElse(null); // 如果dep集合为空，则返回null
-
-            if(closestDep != null ){
+           if(closestDep != null ){
                 log.debug("Closest Dependency : " + closestDep.getSig() + " in " + refClass + " depth : " + closestDep.getDepth());
                 if(closestDep.getDepth() > 1){
                     /* If the closest dependency is not the directly Declared Dependency, then it is an undeclared dependency */
                     log.warn("UnDeclared Smell : " + refClass + " in " + closestDep.getSig());
                     appendToResult("UnDeclared Smell : " + refClass + " in " + closestDep.getSig());
                     appendToResult("Pulled in By" + closestDep.getDepTrail());
-//                    output("ggggg");
                 }
             }
         }

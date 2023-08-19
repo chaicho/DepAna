@@ -11,33 +11,20 @@ import java.util.Set;
 public class BloatedSmell extends BaseSmell{
     @Override
     public void detect() {
-        // Compare the dependency tree with the Call graph
-        // If the dependency tree is "larger" than the call graph, then the project is bloated
-        //        Runtime dependencies
-        Set<String> importPaths = new HashSet<String>();
-        Set<IDepJar> actualUsedDepJars = new HashSet<>();
-        Set<IDepJar> reachableRuntimeDepJars = hostProjectInfo.getReachableJars();
-        //        Compile time dependencies
-        Set<IDepJar> reachableCompileDepJars = new HashSet<>();
-        // Get the dependencies used by the code of the project
-        Set<String> referencedClasses =  GetRefedClasses.analyzeReferencedClasses(hostProjectInfo.getBuildCp());
-        for (String refClass : referencedClasses) {
-            /* Get the dependency jar containing the refed class */
-            Collection<IDepJar> dep = hostProjectInfo.getUsedDepFromClass(refClass);
-            reachableCompileDepJars.addAll(dep);
-        }
-        actualUsedDepJars.addAll(reachableCompileDepJars);
-        actualUsedDepJars.addAll(reachableRuntimeDepJars);
+        Set<? extends IDepJar> allDepJars = depJars.getUsedDepJars();
+        Set<IDepJar> actualTestDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("test");
+        Set<IDepJar> actualCompileDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("compile");
+        Set<IDepJar> actualRuntimeDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("runtime");
+        allDepJars.removeAll(actualTestDepJars);
+        allDepJars.removeAll(actualCompileDepJars);
+        allDepJars.removeAll(actualRuntimeDepJars);
 
-        Set<? extends IDepJar> declaredDepJars = depJars.getUsedDepJars();
         appendToResult("========BloatedSmell========");
-        for (IDepJar dep : declaredDepJars) {
-            if (!actualUsedDepJars.contains(dep)) {
+        for (IDepJar dep : allDepJars) {
                 log.warn("Bloated Smell: " + dep.getDisplayName());
                 appendToResult("Bloated Smell: " + dep.getDisplayName());
+                appendToResult("Dep Scope: " + dep.getScope());
                 appendToResult(dep.getDepTrail());
-                importPaths.add(dep.getDepTrail());
-            }
         }
         return;
     }

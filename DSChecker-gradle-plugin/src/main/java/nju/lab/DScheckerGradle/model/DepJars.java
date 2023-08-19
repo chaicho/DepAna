@@ -278,7 +278,14 @@ public class DepJars implements IDepJars<DepJar> {
         return null;
     }
 
-
+    @Override
+    public Set<DepJar> getDepJarsWithScope (String scope) {
+        return null;
+    }
+    @Override
+    public Set<DepJar> getDepJarsWithScene (String scene) {
+        return null;
+    }
 }
 
 

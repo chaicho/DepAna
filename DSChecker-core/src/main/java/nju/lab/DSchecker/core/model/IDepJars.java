@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface IDepJars<T extends IDepJar> {
-
     /**
      * Get all the jar file paths used by the host project.
      */
@@ -24,4 +23,7 @@ public interface IDepJars<T extends IDepJar> {
      */
     public Set<T> getAllDepJar();
 
+    public Set<T> getDepJarsWithScope(String scope);
+
+    public Set<T> getDepJarsWithScene(String scene);
 }

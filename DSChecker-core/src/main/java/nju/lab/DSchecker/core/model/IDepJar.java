@@ -27,5 +27,7 @@ public interface IDepJar {
 
     String getDepTrail();
 
+    String getScope();
+
 //    Set<String> getDepTrails();
 }

@@ -7,6 +7,7 @@ import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.util.monitor.PerformanceMonitor;
 import nju.lab.DSchecker.util.soot.TypeAna;
 import nju.lab.DScheckerMaven.model.*;
+import nju.lab.DScheckerMaven.core.analyze.MavenLibraryScopeMisuseSmell;
 import nju.lab.DScheckerMaven.util.Conf;
 import nju.lab.DScheckerMaven.util.MavenUtil;
 import org.apache.maven.artifact.factory.ArtifactFactory;
@@ -60,17 +61,16 @@ public class BaseMojo extends AbstractMojo {
 
     public DependencyNode root;
 
-    public boolean ignoreProvidedScope = true;
-    public boolean ignoreTestScope = true;
+    public boolean ignoreProvidedScope = false;
+    public boolean ignoreTestScope = false;
     public boolean ignoreTestClassifier = true;
-    public boolean ignoreRuntimeScope = true;
+    public boolean ignoreRuntimeScope = false;
 
     protected void initGlobalValues() {
         /**
          * 配置一系列重要参数：
          */
         MavenUtil.getInstance().setMojo(this); //在MavenUtil设置一下插件指向自己
-
     }
     /**
      * 初始化全局变量
@@ -81,25 +81,25 @@ public class BaseMojo extends AbstractMojo {
         PerformanceMonitor.initialize(buildDir.getAbsolutePath() + File.separator + "supportData.xml");
 //        validateSysSize();
         // 项目信息处理
-        PerformanceMonitor.start();
+        PerformanceMonitor.start("initHostProjectInfo");
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().setCompileSrcPaths(compileSourceRoots);
         HostProjectInfo.i().setRootDir(new File(mavenSession.getExecutionRootDirectory()));
         PerformanceMonitor.stop("initHostProjectInfo");
 
         // 依赖树处理
-        PerformanceMonitor.start();
+        PerformanceMonitor.start("initDependencyTree");
         root = dependencyTreeBuilder.buildDependencyTree(project, localRepository, null);
         NodeAdapters.init(root);
         PerformanceMonitor.stop("initDependencyTree");
 
         // 依赖库处理
-        PerformanceMonitor.start();
+        PerformanceMonitor.start("initDepJars");
         DepJars.init(NodeAdapters.i());
         PerformanceMonitor.stop("initDepJars");
 
         // 调用图处理
-        PerformanceMonitor.start();
+        PerformanceMonitor.start("initCallGraph");
         TypeAna.i().setHostProjectInfo(HostProjectInfo.i());
         TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
         PerformanceMonitor.stop("initCallGraph");
@@ -107,7 +107,7 @@ public class BaseMojo extends AbstractMojo {
 
         HostProjectInfo.i().init(CallGraphMaven.i(), DepJars.i());
         HostProjectInfo.i().buildDepClassMap();
-   }
+    }
 
     private void validateSysSize() throws Exception {
         long systemSize = 0;
@@ -143,9 +143,10 @@ public class BaseMojo extends AbstractMojo {
             PerformanceMonitor.start("detectSmells");
             SmellFactory smellFactory = new SmellFactory();
             smellFactory.init(HostProjectInfo.i(), DepJars.i(), CallGraphMaven.i());
+            MavenLibraryScopeMisuseSmell mavenLibraryScopeMisuseSmell = new MavenLibraryScopeMisuseSmell();
+            smellFactory.addSmell(mavenLibraryScopeMisuseSmell);
             smellFactory.detectAll();
             PerformanceMonitor.stop("detectSmells");
-
             PerformanceMonitor.close();
         }
     }

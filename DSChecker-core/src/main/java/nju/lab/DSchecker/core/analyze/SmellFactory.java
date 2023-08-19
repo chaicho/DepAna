@@ -40,6 +40,7 @@ public class SmellFactory {
      * */
     public void detectAll() {
         for (BaseSmell smell : smells) {
+            System.out.println("detecting smell: " + smell.getClass().getSimpleName());
             smell.detectSmell();
             smell.outputResult();
         }
@@ -47,7 +48,9 @@ public class SmellFactory {
 
     public void addSmell(BaseSmell smell) {
         smell.init(hostProjectInfo, callGraph, depJars);
+        System.out.println(smells);
         smells.add(smell);
+        System.out.println(smells);
     }
     public void init(IHostProjectInfo hostProjectInfo, IDepJars depJars, ICallGraph callGraph) {
         this.hostProjectInfo = hostProjectInfo;

@@ -1,12 +1,13 @@
 package nju.lab.DScheckerMaven.model;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.*;
+import nju.lab.DSchecker.util.javassist.GetRefedClasses;
+import nju.lab.DSchecker.util.source.analyze.ImportExtractor;
 import soot.SourceLocator;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,6 +48,11 @@ public class HostProjectInfo extends IHostProjectInfo {
     public String getBuildCp() {
         return buildPath + File.separator + "classes";
     }
+
+    @Override
+    public String getBuildTestCp() {
+        return buildPath + File.separator + "test-classes";
+    }
     public void setCompileSrcPaths(List<String> paths) {
             this.compileSrcDirs = paths.stream().map(String::trim).collect(Collectors.toSet());
             this.compileSrcFiles = compileSrcDirs.stream()
@@ -58,4 +64,5 @@ public class HostProjectInfo extends IHostProjectInfo {
     public String getBuildTool() {
         return "maven";
     }
+
 }

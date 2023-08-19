@@ -6,6 +6,7 @@ import nju.lab.DSchecker.core.model.IDepJars;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 表征依赖树中所有节点jar包的全局变量
@@ -70,7 +71,7 @@ public class DepJars implements IDepJars<DepJar> {
 
 	@Override
 	public DepJar getSelectedDepJarById(String s) {
-		for (DepJar depJar : container) {
+		for (DepJar depJar : getUsedDepJars()) {
 			if (depJar.isSelected() && depJar.getName().equals(s)) {
 				return depJar;
 			}
@@ -132,6 +133,34 @@ public class DepJars implements IDepJars<DepJar> {
 	public Set<DepJar> getAllDepJar() {
 		return container;
 	}
+
+	@Override
+	public Set<DepJar> getDepJarsWithScope(String scope) {
+		Set<DepJar> depJars = usedDepJars.stream()
+										 .filter(depJar -> depJar.getScope()!= null && depJar.getScope().equals(scope) && depJar.isSelected() && depJar.getDepth() == 1)
+										 .collect(Collectors.toSet());
+		return depJars;
+	}
+	@Override
+	public Set<DepJar> getDepJarsWithScene(String scene){
+		if (scene == "compile") {
+			Set<DepJar> compileScopeDeps = getDepJarsWithScope("compile");
+			Set<DepJar> runtimeDeps = getDepJarsWithScope("runtime");
+			compileScopeDeps.addAll(runtimeDeps);
+			return compileScopeDeps;
+		}
+		else if (scene == "runtime") {
+			return getDepJarsWithScope("runtime");
+		}
+		else if (scene == "test"){
+			return getDepJarsWithScope("test");
+		}
+		else {
+			log.error("Invalid Scnene" + scene);
+			return null;
+		}
+	}
+
 	/**
 	 * 获取所有jar包的本地路径
 	 * @return

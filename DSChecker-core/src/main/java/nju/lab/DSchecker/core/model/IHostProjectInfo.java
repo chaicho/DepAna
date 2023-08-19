@@ -2,6 +2,8 @@ package nju.lab.DSchecker.core.model;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import nju.lab.DSchecker.util.javassist.GetRefedClasses;
+import nju.lab.DSchecker.util.source.analyze.ImportExtractor;
 import soot.SourceLocator;
 
 import java.io.File;
@@ -190,5 +192,44 @@ public abstract class IHostProjectInfo  {
 
     abstract public String getWrapperPath();
 
+    public abstract String getBuildTestCp();
+
     public abstract String getBuildTool();
+
+    public Set<String> getCompileSrcImports() {
+        for (File compileSrcFile : compileSrcFiles) {
+            return ImportExtractor.getImportsFromJavaFiles(compileSrcFile);
+        }
+        return null;
+    }
+
+    public Set<IDepJar> getActualDepJarsUsedAtScene(String scene) {
+        if(scene.equals("compile")) {
+            Set<String> importedClasses = getCompileSrcImports();
+            Set<String> referencedClasses =  GetRefedClasses.analyzeReferencedClasses(getBuildCp());
+//          Import classes are not all classes for some classes within the same package do not need to be imported.
+            importedClasses.addAll(referencedClasses);
+            Set<IDepJar> depJars = new HashSet<>();
+            for (String referencedClass : importedClasses) {
+                Collection<IDepJar> depJar = getUsedDepFromClass(referencedClass);
+                depJars.addAll(depJar);
+            }
+            return depJars;
+        }
+        else if (scene.equals("test")) {
+            Set<String> referencedClasses =  GetRefedClasses.analyzeReferencedClasses(getBuildTestCp());
+            Set<IDepJar> depJars = new HashSet<>();
+            for (String referencedClass : referencedClasses) {
+                Collection<IDepJar> depJar = getUsedDepFromClass(referencedClass);
+                depJars.addAll(depJar);
+            }
+            return depJars;
+        }
+        else if (scene.equals("runtime")) {
+            return getReachableJars().stream()
+                    .filter(IDepJar -> IDepJar.getDepth() == 1)
+                    .collect(Collectors.toSet());
+        }
+        return new HashSet<>();
+    }
 }
