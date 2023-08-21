@@ -65,4 +65,5 @@ public class HostProjectInfo extends IHostProjectInfo {
         return "maven";
     }
 
+
 }

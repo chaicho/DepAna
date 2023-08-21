@@ -15,12 +15,13 @@ import java.util.Set;
 public class MavenLibraryScopeMisuseSmell extends BaseSmell{
     @Override
     public void detect(){
-        appendToResult("========MavenLibraryScopeMisuseSmell========");
+        appendToResult("========LibraryScopeSmell========");
         // Get DepJars with their declared scope.
         Set<? extends IDepJar> testDepJars = depJars.getDepJarsWithScope("test");
         Set<? extends IDepJar> compileDepJars = depJars.getDepJarsWithScope("compile");
         Set<? extends IDepJar> runtimeDepJars = depJars.getDepJarsWithScope("runtime");
         Set<? extends IDepJar> providedDepJars = depJars.getDepJarsWithScope("provided");
+
         // Get DepJars with their used scenario.
         Set<IDepJar> actualTestDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("test");
         Set<IDepJar> actualCompileDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("compile");
@@ -46,15 +47,15 @@ public class MavenLibraryScopeMisuseSmell extends BaseSmell{
 
         for (IDepJar depJar : compileDepJarsUsedOnlyAtTest) {
             appendToResult("compile scope dep " + depJar.getName() + " is acutally used only at test scene");
-            log.error("compile scope dep " + depJar.getName() + " is acutally used only at test scene");
+            log.error("compile scope dependency " + depJar.getName() + " is acutally used only at test scene");
         }
         for (IDepJar depJar : compileDepJarsUsedOnlyAtRuntime) {
             appendToResult("compile scope dep " + depJar.getName() + " is acutally used only at runtime scene");
-            log.error("compile scope dep " + depJar.getName() + " is acutally used only at runtime scene");
+            log.error("compile scope dependency " + depJar.getName() + " is acutally used only at runtime scene");
         }
         for (IDepJar depJar : compileDepJarsUsedOnlyAtProvided) {
             appendToResult("compile scope dep " + depJar.getName() + " is acutally used only at provided scene");
-            log.error("compile scope dep " + depJar.getName() + " is acutally used only at provided scene");
+            log.error("compile scope dependency " + depJar.getName() + " is acutally used only at provided scene");
         }
 
         return;

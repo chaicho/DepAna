@@ -44,6 +44,9 @@ public class LibraryConflictSmell extends BaseSmell{
             log.warn("conflict jars: " + conflictJars.get(key));
             appendToResult("selected jar: " + selectedJar.get(key).getJarFilePaths());
             appendToResult("conflict jars: " + conflictJars.get(key));
+            for (IDepJar depJar : conflictJars.get(key)) {
+                appendToResult("Pulled in by: " + depJar.getDepTrail());
+            }
         }
     }
     @Override
@@ -62,7 +65,8 @@ public class LibraryConflictSmell extends BaseSmell{
             for (IDepJar depJar : conflictingDepJars) {
                 IDepJar selectedJar = depJars.getSelectedDepJarById(depJar.getName());
                 if (selectedJar == null){
-                    appendToResult("ERROR");
+//                    appendToResult("ERROR");
+                    continue;
                 }
                 addConflictJar(selectedJar, depJar);
             }

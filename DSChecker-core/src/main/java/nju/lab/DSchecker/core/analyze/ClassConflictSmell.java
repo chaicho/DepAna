@@ -13,6 +13,9 @@ public class ClassConflictSmell extends BaseSmell {
         appendToResult("========ClassConflictSmell========");
         Collection<String> duplicateClassNames = hostProjectInfo.getDuplicateClassNames();
         for (String className : duplicateClassNames) {
+            if (!validClass(className)) {
+                continue;
+            }
             Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(className);
             if (depJars.size() == 1 && containsHost(depJars)) {
 //                  The conflicting classes are in host jar, not in dependency.

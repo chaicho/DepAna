@@ -55,6 +55,12 @@ public abstract class BaseSmell {
         }
     }
 
+    public boolean validClass(String className){
+        if(className.contains("module-info")){
+            return false;
+        }
+        return true;
+    }
     public void detectSmell(){
         try {
             detect();

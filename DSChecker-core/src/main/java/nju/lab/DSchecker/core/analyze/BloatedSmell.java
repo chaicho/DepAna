@@ -28,8 +28,8 @@ public class BloatedSmell extends BaseSmell{
         for (IDepJar dep : allDirectDepJars) {
                 log.warn("Bloated Smell: " + dep.getDisplayName());
                 appendToResult("Bloated Smell: " + dep.getDisplayName());
-                appendToResult("Dep Scope: " + dep.getScope());
-                appendToResult(dep.getDepTrail());
+                appendToResult("Dep scope: " + dep.getScope());
+                appendToResult("Pulled in by: " + dep.getDepTrail());
         }
         return;
     }

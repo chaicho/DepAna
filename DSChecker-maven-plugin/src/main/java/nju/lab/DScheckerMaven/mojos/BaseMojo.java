@@ -48,6 +48,9 @@ public class BaseMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${project.compileSourceRoots}", readonly = true, required = true)
     public List<String> compileSourceRoots;
+
+    @Parameter(defaultValue = "${project.testCompileSourceRoots}", readonly = true, required = true)
+    public List<String> testCompileSourceRoots;
     @Component
     public ArtifactFactory factory;
     @Component
@@ -84,6 +87,7 @@ public class BaseMojo extends AbstractMojo {
         PerformanceMonitor.start("initHostProjectInfo");
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().setCompileSrcPaths(compileSourceRoots);
+        HostProjectInfo.i().setTestCompileSrcPaths(testCompileSourceRoots);
         HostProjectInfo.i().setRootDir(new File(mavenSession.getExecutionRootDirectory()));
         PerformanceMonitor.stop("initHostProjectInfo");
 

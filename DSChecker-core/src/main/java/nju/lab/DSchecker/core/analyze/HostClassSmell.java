@@ -14,6 +14,9 @@ public class HostClassSmell extends BaseSmell{
         appendToResult("========HostClassSmell========");
         List<String> hostClasses= hostProjectInfo.getHostClasses();
         for(String className : hostClasses){
+            if (!validClass(className)) {
+                continue;
+            }
             Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(className);
             if(!depJars.isEmpty()) {
                 if(depJars.size() == 1 && containsHost(depJars)) {
