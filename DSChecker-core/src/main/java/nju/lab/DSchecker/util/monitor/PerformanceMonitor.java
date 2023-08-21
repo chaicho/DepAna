@@ -13,7 +13,7 @@ public class PerformanceMonitor {
     private static long endTime;
     public static void initialize(String filename) {
         try {
-            writer = new PrintWriter(new FileWriter(filename, true));
+            writer = new PrintWriter(new FileWriter(filename, false));
             writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             writer.println("<performanceData>");
         } catch (IOException e) {

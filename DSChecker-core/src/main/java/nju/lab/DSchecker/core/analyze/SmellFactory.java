@@ -3,7 +3,7 @@ package nju.lab.DSchecker.core.analyze;
 import nju.lab.DSchecker.core.model.ICallGraph;
 import nju.lab.DSchecker.core.model.IDepJars;
 import nju.lab.DSchecker.core.model.IHostProjectInfo;
-
+import nju.lab.DSchecker.util.monitor.PerformanceMonitor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +12,6 @@ public class SmellFactory {
     private IHostProjectInfo hostProjectInfo;
     private IDepJars depJars;
     private ICallGraph callGraph;
-
     List<BaseSmell> smells = new ArrayList<>();
     /**
      * Creates a new instance of each smell implementation.
@@ -39,10 +38,15 @@ public class SmellFactory {
      *
      * */
     public void detectAll() {
+        if ( hostProjectInfo.getOutputFile().exists()){
+            hostProjectInfo.getOutputFile().delete();
+        }
         for (BaseSmell smell : smells) {
             System.out.println("detecting smell: " + smell.getClass().getSimpleName());
+            PerformanceMonitor.start(smell.getClass().getSimpleName());
             smell.detectSmell();
             smell.outputResult();
+            PerformanceMonitor.stop(smell.getClass().getSimpleName());
         }
     }
 

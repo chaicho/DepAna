@@ -67,14 +67,14 @@ public abstract class BaseSmell {
         }
         catch (Exception e) {
             log.error(e.getMessage());
-            appendToResult("ERRROR");
-            appendToResult("gg");
-            appendToResult(e.getMessage());
-            appendToResult(getClass().toString());
+//            appendToResult("ERRROR");
+//            appendToResult("gg");
+//            appendToResult(e.getMessage());
+//            appendToResult(getClass().toString());
             // Output the stacktrace to the file
-            for (StackTraceElement element : e.getStackTrace()) {
-                appendToResult(element.toString());
-            }
+//            for (StackTraceElement element : e.getStackTrace()) {
+//                appendToResult(element.toString());
+//            }
         }
     }
     public abstract void detect();
