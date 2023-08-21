@@ -7,20 +7,25 @@ import nju.lab.DSchecker.util.javassist.GetRefedClasses;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 @Slf4j
 public class BloatedSmell extends BaseSmell{
     @Override
     public void detect() {
         Set<? extends IDepJar> allDepJars = depJars.getUsedDepJars();
+        Set<? extends IDepJar> allDirectDepJars = allDepJars.stream()
+                                                            .filter(dep -> dep.getDepth() == 1)
+                                                            .collect(Collectors.toSet());
         Set<IDepJar> actualTestDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("test");
         Set<IDepJar> actualCompileDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("compile");
         Set<IDepJar> actualRuntimeDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("runtime");
-        allDepJars.removeAll(actualTestDepJars);
-        allDepJars.removeAll(actualCompileDepJars);
-        allDepJars.removeAll(actualRuntimeDepJars);
+        allDirectDepJars.removeAll(actualTestDepJars);
+        allDirectDepJars.removeAll(actualCompileDepJars);
+        allDirectDepJars.removeAll(actualRuntimeDepJars);
 
         appendToResult("========BloatedSmell========");
-        for (IDepJar dep : allDepJars) {
+        for (IDepJar dep : allDirectDepJars) {
                 log.warn("Bloated Smell: " + dep.getDisplayName());
                 appendToResult("Bloated Smell: " + dep.getDisplayName());
                 appendToResult("Dep Scope: " + dep.getScope());

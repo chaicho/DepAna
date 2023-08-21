@@ -23,7 +23,7 @@ public class SmellFactory {
         smells.add(new ClassConflictSmell());
         smells.add(new LibraryConflictSmell());
         smells.add(new HostClassSmell());
-        smells.add(new LibraryScopeSmell());
+//        smells.add(new LibraryScopeSmell());
         smells.add(new UnDeclaredSmell());
         smells.add(new BloatedSmell());
         smells.add(new WrapperJarMissingSmell());
