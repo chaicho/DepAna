@@ -106,8 +106,8 @@ public class BaseMojo extends AbstractMojo {
 
         // 调用图处理
         PerformanceMonitor.start("initCallGraph");
-        TypeAna.i().setHostProjectInfo(HostProjectInfo.i());
-        TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
+        // TypeAna.i().setHostProjectInfo(HostProjectInfo.i());
+        // TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
         PerformanceMonitor.stop("initCallGraph");
 
         HostProjectInfo.i().init(CallGraphMaven.i(), DepJars.i());

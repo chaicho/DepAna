@@ -257,9 +257,16 @@ public abstract class IHostProjectInfo  {
             return depJars;
         }
         else if (scene.equals("runtime")) {
-            return getReachableJars().stream()
-                    .filter(IDepJar -> IDepJar.getDepth() == 1)
-                    .collect(Collectors.toSet());
+            Set<String> referencedClasses =  GetRefedClasses.analyzeReferencedClasses(getBuildCp());
+            Set<IDepJar> depJars = new HashSet<>();
+            for (String referencedClass : referencedClasses) {
+                Collection<IDepJar> depJar = getUsedDepFromClass(referencedClass);
+                depJars.addAll(depJar);
+            }
+            return depJars;
+//            return getReachableJars().stream()
+//                    .filter(IDepJar -> IDepJar.getDepth() == 1)
+//                    .collect(Collectors.toSet());
         }
         return new HashSet<>();
     }
