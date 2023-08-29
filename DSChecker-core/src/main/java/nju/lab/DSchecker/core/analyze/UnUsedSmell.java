@@ -2,15 +2,13 @@ package nju.lab.DSchecker.core.analyze;
 
 import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.IDepJar;
-import nju.lab.DSchecker.util.javassist.GetRefedClasses;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class BloatedSmell extends BaseSmell{
+public class UnUsedSmell extends BaseSmell{
     @Override
     public void detect() {
         Set<? extends IDepJar> allDepJars = depJars.getUsedDepJars();
@@ -24,12 +22,13 @@ public class BloatedSmell extends BaseSmell{
         allDirectDepJars.removeAll(actualCompileDepJars);
         allDirectDepJars.removeAll(actualRuntimeDepJars);
 
-        appendToResult("========BloatedSmell========");
+        appendToResult("========UnUsedSmell========");
         for (IDepJar dep : allDirectDepJars) {
-                log.warn("Bloated Smell: " + dep.getDisplayName());
-                appendToResult("Bloated Smell: " + dep.getDisplayName());
-                appendToResult("Dep scope: " + dep.getScope());
-                appendToResult("Pulled in by: " + dep.getDepTrail());
+                log.warn("UnUsed Smell: " + dep.getDisplayName());
+                appendToResult("UnUsed Smell: " + dep.getDisplayName());
+                appendToResult("    Dep scope: " + dep.getScope());
+                appendToResult("    Pulled in by: " + dep.getDepTrail());
+                appendToResult("---------");
         }
         return;
     }

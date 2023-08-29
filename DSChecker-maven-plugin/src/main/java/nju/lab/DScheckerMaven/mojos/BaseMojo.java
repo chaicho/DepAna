@@ -3,9 +3,11 @@ package nju.lab.DScheckerMaven.mojos;
 
 import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.analyze.SmellFactory;
+import nju.lab.DSchecker.core.model.DepModel;
 import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.util.monitor.PerformanceMonitor;
 import nju.lab.DSchecker.util.soot.TypeAna;
+import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
 import nju.lab.DScheckerMaven.model.*;
 import nju.lab.DScheckerMaven.core.analyze.MavenLibraryScopeMisuseSmell;
 import nju.lab.DScheckerMaven.util.Conf;
@@ -108,9 +110,16 @@ public class BaseMojo extends AbstractMojo {
         TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
         PerformanceMonitor.stop("initCallGraph");
 
-
         HostProjectInfo.i().init(CallGraphMaven.i(), DepJars.i());
         HostProjectInfo.i().buildDepClassMap();
+
+        // Dependency Model Build
+        DepModel depModel = new DepModel(CallGraphMaven.i(), DepJars.i(), HostProjectInfo.i());
+
+
+        FullClassExtractor.setDepModel(depModel);
+        FullClassExtractor.main(null);
+
     }
 
     private void validateSysSize() throws Exception {

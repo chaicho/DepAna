@@ -40,19 +40,19 @@ public class LibraryConflictSmell extends BaseSmell{
         if(conflictJars.isEmpty())
             return;
         for (String key : conflictJars.keySet()) {
-            log.warn("selected jar: " + selectedJar.get(key).getJarFilePaths());
-            log.warn("conflict jars: " + conflictJars.get(key));
-            appendToResult("selected jar: " + selectedJar.get(key).getJarFilePaths());
-            appendToResult("conflict jars: " + conflictJars.get(key));
+            log.warn("Selected jar: " + selectedJar.get(key).getJarFilePaths());
+            log.warn("Conflict jars: " + conflictJars.get(key));
+            appendToResult("Selected jar: " + selectedJar.get(key).getSig());
+            appendToResult("Conflict jars: " + conflictJars.get(key));
             for (IDepJar depJar : conflictJars.get(key)) {
-                appendToResult("Pulled in by: " + depJar.getDepTrail());
+                appendToResult("    Pulled in by: " + depJar.getDepTrail());
             }
+            appendToResult("---------");
         }
     }
     @Override
     public void detect() {
-            appendToResult("========LibraryConflictSmell========");
-            log.warn("=======Jar Conflict Smell========");
+            appendToResult("========LibraryVersionConflictSmell========");
             Set<IDepJar> conflictingDepJars = depJars.getAllDepJar()
                 .stream()
                 .filter(depJar -> {
@@ -71,9 +71,6 @@ public class LibraryConflictSmell extends BaseSmell{
                 addConflictJar(selectedJar, depJar);
             }
             printAllConflictJars();
-
-
-
     }
 }
 

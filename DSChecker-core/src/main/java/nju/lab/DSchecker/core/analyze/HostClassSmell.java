@@ -4,35 +4,48 @@ import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.IDepJar;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 public class HostClassSmell extends BaseSmell{
 
     @Override
     public void detect(){
-        appendToResult("========HostClassSmell========");
+        appendToResult("========HostClassConflictSmell========");
         List<String> hostClasses= hostProjectInfo.getHostClasses();
-        for(String className : hostClasses){
-            if (!validClass(className)) {
+        Map<Set<IDepJar>,Set<String>> jarToDuplicateClassMap = new HashMap<Set<IDepJar>,Set<String>>();
+        for(String hostClass : hostClasses){
+            Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(hostClass);
+            if(depJars.size() == 1 && containsHost(depJars)){
                 continue;
             }
-            Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(className);
-            if(!depJars.isEmpty()) {
-                if(depJars.size() == 1 && containsHost(depJars)) {
-//                  The conflicting classes are in host jar, not in dependency.
-                    continue;
-                }
-                log.warn("Duplicate Class Smell: " + className);
-                appendToResult("Duplicate Class Smell: " + className);
-                for (IDepJar depJar : depJars) {
-                    if (depJar.isHost()) {
-                        continue;
-                    }
-                    log.warn("in " + depJar.getSig());
-                    appendToResult("in " + depJar.getSig());
-                }
+            Set<IDepJar> depJarSets = new HashSet<IDepJar>();
+            depJarSets.addAll(depJars);
+            if(!jarToDuplicateClassMap.containsKey(depJarSets)){
+                jarToDuplicateClassMap.put(depJarSets,new HashSet<String>());
             }
+            jarToDuplicateClassMap.get(depJarSets).add(hostClass);
         }
+
+        for(Set<IDepJar> depJarSets : jarToDuplicateClassMap.keySet()) {
+            Set<String> duplicateClasses = jarToDuplicateClassMap.get(depJarSets);
+            appendToResult("Host Project");
+            for (IDepJar depJar : depJarSets) {
+                log.warn("Dep " + depJar.getSig());
+                appendToResult("Dep " + depJar.getSig());
+                appendToResult("    Pulled in by: " + depJar.getDepTrail());
+            }
+            appendToResult("Contains Duplicate Classes: " + duplicateClasses.size());
+            for (String className : duplicateClasses) {
+                log.warn("      Duplicate Class Smell: " + className);
+                appendToResult("    " + className);
+            }
+            appendToResult("---------");
+        }
+
     }
 }

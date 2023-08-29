@@ -3,6 +3,7 @@ package nju.lab.DSchecker.core.model;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import nju.lab.DSchecker.util.javassist.GetRefedClasses;
+import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
 import nju.lab.DSchecker.util.source.analyze.ImportExtractor;
 import soot.SourceLocator;
 
@@ -40,7 +41,7 @@ public abstract class IHostProjectInfo  {
     protected Set<String> ABIClasses = new HashSet<>();
     protected Set<String> apiDepJars = new HashSet<>();
     protected List<String> hostClasses;
-    private List<String> testCompileSrcDirs;
+    private Set<String> testCompileSrcDirs;
 
 
     /**
@@ -91,7 +92,7 @@ public abstract class IHostProjectInfo  {
     }
 
     /**
-     * Get the used Depjar that a class belongs to.
+     * Get the used Depjar that a class belongs to.·
      * @param className
      * @return The actual used Depjar that a class belongs to.
      */
@@ -124,12 +125,16 @@ public abstract class IHostProjectInfo  {
     public Set<File> getCompileSrcFiles() {
         return compileSrcFiles;
     }
-
+    public Set<String> getCompileSrcDirs() { return compileSrcDirs;}
     public Set<File> getTestCompileSrcFiles() {
         return testCompileSrcFiles;
     }
+
+    public Set<String> getTestCompileSrcDirs() {
+        return testCompileSrcDirs;
+    }
     public void setTestCompileSrcPaths(List<String> paths) {
-        this.testCompileSrcDirs = paths.stream().map(String::trim).collect(Collectors.toList());
+        this.testCompileSrcDirs = paths.stream().map(String::trim).collect(Collectors.toSet());
         this.testCompileSrcFiles = testCompileSrcDirs.stream()
                 .map(File::new)
                 .collect(Collectors.toSet());
@@ -145,7 +150,7 @@ public abstract class IHostProjectInfo  {
         this.testCompileSrcFiles = testCompileSrcFiles;
         this.testCompileSrcDirs = testCompileSrcFiles.stream()
                 .map(File::getAbsolutePath)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
 
@@ -226,12 +231,10 @@ public abstract class IHostProjectInfo  {
 
     public Set<IDepJar> getActualDepJarsUsedAtScene(String scene) {
         if(scene.equals("compile")) {
-            Set<String> importedClasses = getCompileSrcImports();
-            Set<String> referencedClasses =  GetRefedClasses.analyzeReferencedClasses(getBuildCp());
-//          Import classes are not all classes for some classes within the same package do not need to be imported.
-            importedClasses.addAll(referencedClasses);
+            Set<String> referencedClassesInSrcCode = getReferencedClassesFromSrc();
+            //  Import classes are not all classes for some classes within the same package do not need to be imported.
             Set<IDepJar> depJars = new HashSet<>();
-            for (String referencedClass : importedClasses) {
+            for (String referencedClass : referencedClassesInSrcCode) {
                 IDepJar depJar = getFirstUsedDepFromClass(referencedClass);
                 if (depJar != null && !depJar.isHost()) {
                     depJars.add(depJar);
@@ -240,11 +243,12 @@ public abstract class IHostProjectInfo  {
             return depJars;
         }
         else if (scene.equals("test")) {
-            Set<String> referencedClasses =  GetRefedClasses.analyzeReferencedClasses(getBuildTestCp());
-            Set<String> importedClasses = getTestCompileSrcImports();
-            importedClasses.addAll(referencedClasses);
+            Set<String> referencedClassesInByteCode =  GetRefedClasses.analyzeReferencedClasses(getBuildTestCp());
+            Set<String> referencedClassesInSrcCode =  getReferencedClassesFromTestSrc();
+            Set<String> allReferencedClasses = new HashSet<>(referencedClassesInByteCode);
+            allReferencedClasses.addAll(referencedClassesInSrcCode);
             Set<IDepJar> depJars = new HashSet<>();
-            for (String referencedClass : importedClasses) {
+            for (String referencedClass : allReferencedClasses) {
                 IDepJar depJar = getFirstUsedDepFromClass(referencedClass);
                 if (depJar != null && !depJar.isHost()) {
                     depJars.add(depJar);
@@ -260,17 +264,19 @@ public abstract class IHostProjectInfo  {
         return new HashSet<>();
     }
 
-    public Set<String> getCompileSrcImports() {
-        for (File compileSrcFile : compileSrcFiles) {
-            return ImportExtractor.getImportsFromJavaFiles(compileSrcFile);
+    public Set<String> getReferencedClassesFromSrc() {
+        Set<String> ret = new HashSet<>();
+        for (String compileSrcPath : getCompileSrcDirs() ) {
+            ret.addAll(FullClassExtractor.getClassesFromJavaFiles(compileSrcPath));
         }
-        return null;
+        return ret;
     }
 
-    public Set<String> getTestCompileSrcImports() {
-        for (File testCompileSrcFile : testCompileSrcFiles) {
-            return ImportExtractor.getImportsFromJavaFiles(testCompileSrcFile);
+    public Set<String> getReferencedClassesFromTestSrc() {
+        Set<String> ret = new HashSet<>();
+        for (String compileSrcPath : getTestCompileSrcDirs() ) {
+            ret.addAll(FullClassExtractor.getClassesFromJavaFiles(compileSrcPath));
         }
-        return null;
+        return ret;
     }
 }

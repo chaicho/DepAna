@@ -38,8 +38,9 @@ public class UnDeclaredSmell extends BaseSmell {
         for (IDepJar dep : allUsedDepJars) {
             log.warn("Undeclared Dependency: " + dep.getSig());
             appendToResult("Undeclared dependency: " + dep.getSig());
-            appendToResult("Dependency scope: " + dep.getScope());
-            appendToResult("Pulled in by: " + dep.getDepTrail());
+            appendToResult("    Dependency scope: " + dep.getScope());
+            appendToResult("    Pulled in by: " + dep.getDepTrail());
+            appendToResult("---------");
         }
 
 //        //        Get the classes from the build directory of Host Project and analyze the refed classes of them.

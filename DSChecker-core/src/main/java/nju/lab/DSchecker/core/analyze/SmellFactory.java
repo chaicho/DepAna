@@ -24,7 +24,7 @@ public class SmellFactory {
         smells.add(new HostClassSmell());
 //        smells.add(new LibraryScopeSmell());
         smells.add(new UnDeclaredSmell());
-        smells.add(new BloatedSmell());
+        smells.add(new UnUsedSmell());
         smells.add(new WrapperJarMissingSmell());
         smells.add(new WrapperConfMissingSmell());
         smells.add(new WrapperJarAbnormalSmell());

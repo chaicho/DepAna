@@ -162,6 +162,25 @@ public class DepJars implements IDepJars<DepJar> {
 	}
 
 	/**
+	 * Obtains the paths of all the jars used in the dependency tree.
+	 * @return
+	 */
+	@Override
+	public Set<String> getUsedDepJarsPaths(){
+		Set<String> usedJarPaths = new HashSet<>();
+		for (DepJar depJar : getUsedDepJars()) {
+			if (depJar.isHost()) {
+				continue;
+			}
+			for (String path : depJar.getJarFilePaths(true)) {
+				usedJarPaths.add(path);
+			}
+		}
+		return usedJarPaths;
+	}
+
+
+	/**
 	 * 获取所有jar包的本地路径
 	 * @return
 	 */

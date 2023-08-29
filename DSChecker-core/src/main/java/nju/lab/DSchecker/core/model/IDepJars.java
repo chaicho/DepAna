@@ -27,4 +27,5 @@ public interface IDepJars<T extends IDepJar> {
 
     public Set<T> getDepJarsWithScene(String scene);
 
+    public Set<String> getUsedDepJarsPaths();
 }
