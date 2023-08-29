@@ -263,7 +263,7 @@ public abstract class IHostProjectInfo  {
                 Collection<IDepJar> depJar = getUsedDepFromClass(referencedClass);
                 depJars.addAll(depJar);
             }
-            return depJars;
+            return depJars.stream().filter(depJar -> !depJar.isHost()).collect(Collectors.toSet());
 //            return getReachableJars().stream()
 //                    .filter(IDepJar -> IDepJar.getDepth() == 1)
 //                    .collect(Collectors.toSet());
