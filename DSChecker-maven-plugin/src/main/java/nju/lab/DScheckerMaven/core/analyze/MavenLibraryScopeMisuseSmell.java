@@ -15,7 +15,7 @@ import java.util.Set;
 public class MavenLibraryScopeMisuseSmell extends BaseSmell{
     @Override
     public void detect(){
-        appendToResult("---------LibraryScopeSmell---------");
+        appendToResult("========LibraryScopeSmell========");
         // Get DepJars with their declared scope.
         Set<? extends IDepJar> testDepJars = depJars.getDepJarsWithScope("test");
         Set<? extends IDepJar> compileDepJars = depJars.getDepJarsWithScope("compile");

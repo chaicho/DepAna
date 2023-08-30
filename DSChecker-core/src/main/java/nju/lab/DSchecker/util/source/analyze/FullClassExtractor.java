@@ -5,8 +5,10 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
+import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -90,7 +92,7 @@ public class FullClassExtractor {
         try {
             CompilationUnit cu = StaticJavaParser.parse(file);
 //            Get all the annotations in the file.
-            cu.findAll(MarkerAnnotationExpr.class).forEach(ad -> {
+            cu.findAll(AnnotationExpr.class).forEach(ad -> {
                 referencedClassesInJavaFile.add(ad.resolve().getQualifiedName());
             });
 //            Get all the classes in the file.
