@@ -33,6 +33,7 @@ public class FullClassExtractor {
 
         Set<String> jarPaths = depModel.depJars.getUsedDepJarsPaths();
         Set<String> srcPaths = depModel.hostProjectInfo.getCompileSrcDirs();
+        srcPaths.addAll(depModel.hostProjectInfo.getTestCompileSrcDirs());
         Set<JarTypeSolver> jarTypeSolvers = jarPaths.stream()
                 .map(
                         jarPath -> {
