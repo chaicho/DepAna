@@ -44,6 +44,10 @@ public class MavenLibraryScopeMisuseSmell extends BaseSmell{
         compileDepJarsUsedOnlyAtProvided.removeAll(actualRuntimeDepJars);
         compileDepJarsUsedOnlyAtProvided.removeAll(actualTestDepJars);
         compileDepJarsUsedOnlyAtProvided.retainAll(actualCompileDepJars);
+        log.warn("actualCompileDepJars: " + actualCompileDepJars);
+        log.warn("actualRuntimeDepJars: " + actualRuntimeDepJars);
+        log.warn("actualTestDepJars: " + actualTestDepJars);
+        log.warn("compileScopeDepJars: " + compileDepJars);
 
         // Check if provided scope dep is also used at runtime scene, which means the scope should be compile.
         Set<IDepJar> providedDepJarsUsedAtRuntime = new HashSet<>(providedDepJars);

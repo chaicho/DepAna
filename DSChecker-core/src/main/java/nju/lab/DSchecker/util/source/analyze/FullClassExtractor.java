@@ -93,16 +93,23 @@ public class FullClassExtractor {
             CompilationUnit cu = StaticJavaParser.parse(file);
 //            Get all the annotations in the file.
             cu.findAll(AnnotationExpr.class).forEach(ad -> {
-                referencedClassesInJavaFile.add(ad.resolve().getQualifiedName());
+                try {
+                    referencedClassesInJavaFile.add(ad.resolve().getQualifiedName());
+                } catch (Exception e) {
+                    System.out.println("Exception in resolving annotation: " + ad.toString());
+                }
             });
 //            Get all the classes in the file.
             cu.findAll(ClassOrInterfaceType.class).forEach(ct -> {
-                ResolvedType resolvedType = ct.resolve();
-                if (resolvedType.isReferenceType()) {
-                    referencedClassesInJavaFile.add(resolvedType.asReferenceType().getQualifiedName());
-                }
-                else if (resolvedType.isTypeVariable()) {
-                    referencedClassesInJavaFile.add(resolvedType.asTypeVariable().qualifiedName());
+                try {
+                    ResolvedType resolvedType = ct.resolve();
+                    if (resolvedType.isReferenceType()) {
+                        referencedClassesInJavaFile.add(resolvedType.asReferenceType().getQualifiedName());
+                    } else if (resolvedType.isTypeVariable()) {
+                        referencedClassesInJavaFile.add(resolvedType.asTypeVariable().qualifiedName());
+                    }
+                } catch (Exception e) {
+                    System.out.println("Exception in resolving class: " + ct.toString());
                 }
             });
         }
