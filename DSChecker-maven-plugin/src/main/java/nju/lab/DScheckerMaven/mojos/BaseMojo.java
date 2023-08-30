@@ -142,7 +142,7 @@ public class BaseMojo extends AbstractMojo {
 
         String pckType = project.getPackaging();	//得到项目的打包类型
         if ("jar".equals(pckType) || "war".equals(pckType) || "maven-plugin".equals(pckType)
-                || "bundle".equals(pckType)) {
+                || "bundle".equals(pckType) || "hpi".equals(pckType)) {
             try {
                 initGlobalVar();
             } catch (Exception e) { System.err.println("Caught Exception!");
