@@ -11,6 +11,7 @@ import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Navigator;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
@@ -93,7 +94,13 @@ public class FullClassExtractor {
             });
 //            Get all the classes in the file.
             cu.findAll(ClassOrInterfaceType.class).forEach(ct -> {
-                referencedClassesInJavaFile.add(ct.resolve().asReferenceType().getQualifiedName());
+                ResolvedType resolvedType = ct.resolve();
+                if (resolvedType.isReferenceType()) {
+                    referencedClassesInJavaFile.add(resolvedType.asReferenceType().getQualifiedName());
+                }
+                else if (resolvedType.isTypeVariable()) {
+                    referencedClassesInJavaFile.add(resolvedType.asTypeVariable().qualifiedName());
+                }
             });
         }
         catch (FileNotFoundException e) {
