@@ -26,7 +26,7 @@ public class MavenLibraryScopeMisuseSmell extends BaseSmell{
         Set<IDepJar> actualTestDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("test");
         Set<IDepJar> actualCompileDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("compile");
         Set<IDepJar> actualRuntimeDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("runtime");
-
+        
         // Check if compile scope dep is acutally used only at test scene
         Set<IDepJar> compileDepJarsUsedOnlyAtTest = new HashSet<>(compileDepJars);
         compileDepJarsUsedOnlyAtTest.removeAll(actualCompileDepJars);
