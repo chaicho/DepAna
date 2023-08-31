@@ -2,12 +2,9 @@ package nju.lab.DSchecker.core.analyze;
 
 import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.IDepJar;
-import nju.lab.DSchecker.util.javassist.GetRefedClasses;
 
 //import nju.lab.DSchecker.core;
 
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,7 +34,7 @@ public class UnDeclaredSmell extends BaseSmell {
             log.warn("Undeclared Dependency: " + dep.getSig());
             appendToResult("Undeclared dependency: " + dep.getSig());
             appendToResult("    Dependency scope: " + dep.getScope());
-            appendToResult("    Pulled in by: " + dep.getDepTrail());
+            appendToResult("    Pulled in by: " + dep.getUsedDepTrail());
             appendToResult("---------");
         }
 

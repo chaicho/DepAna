@@ -12,11 +12,11 @@ import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class ClassConflictSmell extends BaseSmell {
+public class LibraryClassConflictSmell extends BaseSmell {
 
     @Override
     public void detect() {
-        appendToResult("========ClassConflictSmell========");
+        appendToResult("========LibraryClassConflictSmell========");
         Collection<String> duplicateClassNames = hostProjectInfo.getDuplicateClassNames();
         Map<List<IDepJar>,Set<String>> jarToDuplicateClassMap = new HashMap<List<IDepJar>,Set<String>>();
         for (String className : duplicateClassNames) {
@@ -51,7 +51,7 @@ public class ClassConflictSmell extends BaseSmell {
             for (IDepJar depJar : depJarLists) {
                 log.warn("Dep " + depJar.getSig());
                 appendToResult("Dep " + depJar.getSig());
-                appendToResult("    Pulled in by: " + depJar.getDepTrail());
+                appendToResult("    Pulled in by: " + depJar.getUsedDepTrail());
             }
             appendToResult("Contains Duplicate Classes: " + duplicateClasses.size());
             for (String className : duplicateClasses) {

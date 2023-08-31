@@ -19,7 +19,7 @@ public class SmellFactory {
      * @return a list of BaseSmell objects
      */
     public void initSmells() {
-        smells.add(new ClassConflictSmell());
+        smells.add(new LibraryClassConflictSmell());
         smells.add(new LibraryConflictSmell());
         smells.add(new HostClassSmell());
 //        smells.add(new LibraryScopeSmell());

@@ -25,6 +25,8 @@ public interface IDepJar {
 
     String getDisplayName();
 
+    String getUsedDepTrail();
+
     String getDepTrail();
 
     String getScope();

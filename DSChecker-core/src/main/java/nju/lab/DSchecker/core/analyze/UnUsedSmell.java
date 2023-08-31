@@ -27,7 +27,7 @@ public class UnUsedSmell extends BaseSmell{
                 log.warn("UnUsed Smell: " + dep.getDisplayName());
                 appendToResult("UnUsed Smell: " + dep.getDisplayName());
                 appendToResult("    Dep scope: " + dep.getScope());
-                appendToResult("    Pulled in by: " + dep.getDepTrail());
+                appendToResult("    Pulled in by: " + dep.getUsedDepTrail());
                 appendToResult("---------");
         }
         return;

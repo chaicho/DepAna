@@ -347,7 +347,7 @@ public class DepJar implements IDepJar {
 	 * @return path in dependency tree
 	 */
 	@Override
-	public String getDepTrail() {
+	public String getUsedDepTrail() {
 		StringBuilder sb = new StringBuilder();
 		for (NodeAdapter node : getNodeAdapters()) {
 			if (!node.isNodeSelected()) {
@@ -360,4 +360,17 @@ public class DepJar implements IDepJar {
 		}
 		return sb.toString();
 	}
+
+	@Override
+	public String getDepTrail() {
+		StringBuilder sb = new StringBuilder();
+		for (NodeAdapter node : getNodeAdapters()) {
+			sb.append("  [");
+			sb.append(node.getWholePath());
+			sb.append("]");
+			break;
+		}
+		return sb.toString();
+	}
+
 }

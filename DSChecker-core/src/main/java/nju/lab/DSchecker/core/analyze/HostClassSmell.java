@@ -38,7 +38,7 @@ public class HostClassSmell extends BaseSmell{
             for (IDepJar depJar : depJarSets) {
                 log.warn("Dep " + depJar.getSig());
                 appendToResult("Dep " + depJar.getSig());
-                appendToResult("    Pulled in by: " + depJar.getDepTrail());
+                appendToResult("    Pulled in by: " + depJar.getUsedDepTrail());
             }
             appendToResult("Contains Duplicate Classes: " + duplicateClasses.size());
             for (String className : duplicateClasses) {
