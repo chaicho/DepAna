@@ -176,6 +176,17 @@ public abstract class IHostProjectInfo  {
      * Get all the jar files reachable by the host project.
      * @return Set of jar files
     */
+    public Set<IDepJar> getDirectReachableJars() {
+        Set<String> reachableClasses = callGraph.getReachableDirectClasses();
+        Set<IDepJar> ret = new java.util.HashSet<>();
+        for (String className : reachableClasses) {
+            Collection<IDepJar> depJars = getUsedDepFromClass(className);
+            if (depJars != null) {
+                ret.addAll(depJars);
+            }
+        }
+        return ret;
+    }
     public  Set<IDepJar> getReachableJars(){
         Set<String> reachableClasses = callGraph.getReachableClasses();
         Set<IDepJar> ret = new java.util.HashSet<>();
@@ -257,9 +268,7 @@ public abstract class IHostProjectInfo  {
             return depJars;
         }
         else if (scene.equals("runtime")) {
-            return getReachableJars().stream()
-                    .filter(IDepJar -> IDepJar.getDepth() == 1)
-                    .collect(Collectors.toSet());
+            return getDirectReachableJars();
         }
         return new HashSet<>();
     }

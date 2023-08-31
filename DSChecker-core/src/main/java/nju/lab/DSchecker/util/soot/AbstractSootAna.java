@@ -173,7 +173,7 @@ public abstract class AbstractSootAna {
 		}
 		return true;
 	}
-	protected void addGenArg(List<String> argsList) {
+	protected void 	addGenArg(List<String> argsList) {
 		argsList.add("-ire");
 		/**
 		 * 暂时认为-app没用

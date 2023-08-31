@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class UnDeclaredSmell extends BaseSmell {
@@ -18,10 +19,9 @@ public class UnDeclaredSmell extends BaseSmell {
     @Override
     public void detect(){
         appendToResult("========UnDeclaredSmell========");
-        Set<? extends IDepJar> testDepJars = depJars.getDepJarsWithScope("test");
-        Set<? extends IDepJar> compileDepJars = depJars.getDepJarsWithScope("compile");
-        Set<? extends IDepJar> runtimeDepJars = depJars.getDepJarsWithScope("runtime");
-        Set<? extends IDepJar> providedDepJars = depJars.getDepJarsWithScope("provided");
+        Set<IDepJar> declaredDepJars = depJars.getUsedDepJars().stream()
+                                                               .filter(depJar -> depJar.getDepth() == 1)
+                                                               .collect(Collectors.toSet());
         // Get DepJars with their used scenario.
         Set<IDepJar> actualTestDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("test");
         Set<IDepJar> actualCompileDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("compile");
@@ -31,10 +31,8 @@ public class UnDeclaredSmell extends BaseSmell {
         allUsedDepJars.addAll(actualCompileDepJars);
         allUsedDepJars.addAll(actualRuntimeDepJars);
 
-        allUsedDepJars.removeAll(testDepJars);
-        allUsedDepJars.removeAll(compileDepJars);
-        allUsedDepJars.removeAll(providedDepJars);
-        allUsedDepJars.removeAll(runtimeDepJars);
+        allUsedDepJars.removeAll(declaredDepJars);
+
         for (IDepJar dep : allUsedDepJars) {
             log.warn("Undeclared Dependency: " + dep.getSig());
             appendToResult("Undeclared dependency: " + dep.getSig());

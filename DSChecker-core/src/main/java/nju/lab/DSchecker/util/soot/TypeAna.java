@@ -50,16 +50,6 @@ public class TypeAna extends AbstractSootAna{
         }
         hostProjectInfo.initABIDepjars(apiTypeTransformer.getABINames());
 
-//        SootClass mainClass = Scene.v().getMainClass();
-//        System.out.println("------mainClass------");
-//        System.out.println(mainClass);
-//        System.out.println("-----------EntryPoints-------------");
-//        System.out.println(Scene.v().getEntryPoints());
-//        System.out.println("---------------ArgumentClasses-------------");
-//        System.out.println(Scene.v().getApplicationClasses());
-//        System.out.println("---------------CallGraph-------------");
-//        System.out.println(Scene.v().getCallGraph().size());
-
     }
 
     @Override

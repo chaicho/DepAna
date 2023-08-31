@@ -108,6 +108,7 @@ public class BaseMojo extends AbstractMojo {
         PerformanceMonitor.start("initCallGraph");
         TypeAna.i().setHostProjectInfo(HostProjectInfo.i());
         TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
+
         PerformanceMonitor.stop("initCallGraph");
 
         HostProjectInfo.i().init(CallGraphMaven.i(), DepJars.i());
@@ -118,7 +119,7 @@ public class BaseMojo extends AbstractMojo {
 
 
         FullClassExtractor.setDepModel(depModel);
-        FullClassExtractor.main(null);
+//        FullClassExtractor.main(null);
 
     }
 

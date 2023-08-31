@@ -350,6 +350,9 @@ public class DepJar implements IDepJar {
 	public String getDepTrail() {
 		StringBuilder sb = new StringBuilder();
 		for (NodeAdapter node : getNodeAdapters()) {
+			if (!node.isNodeSelected()) {
+				continue;
+			}
 			sb.append("  [");
 			sb.append(node.getWholePath());
 			sb.append("]");
