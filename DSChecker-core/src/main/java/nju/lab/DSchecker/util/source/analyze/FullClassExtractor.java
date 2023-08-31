@@ -48,7 +48,14 @@ public class FullClassExtractor {
                 .collect(Collectors.toSet());
 
         Set<JavaParserTypeSolver> javaParserTypeSolvers = srcPaths.stream()
-                .map(srcPath -> new JavaParserTypeSolver(new File(srcPath)))
+                .map(srcPath -> {
+                            if (new File(srcPath).exists()) {
+                                return new JavaParserTypeSolver(new File(srcPath));
+                            }
+                            return null;
+                        }
+                )
+                .filter(x -> x!=null)
                 .collect(Collectors.toSet());
 
         CombinedTypeSolver myTypeSolver = new CombinedTypeSolver(
