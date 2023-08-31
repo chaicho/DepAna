@@ -50,7 +50,7 @@ public abstract class IHostProjectInfo  {
      * @return
      */
     public void buildDepClassMap() {
-        for (IDepJar depJar : depJars.getUsedDepJars()) {
+        for (IDepJar depJar : depJars.getSeqUsedDepJars()) {
             for (String className : depJar.getAllCls()) {
                 usedDependenciesPerClass.put(className, depJar);
             }

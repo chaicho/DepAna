@@ -18,6 +18,7 @@ public interface IDepJars<T extends IDepJar> {
      */
     public T getSelectedDepJarById(String componentId);
 
+    public List<T>  getSeqUsedDepJars();
     /**
      Get all the jar files of the given project.
      */

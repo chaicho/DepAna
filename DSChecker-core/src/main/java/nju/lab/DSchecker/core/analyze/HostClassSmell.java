@@ -3,6 +3,7 @@ package nju.lab.DSchecker.core.analyze;
 import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.IDepJar;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,13 +18,13 @@ public class HostClassSmell extends BaseSmell{
     public void detect(){
         appendToResult("========HostClassConflictSmell========");
         List<String> hostClasses= hostProjectInfo.getHostClasses();
-        Map<Set<IDepJar>,Set<String>> jarToDuplicateClassMap = new HashMap<Set<IDepJar>,Set<String>>();
+        Map<List<IDepJar>,Set<String>> jarToDuplicateClassMap = new HashMap<List<IDepJar>,Set<String>>();
         for(String hostClass : hostClasses){
             Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(hostClass);
             if(depJars.size() == 1 && containsHost(depJars)){
                 continue;
             }
-            Set<IDepJar> depJarSets = new HashSet<IDepJar>();
+            List<IDepJar> depJarSets = new ArrayList<>();
             depJarSets.addAll(depJars);
             if(!jarToDuplicateClassMap.containsKey(depJarSets)){
                 jarToDuplicateClassMap.put(depJarSets,new HashSet<String>());
@@ -31,7 +32,7 @@ public class HostClassSmell extends BaseSmell{
             jarToDuplicateClassMap.get(depJarSets).add(hostClass);
         }
 
-        for(Set<IDepJar> depJarSets : jarToDuplicateClassMap.keySet()) {
+        for(List<IDepJar> depJarSets : jarToDuplicateClassMap.keySet()) {
             Set<String> duplicateClasses = jarToDuplicateClassMap.get(depJarSets);
             appendToResult("Host Project");
             for (IDepJar depJar : depJarSets) {
