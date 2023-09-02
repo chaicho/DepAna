@@ -43,7 +43,7 @@ public abstract class IHostProjectInfo  {
     protected List<String> hostClasses;
     private Set<String> testCompileSrcDirs;
 
-
+    public Set<String> referencedClasses = new HashSet<>();
     /**
      * Construct the class to Depjar map.
      * @param
@@ -283,11 +283,49 @@ public abstract class IHostProjectInfo  {
         return ret;
     }
 
+    /**
+     * Get all the classes referenced by the host project's bytecode.
+     * @return
+     */
+    public Set<String> getReferencedClassesFromBuild() {
+        Set<String> ret = new HashSet<>();
+        ret.addAll(GetRefedClasses.analyzeReferencedClasses(getBuildCp()));
+        return ret;
+    }
+    /**
+     * Get all the classes referenced by the host project's tests' bytecode.
+     * @return
+     */
+    public Set<String> getReferencedClassesFromTestBuild() {
+        Set<String> ret = new HashSet<>();
+        ret.addAll(GetRefedClasses.analyzeReferencedClasses(getBuildTestCp()));
+        return ret;
+    }
+
+    /**
+     * Get all the classes referenced by the host project, including src code and test code.
+     * @return
+     */
+    public Set<String> getReferencedClassesFromAll() {
+        if (!referencedClasses.isEmpty()) {
+            return referencedClasses;
+        }
+        referencedClasses.addAll(getReferencedClassesFromSrc());
+        referencedClasses.addAll(getReferencedClassesFromBuild());
+        referencedClasses.addAll(getReferencedClassesFromTestSrc());
+        referencedClasses.addAll(getReferencedClassesFromTestBuild());
+        return referencedClasses;
+    }
+
     public Set<String> getReferencedClassesFromTestSrc() {
         Set<String> ret = new HashSet<>();
         for (String compileSrcPath : getTestCompileSrcDirs() ) {
             ret.addAll(FullClassExtractor.getClassesFromJavaFiles(compileSrcPath));
         }
         return ret;
+    }
+
+    public boolean isUsedByHost(String className) {
+        return  callGraph.getReachableClasses().contains(className);
     }
 }

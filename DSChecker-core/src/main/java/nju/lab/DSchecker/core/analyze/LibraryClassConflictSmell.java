@@ -48,12 +48,16 @@ public class LibraryClassConflictSmell extends BaseSmell {
 
         for(List<IDepJar> depJarLists : jarToDuplicateClassMap.keySet()){
             Set<String> duplicateClasses = jarToDuplicateClassMap.get(depJarLists);
+            duplicateClasses.stream().filter(className -> hostProjectInfo.isUsedByHost(className));
+            if (duplicateClasses.isEmpty()) {
+                return;
+            }
             for (IDepJar depJar : depJarLists) {
                 log.warn("Dep " + depJar.getSig());
                 appendToResult("Dep " + depJar.getSig());
                 appendToResult("    Pulled in by: " + depJar.getUsedDepTrail());
             }
-            appendToResult("Contains Duplicate Classes: " + duplicateClasses.size());
+            appendToResult("Contains Duplicate Classes Used By the project: " + duplicateClasses.size());
             for (String className : duplicateClasses) {
                 log.warn("      Duplicate Class Smell: " + className);
                 appendToResult("    " + className);
