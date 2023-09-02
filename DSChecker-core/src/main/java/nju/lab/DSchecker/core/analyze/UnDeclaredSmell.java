@@ -31,6 +31,9 @@ public class UnDeclaredSmell extends BaseSmell {
         allUsedDepJars.removeAll(declaredDepJars);
 
         for (IDepJar dep : allUsedDepJars) {
+            if(dep.isHost()) {
+                continue;
+            }
             log.warn("Undeclared Dependency: " + dep.getSig());
             appendToResult("Undeclared dependency: " + dep.getSig());
             appendToResult("    Dependency scope: " + dep.getScope());

@@ -177,7 +177,9 @@ public abstract class IHostProjectInfo  {
      * @return Set of jar files
     */
     public Set<IDepJar> getDirectReachableJars() {
-        Set<String> reachableClasses = callGraph.getReachableDirectClasses();
+        Set<String> reachableClasses = new HashSet<>(callGraph.getReachableDirectClasses());
+        Set<String> constantPoolClasses =  GetRefedClasses.analyzeReferencedClasses(getBuildCp());
+        reachableClasses.addAll(constantPoolClasses);
         Set<IDepJar> ret = new java.util.HashSet<>();
         for (String className : reachableClasses) {
             Collection<IDepJar> depJars = getUsedDepFromClass(className);
