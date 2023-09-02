@@ -42,9 +42,12 @@ public class FullClassExtractor {
                             try {
                                 return new JarTypeSolver(jarPath);
                             } catch (IOException e) {
-                                throw new RuntimeException(e);
+                                System.out.println("jarPath: " + jarPath);
+                                e.printStackTrace();
+                                return null;
                             }
                         })
+                .filter(x -> x!=null)
                 .collect(Collectors.toSet());
 
         Set<JavaParserTypeSolver> javaParserTypeSolvers = srcPaths.stream()
