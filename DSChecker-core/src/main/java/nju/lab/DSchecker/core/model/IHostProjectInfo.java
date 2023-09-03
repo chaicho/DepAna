@@ -4,7 +4,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import nju.lab.DSchecker.util.javassist.GetRefedClasses;
 import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
-import nju.lab.DSchecker.util.source.analyze.ImportExtractor;
 import soot.SourceLocator;
 
 import java.io.File;
@@ -44,6 +43,14 @@ public abstract class IHostProjectInfo  {
     private Set<String> testCompileSrcDirs;
 
     public Set<String> referencedClasses = new HashSet<>();
+
+    private Set<IDepJar> actualCompileDepJars = new HashSet<>();
+
+    private Set<IDepJar> actualTestDepJars = new HashSet<>();
+
+    private Set<IDepJar> actualRuntimeDepJars = new HashSet<>();
+
+
     /**
      * Construct the class to Depjar map.
      * @param
@@ -244,33 +251,42 @@ public abstract class IHostProjectInfo  {
 
     public Set<IDepJar> getActualDepJarsUsedAtScene(String scene) {
         if(scene.equals("compile")) {
-            Set<String> referencedClassesInSrcCode = getReferencedClassesFromSrc();
-            //  Import classes are not all classes for some classes within the same package do not need to be imported.
-            Set<IDepJar> depJars = new HashSet<>();
-            for (String referencedClass : referencedClassesInSrcCode) {
-                IDepJar depJar = getFirstUsedDepFromClass(referencedClass);
-                if (depJar != null && !depJar.isHost()) {
-                    depJars.add(depJar);
+            if (actualCompileDepJars.isEmpty()) {
+                Set<String> referencedClassesInSrcCode = getReferencedClassesFromSrc();
+                //  Import classes are not all classes for some classes within the same package do not need to be imported.
+                Set<IDepJar> depJars = new HashSet<>();
+                for (String referencedClass : referencedClassesInSrcCode) {
+                    IDepJar depJar = getFirstUsedDepFromClass(referencedClass);
+                    if (depJar != null && !depJar.isHost()) {
+                        depJars.add(depJar);
+                    }
                 }
+                actualCompileDepJars = depJars;
             }
-            return depJars;
+            return new HashSet<>(actualCompileDepJars);
         }
         else if (scene.equals("test")) {
-            Set<String> referencedClassesInByteCode =  GetRefedClasses.analyzeReferencedClasses(getBuildTestCp());
-            Set<String> referencedClassesInSrcCode =  getReferencedClassesFromTestSrc();
-            Set<String> allReferencedClasses = new HashSet<>(referencedClassesInByteCode);
-            allReferencedClasses.addAll(referencedClassesInSrcCode);
-            Set<IDepJar> depJars = new HashSet<>();
-            for (String referencedClass : allReferencedClasses) {
-                IDepJar depJar = getFirstUsedDepFromClass(referencedClass);
-                if (depJar != null && !depJar.isHost()) {
-                    depJars.add(depJar);
+            if (actualTestDepJars.isEmpty()) {
+                Set<String> referencedClassesInByteCode =  GetRefedClasses.analyzeReferencedClasses(getBuildTestCp());
+                Set<String> referencedClassesInSrcCode =  getReferencedClassesFromTestSrc();
+                Set<String> allReferencedClasses = new HashSet<>(referencedClassesInByteCode);
+                allReferencedClasses.addAll(referencedClassesInSrcCode);
+                Set<IDepJar> depJars = new HashSet<>();
+                for (String referencedClass : allReferencedClasses) {
+                    IDepJar depJar = getFirstUsedDepFromClass(referencedClass);
+                    if (depJar != null && !depJar.isHost()) {
+                        depJars.add(depJar);
+                    }
                 }
+                actualTestDepJars = depJars;
             }
-            return depJars;
+            return new HashSet<>(actualTestDepJars);
         }
         else if (scene.equals("runtime")) {
-            return getDirectReachableJars();
+            if (actualRuntimeDepJars.isEmpty()) {
+                actualRuntimeDepJars = getDirectReachableJars();
+            }
+            return new HashSet<>(actualRuntimeDepJars);
         }
         return new HashSet<>();
     }
