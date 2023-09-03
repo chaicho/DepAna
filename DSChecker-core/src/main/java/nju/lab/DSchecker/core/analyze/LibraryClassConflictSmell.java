@@ -62,7 +62,7 @@ public class LibraryClassConflictSmell extends BaseSmell {
                 log.warn("      Duplicate Class Smell: " + className);
                 appendToResult("    " + className);
             }
-            appendToResult("Acutal Used Dependency" + depJarLists.get(0));
+            appendToResult("Actual Used Dependency: " + depJarLists.get(0));
             appendToResult("---------");
         }
     }
