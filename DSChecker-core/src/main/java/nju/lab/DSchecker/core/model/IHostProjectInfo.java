@@ -194,6 +194,7 @@ public abstract class IHostProjectInfo  {
                 ret.add(depJar);
                 System.out.println(className + " is reachable by methods");
                 System.out.println(callGraph.getSourceMethods(className));
+                System.out.println(depJar.getDisplayName());
             }
         }
         return ret;
