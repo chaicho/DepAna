@@ -6,13 +6,17 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Navigator;
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -122,6 +126,34 @@ public class FullClassExtractor {
                     System.out.println("Exception in resolving class: " + ct.toString());
                 }
             });
+            cu.findAll(MethodCallExpr.class).forEach(te -> {
+                try {
+                    if (te.getScope().isPresent()) {
+                        ResolvedType resolvedType = te.getScope().get().calculateResolvedType();
+                        if (resolvedType.isReferenceType()) {
+                            referencedClassesInJavaFile.add(resolvedType.asReferenceType().getQualifiedName());
+                        } else if (resolvedType.isTypeVariable()) {
+                            referencedClassesInJavaFile.add(resolvedType.asTypeVariable().qualifiedName());
+                        }
+                    }
+                }
+                catch (Exception e) {
+                    System.out.println("Exception while resolving method " + te.getScope());
+                }
+            });
+            cu.findAll(FieldAccessExpr.class).forEach(fa -> {
+                try {
+                    ResolvedType resolvedType = fa.getScope().calculateResolvedType();
+                    if (resolvedType.isReferenceType()) {
+                        referencedClassesInJavaFile.add(resolvedType.asReferenceType().getQualifiedName());
+                    } else if (resolvedType.isTypeVariable()) {
+                        referencedClassesInJavaFile.add(resolvedType.asTypeVariable().qualifiedName());
+                    }
+                } catch (Exception e) {
+                    System.out.println("Exception in resolving field access: " + fa.toString());
+                }
+            });
+
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
