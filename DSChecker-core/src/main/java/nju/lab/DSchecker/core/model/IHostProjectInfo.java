@@ -189,11 +189,11 @@ public abstract class IHostProjectInfo  {
         reachableClasses.addAll(constantPoolClasses);
         Set<IDepJar> ret = new java.util.HashSet<>();
         for (String className : reachableClasses) {
-            System.out.println(className + " is reachable by methods");
-            System.out.println(callGraph.getSourceMethods(className));
             Collection<IDepJar> depJars = getUsedDepFromClass(className);
             if (depJars != null) {
                 ret.addAll(depJars);
+                System.out.println(className + " is reachable by methods");
+                System.out.println(callGraph.getSourceMethods(className));
             }
         }
         return ret;

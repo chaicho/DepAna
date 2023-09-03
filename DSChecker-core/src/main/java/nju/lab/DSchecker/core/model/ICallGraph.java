@@ -23,7 +23,11 @@ public interface ICallGraph {
     Map<String , Set<SootMethod> > invokedMethods = new HashMap<String , Set<SootMethod>>();
 
     public default Set<String> getSourceMethods (String className) {
-        return invokedMethods.get(className).stream()
+        if (!invokedMethods.containsKey(className)) {
+            return new HashSet<String>();
+        }
+        return invokedMethods.get(className)
+                .stream()
                 .map(method -> method.getSignature())
                 .collect(Collectors.toSet());
     }
@@ -58,16 +62,7 @@ public interface ICallGraph {
         for (SootClass sootClass : Scene.v().getApplicationClasses()) {
             for (SootMethod method : sootClass.getMethods()) {
                 if (outCallingMethod(method)) {
-                    String className = method.getDeclaringClass().getName();
                     reachableClasses.add(method.getDeclaringClass().getName());
-                    if (invokedMethods.containsKey(className)){
-                        invokedMethods.get(className).add(method);
-                    }
-                    else {
-                        Set<SootMethod> methods = new HashSet<SootMethod>();
-                        methods.add(method);
-                        invokedMethods.put(className, methods);
-                    }
                 }
                 else {
                     entryMthds.add(method);
@@ -85,8 +80,17 @@ public interface ICallGraph {
                 // Check if it is in an application class
 
                 if (outCallingMethod(targetMethod)) {
+                    String className = targetMethod.getDeclaringClass().getName();
                     // Add its class name to the set
                     reachableClasses.add(targetMethod.getDeclaringClass().getName());
+                    if (invokedMethods.containsKey(className)){
+                        invokedMethods.get(className).add(entryMethod);
+                    }
+                    else {
+                        Set<SootMethod> methods = new HashSet<SootMethod>();
+                        methods.add(entryMethod);
+                        invokedMethods.put(className, methods);
+                    }
                 }
             }
         }
