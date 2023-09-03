@@ -190,7 +190,7 @@ public abstract class IHostProjectInfo  {
         Set<IDepJar> ret = new java.util.HashSet<>();
         for (String className : reachableClasses) {
             IDepJar depJar = getFirstUsedDepFromClass(className);
-            if (depJars != null) {
+            if (depJar != null) {
                 ret.add(depJar);
                 System.out.println(className + " is reachable by methods");
                 System.out.println(callGraph.getSourceMethods(className));
