@@ -114,6 +114,32 @@ public abstract class IHostProjectInfo  {
             return null;
         return usedDependenciesPerClass.get(className).iterator().next();
     }
+
+    public IDepJar getFirstUsedDepFromClassWithTargetScene(String className, String scene) {
+        if(usedDependenciesPerClass.get(className).size() == 0)
+            return null;
+        Set<String> appropriateScopes = new HashSet<String>();
+        if (scene == "compile") {
+            appropriateScopes.add("compile");
+            appropriateScopes.add("provided");
+            appropriateScopes.add("runtime");
+        }
+        else if (scene == "runtime") {
+            appropriateScopes.add("runtime");
+            appropriateScopes.add("compile");
+        }
+        else if (scene == "test") {
+            appropriateScopes.add("test");
+            appropriateScopes.add("compile");
+            appropriateScopes.add("provided");
+            appropriateScopes.add("runtime");
+        }
+        for (IDepJar depJar : usedDependenciesPerClass.get(className)) {
+            if(appropriateScopes.contains(depJar.getScope()))
+                return depJar;
+        }
+        return null;
+    }
     /**
      * Get the single used Depjar that a class belongs to since there are multiple classes with the same name.
      * @param className
@@ -183,13 +209,13 @@ public abstract class IHostProjectInfo  {
      * Get all the jar files reachable by the host project.
      * @return Set of jar files
     */
-    public Set<IDepJar> getDirectReachableJars() {
+    public Set<IDepJar> getRuntimeDirectReachableJars() {
         Set<String> reachableClasses = new HashSet<>(callGraph.getReachableDirectClasses());
         Set<String> constantPoolClasses =  GetRefedClasses.analyzeReferencedClasses(getBuildCp());
         reachableClasses.addAll(constantPoolClasses);
         Set<IDepJar> ret = new java.util.HashSet<>();
         for (String className : reachableClasses) {
-            IDepJar depJar = getFirstUsedDepFromClass(className);
+            IDepJar depJar = getFirstUsedDepFromClassWithTargetScene(className,"runtime");
             if (depJar != null) {
                 ret.add(depJar);
                 System.out.println(className + " is reachable by methods");
@@ -259,7 +285,7 @@ public abstract class IHostProjectInfo  {
                 //  Import classes are not all classes for some classes within the same package do not need to be imported.
                 Set<IDepJar> depJars = new HashSet<>();
                 for (String referencedClass : referencedClassesInSrcCode) {
-                    IDepJar depJar = getFirstUsedDepFromClass(referencedClass);
+                    IDepJar depJar = getFirstUsedDepFromClassWithTargetScene(referencedClass, "compile");
                     if (depJar != null && !depJar.isHost()) {
                         depJars.add(depJar);
                     }
@@ -276,7 +302,7 @@ public abstract class IHostProjectInfo  {
                 allReferencedClasses.addAll(referencedClassesInSrcCode);
                 Set<IDepJar> depJars = new HashSet<>();
                 for (String referencedClass : allReferencedClasses) {
-                    IDepJar depJar = getFirstUsedDepFromClass(referencedClass);
+                    IDepJar depJar = getFirstUsedDepFromClassWithTargetScene(referencedClass, "test");
                     if (depJar != null && !depJar.isHost()) {
                         depJars.add(depJar);
                     }
@@ -287,7 +313,7 @@ public abstract class IHostProjectInfo  {
         }
         else if (scene.equals("runtime")) {
             if (actualRuntimeDepJars.isEmpty()) {
-                actualRuntimeDepJars = getDirectReachableJars();
+                actualRuntimeDepJars = getRuntimeDirectReachableJars();
             }
             return new HashSet<>(actualRuntimeDepJars);
         }
