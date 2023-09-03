@@ -41,6 +41,7 @@ public class TypeAna extends AbstractSootAna{
         PackManager.v().getPack("wjtp").add(new Transform("wjtp.APIType", apiTypeTransformer));
 
         try {
+            System.out.println(args);
             soot.Main.main(args.toArray(new String[0]));
         }
         catch (Exception e){
@@ -57,6 +58,10 @@ public class TypeAna extends AbstractSootAna{
         argsList.add("-p");
         argsList.add("cg");
         argsList.add("verbose:true,all-reachable:true,implicit-entry:false");
+        argsList.add("-p");
+        argsList.add("cg.spark");
+        argsList.add("enabled:true");
+//        argsList.add("verbose:true");
 //        argsList.add("implicit-entry:false,");
 //        argsList.add("all-reachable:true");
 //        argsList.add("exclude:java.*");

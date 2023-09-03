@@ -23,7 +23,6 @@ public class APITypeTransformer extends SceneTransformer {
     protected void internalTransform(String phaseName, Map<String, String> options) {
         Chain<SootClass> classesToBeAnalyzed = Scene.v().getApplicationClasses();
         // Get the types used in super classes or interfaces
-        System.out.println("System to be analyzed: " + classesToBeAnalyzed);
         typesUsedInSuperClasses = new HashSet<>();
 
         // Get the types used in public method parameters, including generic parameter types
