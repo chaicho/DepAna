@@ -20,6 +20,9 @@ public class HostClassSmell extends BaseSmell{
         List<String> hostClasses= hostProjectInfo.getHostClasses();
         Map<List<IDepJar>,Set<String>> jarToDuplicateClassMap = new HashMap<List<IDepJar>,Set<String>>();
         for(String hostClass : hostClasses){
+            if (!validClass(hostClass)){
+                continue;
+            }
             Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(hostClass);
             if(depJars.size() == 1 && containsHost(depJars)){
                 continue;
