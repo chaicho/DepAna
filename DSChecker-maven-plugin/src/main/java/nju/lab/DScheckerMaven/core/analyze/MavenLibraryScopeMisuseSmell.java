@@ -59,16 +59,19 @@ public class MavenLibraryScopeMisuseSmell extends BaseSmell{
 
         for (IDepJar depJar : compileDepJarsUsedOnlyAtTest) {
             appendToResult("compile scope dep " + depJar.getName() + " is acutally used only at test scene");
+            appendToResult(depJar.getUsedClassesAsString());
             appendToResult("---------");
             log.error("compile scope dependency " + depJar.getName() + " is acutally used only at test scene");
         }
         for (IDepJar depJar : compileDepJarsUsedOnlyAtRuntime) {
             appendToResult("compile scope dep " + depJar.getName() + " is acutally used only at runtime scene");
+            appendToResult(depJar.getUsedClassesAsString());
             appendToResult("---------");
             log.error("compile scope dependency " + depJar.getName() + " is acutally used only at runtime scene");
         }
         for (IDepJar depJar : compileDepJarsUsedOnlyAtProvided) {
             appendToResult("compile scope dep " + depJar.getName() + " is acutally used only at provided scene");
+            appendToResult(depJar.getUsedClassesAsString());
             appendToResult("---------");
             log.error("compile scope dependency " + depJar.getName() + " is acutally used only at provided scene");
         }

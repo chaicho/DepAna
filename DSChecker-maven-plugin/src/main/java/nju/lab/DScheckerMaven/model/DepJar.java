@@ -30,6 +30,8 @@ public class DepJar implements IDepJar {
 	private Map<String, ClassVO> clsTb;// all class in jar
 	//private Set<String> clsSigs;// only all class signatures defined in jars
 	private Set<String> phantomClsSet;// all phantom classes in jar
+
+	private Map<String, Set<String>> classesUsedScopes;
 	/**
 	 * Nodes in Dependency tree that this jar is connected to.
 	 */
@@ -58,6 +60,11 @@ public class DepJar implements IDepJar {
 		this.classifier = classifier;
 		this.priority = priority;
 		this.jarFilePaths = jarFilePaths;
+
+		classesUsedScopes = new HashMap<>();
+		classesUsedScopes.put("compile", new HashSet<>());
+		classesUsedScopes.put("runtime", new HashSet<>());
+		classesUsedScopes.put("test", new HashSet<>());
 	}
 	/**
 	 * 初始化
@@ -322,6 +329,51 @@ public class DepJar implements IDepJar {
 		}
 		return scope;
 	}
+
+	@Override
+	public Set<String> getUsedClassesAtScene(String scene) {
+		if (classesUsedScopes.containsKey(scene)) {
+			return classesUsedScopes.get(scene);
+		}
+		else {
+			return new HashSet<>();
+		}
+	}
+	@Override
+	public Map<String, Set<String>> getUsedClasses() {
+		return classesUsedScopes;
+	}
+
+	public String getUsedClassesAtSceneAsString(String scene) {
+		if (classesUsedScopes.containsKey(scene)) {
+			return classesUsedScopes.get(scene).toString();
+		}
+		else {
+			return "";
+		}
+	}
+	@Override
+	public String getUsedClassesAsString() {
+		StringBuilder sb = new StringBuilder();
+		for (String scene : classesUsedScopes.keySet()) {
+			sb.append("		scene " + scene + " : " );
+			sb.append(classesUsedScopes.get(scene).toString());
+			sb.append("\n");
+		}
+		return sb.toString();
+	}
+	@Override
+	public void addClassToScene(String scene, String cls) {
+		if (classesUsedScopes.containsKey(scene)) {
+			classesUsedScopes.get(scene).add(cls);
+		}
+		else {
+			Set<String> clsSet = new HashSet<>();
+			clsSet.add(cls);
+			classesUsedScopes.put(scene, clsSet);
+		}
+	}
+
 	/**
 	 * @return priority
 	 */
@@ -330,7 +382,7 @@ public class DepJar implements IDepJar {
 	}
 
 	public String getDisplayName(){
-		return getGroupId() +":" + getArtifactId() + ":" + getVersion() + ":" + getClassifier();
+		return getGroupId() +":" + getArtifactId() + ":" + getVersion() + ":" + getScope();
 	}
 
 	/**

@@ -1,6 +1,8 @@
 package nju.lab.DSchecker.core.model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface IDepJar {
@@ -15,6 +17,7 @@ public interface IDepJar {
     String getArtifactId();
     String getName();
     Set<String> getAllCls();
+
 
     int getDepth();
     List<String> getJarFilePaths();
@@ -31,5 +34,8 @@ public interface IDepJar {
 
     String getScope();
 
-//    Set<String> getDepTrails();
+    Map<String, Set<String> > getUsedClasses();
+    Set<String> getUsedClassesAtScene(String scene);
+    void addClassToScene(String scene, String cls);
+    public String getUsedClassesAsString();
 }

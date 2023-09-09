@@ -34,10 +34,12 @@ public class UnDeclaredSmell extends BaseSmell {
             if(dep.isHost()) {
                 continue;
             }
+
             log.warn("Undeclared Dependency: " + dep.getSig());
-            appendToResult("Undeclared dependency: " + dep.getSig());
+            appendToResult("Undeclared dependency: " + dep.getDisplayName());
             appendToResult("    Dependency scope: " + dep.getScope());
             appendToResult("    Pulled in by: " + dep.getUsedDepTrail());
+            appendToResult(dep.getUsedClassesAsString());
             appendToResult("---------");
         }
 

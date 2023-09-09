@@ -218,6 +218,7 @@ public abstract class IHostProjectInfo  {
             IDepJar depJar = getFirstUsedDepFromClassWithTargetScene(className,"runtime");
             if (depJar != null) {
                 ret.add(depJar);
+                depJar.addClassToScene("runtime", className);
                 System.out.println(className + " is reachable by methods");
                 System.out.println(callGraph.getSourceMethods(className));
                 System.out.println(depJar.getDisplayName());
@@ -288,6 +289,7 @@ public abstract class IHostProjectInfo  {
                     IDepJar depJar = getFirstUsedDepFromClassWithTargetScene(referencedClass, "compile");
                     if (depJar != null && !depJar.isHost()) {
                         depJars.add(depJar);
+                        depJar.addClassToScene("compile", referencedClass);
                     }
                 }
                 actualCompileDepJars = depJars;
@@ -305,6 +307,7 @@ public abstract class IHostProjectInfo  {
                     IDepJar depJar = getFirstUsedDepFromClassWithTargetScene(referencedClass, "test");
                     if (depJar != null && !depJar.isHost()) {
                         depJars.add(depJar);
+                        depJar.addClassToScene("test", referencedClass);
                     }
                 }
                 actualTestDepJars = depJars;
