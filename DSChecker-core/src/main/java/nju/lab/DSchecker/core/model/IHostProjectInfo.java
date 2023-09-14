@@ -18,8 +18,12 @@ public abstract class IHostProjectInfo  {
 
     protected File rootDir;
 
-    protected File outputFile;
+    protected File resultFile;
     protected String buildPath;
+
+    protected File outputDir;
+
+    protected File testOutputDir;
     /**
     compileSrcFiles represents the source files of the project;
     */
@@ -71,7 +75,16 @@ public abstract class IHostProjectInfo  {
      public void setRootDir(File dir){
          this.rootDir = dir;
      }
+    /** Set the output directory of the project.
+     * @param dir
+     */
+    public void setOutputDir(File dir) {
+        this.outputDir = dir;
+    }
 
+    public void setTestOutputDir(File dir) {
+        this.testOutputDir = dir;
+    }
     /**
      * Get the root directory of the project.
      * @return
@@ -190,10 +203,10 @@ public abstract class IHostProjectInfo  {
     public void setBuildDir(File buildDir) {
         this.buildDir = buildDir;
         this.buildPath = buildDir.getAbsolutePath();
-        this.outputFile =new File(buildDir, "DScheckerResult.txt");
-        if(!outputFile.exists()){
+        this.resultFile =new File(buildDir, "DScheckerResult.txt");
+        if(!resultFile.exists()){
             try {
-                outputFile.createNewFile();
+                resultFile.createNewFile();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -267,8 +280,8 @@ public abstract class IHostProjectInfo  {
         return apiDepJars;
     }
 
-    public File getOutputFile(){
-        return outputFile;
+    public File getResultFile(){
+        return resultFile;
     }
 
     abstract public String getWrapperPath();

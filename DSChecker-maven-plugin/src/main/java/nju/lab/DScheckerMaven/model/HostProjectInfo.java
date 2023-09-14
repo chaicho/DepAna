@@ -46,12 +46,12 @@ public class HostProjectInfo extends IHostProjectInfo {
 
     @Override
     public String getBuildCp() {
-        return buildPath + File.separator + "classes";
+        return outputDir.getAbsolutePath();
     }
 
     @Override
     public String getBuildTestCp() {
-        return buildPath + File.separator + "test-classes";
+        return testOutputDir.getAbsolutePath();
     }
     public void setCompileSrcPaths(List<String> paths) {
             this.compileSrcDirs = paths.stream().map(String::trim).collect(Collectors.toSet());

@@ -61,6 +61,13 @@ public class BaseMojo extends AbstractMojo {
     public ArtifactResolver resolver;
     @Parameter(defaultValue = "${project.build.directory}", required = true)
     public File buildDir;
+
+    @Parameter(defaultValue = "${project.build.outputDirectory}", required = true)
+    public File outputDir;
+
+    @Parameter(defaultValue = "${project.build.testOutputDirectory}", required = true)
+    public File testOutputDir;
+
     @Component
     public DependencyTreeBuilder dependencyTreeBuilder;
 
@@ -88,6 +95,8 @@ public class BaseMojo extends AbstractMojo {
         // 项目信息处理
         PerformanceMonitor.start("initHostProjectInfo");
         HostProjectInfo.i().setBuildDir(buildDir);
+        HostProjectInfo.i().setOutputDir(outputDir);
+        HostProjectInfo.i().setTestOutputDir(testOutputDir);
         HostProjectInfo.i().setCompileSrcPaths(compileSourceRoots);
         HostProjectInfo.i().setTestCompileSrcPaths(testCompileSourceRoots);
         HostProjectInfo.i().setRootDir(new File(mavenSession.getExecutionRootDirectory()));

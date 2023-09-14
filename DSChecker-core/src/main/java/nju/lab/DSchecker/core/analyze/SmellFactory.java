@@ -38,8 +38,8 @@ public class SmellFactory {
      *
      * */
     public void detectAll() {
-        if ( hostProjectInfo.getOutputFile().exists()){
-            hostProjectInfo.getOutputFile().delete();
+        if ( hostProjectInfo.getResultFile().exists()){
+            hostProjectInfo.getResultFile().delete();
         }
         for (BaseSmell smell : smells) {
             System.out.println("detecting smell: " + smell.getClass().getSimpleName());

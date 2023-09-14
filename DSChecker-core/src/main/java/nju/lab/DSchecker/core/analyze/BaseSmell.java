@@ -5,14 +5,11 @@ import nju.lab.DSchecker.core.model.ICallGraph;
 import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.core.model.IDepJars;
 import nju.lab.DSchecker.core.model.IHostProjectInfo;
-import nju.lab.DSchecker.util.javassist.GetRefedClasses;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 public abstract class BaseSmell {
@@ -20,7 +17,7 @@ public abstract class BaseSmell {
         this.hostProjectInfo = hostProjectInfo;
         this.callGraph = callGraph;
         this.depJars = depJars;
-        this.outFile = hostProjectInfo.getOutputFile();
+        this.outFile = hostProjectInfo.getResultFile();
     }
     public IHostProjectInfo hostProjectInfo;
     public ICallGraph  callGraph;
