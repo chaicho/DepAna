@@ -21,7 +21,8 @@ import java.util.stream.Collectors;
 public interface ICallGraph {
     // Record the possible methods that invoke specific classes.
     Map<String , Set<SootMethod> > invokedMethods = new HashMap<String , Set<SootMethod>>();
-
+    CallGraph runtimeCallGraph = null;
+    CallGraph testCallGraph = null;
     public default Set<String> getSourceMethods (String className) {
         if (!invokedMethods.containsKey(className)) {
             return new HashSet<String>();
@@ -36,8 +37,6 @@ public interface ICallGraph {
         Set<String> ret = new java.util.HashSet<>();
         ReachableMethods reachableMethods = Scene.v().getReachableMethods();
         QueueReader queueReader = reachableMethods.listener();
-
-
         while (queueReader.hasNext()) {
             MethodOrMethodContext sootMethodContext = ((MethodOrMethodContext) queueReader.next());
             SootMethod sootMethod = sootMethodContext.method();
