@@ -92,6 +92,7 @@ public abstract class AbstractSootAna {
 //		}
 
 		argsList.add("-process-dir");
+    System.out.println("hostProjectInfo.getBuildCp() = " + hostProjectInfo.getBuildCp());
 		argsList.add(hostProjectInfo.getBuildCp());
 
 	}

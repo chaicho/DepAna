@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 
 public class FullClassExtractor {
     public static DepModel depModel;
+
     public static void setDepModel(DepModel depModel) {
         FullClassExtractor.depModel = depModel;
 
@@ -51,23 +52,21 @@ public class FullClassExtractor {
                                 return null;
                             }
                         })
-                .filter(x -> x!=null)
+                .filter(x -> x != null)
                 .collect(Collectors.toSet());
 
         Set<JavaParserTypeSolver> javaParserTypeSolvers = srcPaths.stream()
                 .map(srcPath -> {
-                            if (new File(srcPath).exists()) {
-                                return new JavaParserTypeSolver(new File(srcPath));
-                            }
-                            return null;
-                        }
-                )
-                .filter(x -> x!=null)
+                    if (new File(srcPath).exists()) {
+                        return new JavaParserTypeSolver(new File(srcPath));
+                    }
+                    return null;
+                })
+                .filter(x -> x != null)
                 .collect(Collectors.toSet());
 
         CombinedTypeSolver myTypeSolver = new CombinedTypeSolver(
-                new ReflectionTypeSolver()
-        );
+                new ReflectionTypeSolver());
         for (JarTypeSolver jarTypeSolver : jarTypeSolvers) {
             myTypeSolver.add(jarTypeSolver);
         }
@@ -76,27 +75,32 @@ public class FullClassExtractor {
         }
         JavaSymbolSolver symbolSolver = new JavaSymbolSolver(myTypeSolver);
         StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
+        System.out.println("Symbol solver set up.");
     }
+
     // A method that takes a directory and recursively finds all the Java files
     public static Set<String> getClassesFromJavaFiles(String dirPath) {
-        // Check if the file is a directory
         HashSet<String> referencedClassesInJavaFiles = new HashSet<String>();
-        File dir = new File(dirPath);
-        if (dir.isDirectory()) {
-            // Get the files in the directory
-            File[] files = dir.listFiles();
-            // Loop through the files
-            for (File file : files) {
-                // If the file is a directory, call the method recursively
-                if (file.isDirectory()) {
-                    referencedClassesInJavaFiles.addAll(getClassesFromJavaFiles(file.getAbsolutePath()));
-                }
-                // If the file is a Java file, parse it and extract the imports
-                else if (file.getName().endsWith(".java")) {
-                    referencedClassesInJavaFiles.addAll(getReferencesFromJavaFile(file));
+            // Check if the file is a directory
+            File dir = new File(dirPath);
+            System.out.println(dirPath);
+            if (dir.isDirectory()) {
+                // Get the files in the directory
+                File[] files = dir.listFiles();
+                // Loop through the files
+                for (File file : files) {
+                    // If the file is a directory, call the method recursively
+                    if (file.isDirectory()) {
+                        referencedClassesInJavaFiles.addAll(getClassesFromJavaFiles(file.getAbsolutePath()));
+                    }
+                    // If the file is a Java file, parse it and extract the imports
+                    else if (file.getName().endsWith(".java")) {
+                        referencedClassesInJavaFiles.addAll(getReferencesFromJavaFile(file));
+                    }
                 }
             }
-        }
+    
+
         return referencedClassesInJavaFiles;
     }
 
@@ -105,7 +109,7 @@ public class FullClassExtractor {
         Set<String> referencedClassesInJavaFile = new HashSet<String>();
         try {
             CompilationUnit cu = StaticJavaParser.parse(file);
-//            Get all the annotations in the file.
+            // Get all the annotations in the file.
             cu.findAll(AnnotationExpr.class).forEach(ad -> {
                 try {
                     referencedClassesInJavaFile.add(ad.resolve().getQualifiedName());
@@ -113,7 +117,7 @@ public class FullClassExtractor {
                     System.out.println("Exception in resolving annotation: " + ad.toString());
                 }
             });
-//            Get all the classes in the file.
+            // Get all the classes in the file.
             cu.findAll(ClassOrInterfaceType.class).forEach(ct -> {
                 try {
                     ResolvedType resolvedType = ct.resolve();
@@ -136,8 +140,7 @@ public class FullClassExtractor {
                             referencedClassesInJavaFile.add(resolvedType.asTypeVariable().qualifiedName());
                         }
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     System.out.println("Exception while resolving method " + te.getScope());
                 }
             });
@@ -153,17 +156,24 @@ public class FullClassExtractor {
                     System.out.println("Exception in resolving field access: " + fa.toString());
                 }
             });
-
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
+            System.out.println("Exception in getReferencesFromJavaFile: " + file.getAbsolutePath());
+            e.printStackTrace();
+        } catch (StackOverflowError e) {
+            System.out.println("StackOverflowError in getReferencesFromJavaFile: " + file.getAbsolutePath());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Exception in getReferencesFromJavaFile: " + file.getAbsolutePath());
             e.printStackTrace();
         }
+        
         return referencedClassesInJavaFile;
     }
+
     public static void main(String[] args) {
-       Set<String> classes = getClassesFromJavaFiles("D:\\Pathtodoc\\dependency-graph-as-task-inputs\\app\\src\\main");
-       for (String className : classes){
-              System.out.println(className);
+        Set<String> classes = getClassesFromJavaFiles("D:\\Pathtodoc\\dependency-graph-as-task-inputs\\app\\src\\main");
+        for (String className : classes) {
+            System.out.println(className);
         }
     }
 }
