@@ -22,7 +22,8 @@ public class UnDeclaredSmell extends BaseSmell {
         // Get DepJars with their used scenario.
         Set<IDepJar> actualTestDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("test");
         Set<IDepJar> actualCompileDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("compile");
-//        Set<IDepJar> actualRuntimeDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("runtime");
+        // The line is needed to calculate runtime used classes
+        Set<IDepJar> actualRuntimeDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("runtime");
         Set<IDepJar> allUsedDepJars = new HashSet<>();
         allUsedDepJars.addAll(actualTestDepJars);
         allUsedDepJars.addAll(actualCompileDepJars);
