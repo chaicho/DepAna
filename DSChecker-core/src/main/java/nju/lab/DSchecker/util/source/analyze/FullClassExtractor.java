@@ -2,6 +2,7 @@ package nju.lab.DSchecker.util.source.analyze;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -9,6 +10,8 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
@@ -28,7 +31,9 @@ import nju.lab.DSchecker.core.model.DepModel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -105,6 +110,26 @@ public class FullClassExtractor {
         Set<String> referencedClassesInJavaFile = new HashSet<String>();
         try {
             CompilationUnit cu = StaticJavaParser.parse(file);
+            Map<String, String> importNameToClass = new HashMap<>();
+//           Get all the import statements
+            cu.findAll(ImportDeclaration.class)
+                    .stream()
+                    .filter(importDeclaration -> !importDeclaration.isAsterisk())
+                    .forEach( importDeclaration ->
+                            importNameToClass.put(importDeclaration.getName().getIdentifier(),importDeclaration.getName().getQualifier().get().asString()
+                            )
+                    );
+            cu.findAll(SimpleName.class).forEach(sn -> {
+                try {
+                    if (importNameToClass.containsKey(sn.asString())) {
+                        referencedClassesInJavaFile.add(importNameToClass.get(sn.asString()));
+                    }
+                }
+                catch (Exception e) {
+                    System.out.println("Exception in resolving SimpleName: " + sn.toString());
+                }
+            });        ;
+
 //            Get all the annotations in the file.
             cu.findAll(AnnotationExpr.class).forEach(ad -> {
                 try {
@@ -126,6 +151,7 @@ public class FullClassExtractor {
                     System.out.println("Exception in resolving class: " + ct.toString());
                 }
             });
+
             cu.findAll(MethodCallExpr.class).forEach(te -> {
                 try {
                     if (te.getScope().isPresent()) {
