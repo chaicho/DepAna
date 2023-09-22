@@ -322,11 +322,13 @@ public class DepJar implements IDepJar {
 	public String getScope() {
 		String scope = null;
 		for (NodeAdapter node : nodeAdapters) {
-			scope = node.getScope();
-			if (scope != null) {
-				break;
-			}
-		}
+            if (node.isNodeSelected()) {
+			    scope = node.getScope();
+			    if (scope != null) {
+				    break;
+			    }
+            }
+        }
 		return scope;
 	}
 
