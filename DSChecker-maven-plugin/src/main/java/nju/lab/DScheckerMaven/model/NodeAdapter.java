@@ -185,6 +185,9 @@ public class NodeAdapter {
 		}
 		return node.getState() == DependencyNode.INCLUDED;
 	}
+	public String getPreManagedScope() {
+		return node.getPremanagedScope();
+	}
 	public String getManagedVersion() {
 		return node.getArtifact().getVersion();
 	}

@@ -426,5 +426,26 @@ public class DepJar implements IDepJar {
 		}
 		return sb.toString();
 	}
+	@Override
+	public Set<String> getDepTrails() {
+		Set<String> trails = new HashSet<>();
+		for (NodeAdapter node : getNodeAdapters()) {
+			trails.add(node.getWholePath());
+		}
+		return trails;
+	}
+	@Override
+	public Set<String> getScopes() {
+		Set<String> scopes = new HashSet<String>();
+		for (NodeAdapter node : getNodeAdapters()) {
+			if (node.getPreManagedScope() != null) {
+				scopes.add(node.getPreManagedScope());
+			}
+			else {
+				scopes.add(node.getScope());
+			}
+		}
+		return scopes;
+	}
 
 }

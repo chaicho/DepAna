@@ -30,9 +30,14 @@ public interface IDepJar {
 
     String getUsedDepTrail();
 
+//    Get the first import path in the dependency tree
     String getDepTrail();
+//  Get all the import paths in the dependency tree
+    Set<String> getDepTrails();
 
     String getScope();
+
+    Set<String> getScopes();
 
     Map<String, Set<String> > getUsedClasses();
     Set<String> getUsedClassesAtScene(String scene);
