@@ -134,6 +134,9 @@ public class NodeAdapter {
 		return node.getArtifact().getGroupId();
 	}
 	public String getScope() {
+		if (null != node.getOriginalScope() ) {
+			return node.getOriginalScope();
+		}
 		return node.getArtifact().getScope();
 	}
 	public String getArtifactId() {

@@ -81,6 +81,7 @@ public class NodeAdapterCollector implements DependencyNodeVisitor {
             }
         }
         if (node.getState() == 0) {
+//            0 Represents Included.
             /*这里的优先级是加载类的优先级，将会在检测完全限定名相同时用到*/
             nodeAdapters.addNodeAapter(new NodeAdapter(node, priority));
             priority++;
