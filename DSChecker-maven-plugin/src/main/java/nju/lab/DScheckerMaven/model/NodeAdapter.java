@@ -120,6 +120,9 @@ public class NodeAdapter {
 		return getGroupId().equals(groupId2) && getArtifactId().equals(artifactId2) && getVersion().equals(version2)
 				&& getClassifier().equals(classifier2);
 	}
+	public boolean isSelf(String groupId, String artifactId, String version, String classifier, String scope) {
+		return getGroupId().equals(groupId) && getArtifactId().equals(artifactId) && getVersion().equals(version) && getScope().equals(scope);
+	}
 
 	/**
 	 * judge whether is self
@@ -143,6 +146,9 @@ public class NodeAdapter {
 		if (null != node.getPremanagedScope()) {
 			return node.getPremanagedScope();
 		}
+		return node.getArtifact().getScope();
+	}
+	public String getManagedScope() {
 		return node.getArtifact().getScope();
 	}
 	public String getArtifactId() {

@@ -453,12 +453,7 @@ public class DepJar implements IDepJar {
 	public Set<String> getScopes() {
 		Set<String> scopes = new HashSet<String>();
 		for (NodeAdapter node : getNodeAdapters()) {
-			if (node.getPreManagedScope() != null) {
-				scopes.add(node.getPreManagedScope());
-			}
-			else {
-				scopes.add(node.getScope());
-			}
+			scopes.add(node.getScope());
 		}
 		return scopes;
 	}

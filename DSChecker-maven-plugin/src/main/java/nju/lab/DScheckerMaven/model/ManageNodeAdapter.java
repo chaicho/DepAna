@@ -32,7 +32,7 @@ public class ManageNodeAdapter extends NodeAdapter {
 		version = nodeAdapter.getManagedVersion();
 		classifier = nodeAdapter.getClassifier();
 		type = nodeAdapter.getType();
-		scope = nodeAdapter.getScope();
+		scope = nodeAdapter.getManagedScope();
 		beforeManagedNode = nodeAdapter;
 		this.node = nodeAdapter.getNode();
 		if (nodeAdapter.getState() == DependencyNode.OMITTED_FOR_CONFLICT) {

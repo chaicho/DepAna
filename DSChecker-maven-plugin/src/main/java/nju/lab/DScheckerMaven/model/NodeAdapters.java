@@ -46,7 +46,7 @@ public class NodeAdapters {
             // this node have management
             if (nodeAdapter.isVersionChanged()) {
                 NodeAdapter maybeExistNode = instance.getNodeAdapter(nodeAdapter.getGroupId(), nodeAdapter.getArtifactId(),
-                        nodeAdapter.getManagedVersion(), nodeAdapter.getClassifier());
+                        nodeAdapter.getManagedVersion(), nodeAdapter.getClassifier(), nodeAdapter.getManagedScope());
                 //2022.8.10. big bug! null doesn't mean good.maybe duplicated
                 if (null == maybeExistNode || (!(maybeExistNode instanceof ManageNodeAdapter) && maybeExistNode.getPriority() == -1)) {
                     // this managed-version doesnt have used node,we should new a virtual node to
@@ -55,7 +55,7 @@ public class NodeAdapters {
                     // find if manageNd exists
                     for (NodeAdapter existManageNd : manageNds) {
                         if (existManageNd.isSelf(nodeAdapter.getGroupId(), nodeAdapter.getArtifactId(),
-                                nodeAdapter.getManagedVersion(), nodeAdapter.getClassifier())) {
+                                nodeAdapter.getManagedVersion(), nodeAdapter.getClassifier(), nodeAdapter.getManagedScope())) {
                             manageNd = existManageNd;
                             break;
                         }
@@ -161,6 +161,17 @@ public class NodeAdapters {
         // TODO delete the log
         log.warn("cant find nodeAdapter for management node:" + groupId2 + ":" + artifactId2 + ":"
                 + version2 + ":" + classifier2);
+        return null;
+    }
+    /**
+     * Find NodeAdapter for management with the given groupId, artifactId, version, classifier and scope.
+     */
+    public NodeAdapter getNodeAdapter(String groupId, String artifactId, String version, String classifier, String scope) {
+        for (NodeAdapter nodeAdapter : container) {
+            if (nodeAdapter.isSelf(groupId, artifactId, version, classifier, scope)) {
+                return nodeAdapter;
+            }
+        }
         return null;
     }
     /**
