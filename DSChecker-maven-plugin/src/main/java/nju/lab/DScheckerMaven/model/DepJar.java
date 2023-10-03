@@ -317,19 +317,34 @@ public class DepJar implements IDepJar {
 		return false;
 	}
 	/**
-	 * @return scope
+	 * The scope of a jar is the largest scope of all scopes in the dependency tree.
+	 * @return the scope after the scopes handling
 	 */
 	public String getScope() {
-		String scope = null;
+		Set<String> scopes = new HashSet<String>();
 		for (NodeAdapter node : nodeAdapters) {
-            if (node.isNodeSelected()) {
-			    scope = node.getScope();
-			    if (scope != null) {
-				    break;
-			    }
-            }
+			if (node.getNodeDepth() == 1) {
+//				Direct dependency's scope is seleted by mechanism.
+				return node.getScope();
+			} else {
+				scopes.add(node.getScope());
+			}
         }
-		return scope;
+		if (scopes.contains("compile")) {
+			return "compile";
+		}
+		else if (scopes.contains("runtime")) {
+			return "runtime";
+		}
+		else if (scopes.contains("provided")) {
+			return "provided";
+		}
+		else if (scopes.contains("test")) {
+			return "test";
+		}
+		else {
+			return "N/A";
+		}
 	}
 
 	@Override

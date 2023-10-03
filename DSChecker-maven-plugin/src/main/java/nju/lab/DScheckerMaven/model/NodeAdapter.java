@@ -133,9 +133,15 @@ public class NodeAdapter {
 	public String getGroupId() {
 		return node.getArtifact().getGroupId();
 	}
+	/**
+	 * If the node's scope is reset due to conflict or managed by the dependency management node, return their original scopes.
+	 */
 	public String getScope() {
-		if (null != node.getOriginalScope() ) {
+		if (null != node.getOriginalScope()) {
 			return node.getOriginalScope();
+		}
+		if (null != node.getPremanagedScope()) {
+			return node.getPremanagedScope();
 		}
 		return node.getArtifact().getScope();
 	}
