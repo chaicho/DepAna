@@ -192,6 +192,17 @@ public class NodeAdapters {
         }
         return result;
     }
+
+    public Set<NodeAdapter> getNodeAdaptersWithSameGA(String groupId, String artifactId) {
+        Set<NodeAdapter> result = new HashSet<NodeAdapter>();
+        for (NodeAdapter nodeAdapter : container) {
+            if (nodeAdapter.getGroupId().equals(groupId) && nodeAdapter.getArtifactId().equals(artifactId)) {
+                result.add(nodeAdapter);
+            }
+        }
+        return result;
+    }
+
     /**
      * 获取所有依赖树节点适配器
      *
