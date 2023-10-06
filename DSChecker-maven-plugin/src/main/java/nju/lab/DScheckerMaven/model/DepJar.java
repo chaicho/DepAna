@@ -130,7 +130,7 @@ public class DepJar implements IDepJar {
     }
 
     public Set<NodeAdapter> getNodeAdaptersWithSameGA() {
-        if (nodeAdapters == null) {
+        if (nodeAdaptersWithSameGA == null) {
             nodeAdaptersWithSameGA = NodeAdapters.i().getNodeAdaptersWithSameGA(getGroupId(),getArtifactId());
         }
         return nodeAdaptersWithSameGA;
@@ -360,7 +360,7 @@ public class DepJar implements IDepJar {
     public String getScope() {
         Set<String> scopes = new HashSet<String>();
         log.error(getArtifactId());
-        log.error(nodeAdapters.toString());
+        log.error(getNodeAdapters().toString());
         for (NodeAdapter node : getNodeAdaptersWithSameGA()) {
             if (node.getNodeDepth() == 1) {
                 if (getArtifactId().equals("snappy-java")) {
@@ -450,7 +450,7 @@ public class DepJar implements IDepJar {
      */
     @Override
     public int getDepth() {
-        return nodeAdapters.stream().map(NodeAdapter::getNodeDepth).min(Integer::compareTo).get();
+        return getNodeAdapters().stream().map(NodeAdapter::getNodeDepth).min(Integer::compareTo).get();
     }
 
     /**

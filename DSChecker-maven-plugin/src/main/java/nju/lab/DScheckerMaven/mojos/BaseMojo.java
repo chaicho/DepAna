@@ -75,7 +75,7 @@ public class BaseMojo extends AbstractMojo {
 
     public boolean ignoreProvidedScope = false;
     public boolean ignoreTestScope = false;
-    public boolean ignoreTestClassifier = true;
+    public boolean ignoreTestClassifier = false;
     public boolean ignoreRuntimeScope = false;
 
     protected void initGlobalValues() {
