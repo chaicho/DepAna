@@ -91,7 +91,7 @@ public class MavenSharedLibrarySmell extends BaseSmell {
                 appendToResult("Dependency " + managementKey + " is shared by multiple modules, part of them are not controlled by dependencyManagement.");
                 for (Dependency dependency : dependencies) {
                         for (MavenProject module : dependencyToModule.get(dependency)) {
-                            appendToResult("    " + getRelativeModulePath(module, project));
+                            appendToResult("    " + getRelativeModulePath(module, project) + " : " + dependency.getGroupId()+ ":" + dependency.getArtifactId() + ":" + dependency.getVersion());
                         }
                 }
                 appendToResult("---------");
@@ -100,7 +100,7 @@ public class MavenSharedLibrarySmell extends BaseSmell {
                 appendToResult("Dependency " + managementKey + " is shared by multiple modules");
                 for (Dependency dependency : dependencies) {
                     for (MavenProject module : dependencyToModule.get(dependency)) {
-                        appendToResult("    " + getRelativeModulePath(module, project));
+                        appendToResult("    " + getRelativeModulePath(module, project) + " : " + dependency.getGroupId()+ ":" + dependency.getArtifactId() + ":" + dependency.getVersion());
                     }
                 }
                 appendToResult("---------");

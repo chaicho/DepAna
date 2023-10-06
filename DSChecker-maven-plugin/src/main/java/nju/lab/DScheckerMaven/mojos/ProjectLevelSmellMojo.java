@@ -134,6 +134,9 @@ public class ProjectLevelSmellMojo extends AbstractMojo {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        if (project.getPackaging() != null && !project.getPackaging().equals("jar")) {
+            return;
+        }
         SmellFactory smellFactory = new SmellFactory();
         smellFactory.initOnly(HostProjectInfo.i(), DepJars.i(), CallGraphMaven.i());
         MavenSharedLibrarySmell mavenSharedLibrarySmell = new MavenSharedLibrarySmell(project,reactorProjects);
