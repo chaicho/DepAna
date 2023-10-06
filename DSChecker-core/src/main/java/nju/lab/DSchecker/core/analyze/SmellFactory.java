@@ -63,5 +63,9 @@ public class SmellFactory {
         this.depJars = depJars;
         initSmells();
     }
-
+    public void initOnly(IHostProjectInfo hostProjectInfo, IDepJars depJars, ICallGraph callGraph) {
+        this.hostProjectInfo = hostProjectInfo;
+        this.callGraph = callGraph;
+        this.depJars = depJars;
+    }
 }
