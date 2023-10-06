@@ -39,15 +39,12 @@ public class SmellFactory {
      *
      * */
     public void detectAll() {
-        if ( hostProjectInfo.getResultFile().exists()){
-            hostProjectInfo.getResultFile().delete();
-        }
         for (BaseSmell smell : smells) {
             System.out.println("detecting smell: " + smell.getClass().getSimpleName());
-            PerformanceMonitor.start(smell.getClass().getSimpleName());
+//            PerformanceMonitor.start(smell.getClass().getSimpleName());
             smell.detectSmell();
             smell.outputResult();
-            PerformanceMonitor.stop(smell.getClass().getSimpleName());
+//            PerformanceMonitor.stop(smell.getClass().getSimpleName());
         }
     }
 

@@ -204,12 +204,32 @@ public abstract class IHostProjectInfo  {
         this.buildDir = buildDir;
         this.buildPath = buildDir.getAbsolutePath();
         this.resultFile =new File(buildDir, "DScheckerResult.txt");
-        if(!resultFile.exists()){
-            try {
-                resultFile.createNewFile();
-            } catch (Exception e) {
-                e.printStackTrace();
+        // Check if the directory exists; if not, create it
+        if (!buildDir.exists()) {
+            if (buildDir.mkdirs()) {
+                System.out.println("Directory created successfully: " + buildDir.getAbsolutePath());
+            } else {
+                System.err.println("Failed to create directory: " + buildDir.getAbsolutePath());
+                return; // Exit the method if directory creation fails
             }
+        } else {
+            // If the directory already exists, delete the result file if it exists
+            if (resultFile.exists()) {
+                if (resultFile.delete()) {
+                    System.out.println("Existing result file deleted: " + resultFile.getAbsolutePath());
+                } else {
+                    System.err.println("Failed to delete existing result file: " + resultFile.getAbsolutePath());
+                    return; // Exit the method if deletion fails
+                }
+            }
+        }
+
+        // Create the new result file
+        try {
+            resultFile.createNewFile();
+            System.out.println("New result file created: " + resultFile.getAbsolutePath());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     /**

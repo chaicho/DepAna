@@ -93,7 +93,7 @@ public class ProjectLevelSmellMojo extends AbstractMojo {
      */
     protected void initGlobalVar() throws Exception {
         initGlobalValues();
-        PerformanceMonitor.initialize(buildDir.getAbsolutePath() + File.separator + "supportData.xml");
+//        PerformanceMonitor.initialize(buildDir.getAbsolutePath() + File.separator + "supportData.xml");
 //        validateSysSize();
         // 项目信息处理
 //        PerformanceMonitor.start("initHostProjectInfo");
@@ -132,6 +132,10 @@ public class ProjectLevelSmellMojo extends AbstractMojo {
         if (project.getPackaging() != null && !project.getPackaging().equals("pom")) {
             return;
         }
+        if (project.getParent() != null) {
+            return;
+        }
+
         try {
             initGlobalVar();
         } catch (Exception e) {
