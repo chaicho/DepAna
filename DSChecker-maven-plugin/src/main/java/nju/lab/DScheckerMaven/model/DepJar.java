@@ -363,17 +363,10 @@ public class DepJar implements IDepJar {
         log.error(getNodeAdapters().toString());
         for (NodeAdapter node : getNodeAdaptersWithSameGA()) {
             if (node.getNodeDepth() == 1) {
-                if (getArtifactId().equals("snappy-java")) {
-                    log.error("snappy-java direct scope: " + node.getScope());
-                }
                 return node.getScope();
             } else {
                 scopes.add(node.getScope());
             }
-        }
-        if (getArtifactId().equals("snappy-java")) {
-            log.error(nodeAdapters.toString());
-            log.error("snappy-java scopes: " + scopes);
         }
         if (scopes.contains("compile")) {
             return "compile";
