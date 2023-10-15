@@ -1,5 +1,6 @@
 package nju.lab.DScheckerMaven.core.analyze;
 
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.analyze.BaseSmell;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
@@ -9,13 +10,34 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+@Slf4j
 public class MavenSharedLibrarySmell extends BaseSmell {
     MavenProject project;
     List<MavenProject> reactorProjects;
+    Set<String> innerPaths = null;
+    HashMap<String, MavenProject> depManagementBlockToProject = new HashMap<>();
     public MavenSharedLibrarySmell(MavenProject project, List<MavenProject> reactorProjects) {
         this.project = project;
         this.reactorProjects = reactorProjects;
+    }
+
+    public boolean versionFromCurrentProject(String versionLoc) {
+        if (innerPaths == null) {
+            innerPaths = new HashSet<>();
+            for (MavenProject project : reactorProjects) {
+                innerPaths.add(project.getFile().getPath());
+            }
+        }
+        return innerPaths.contains(versionLoc);
+    }
+    public boolean versionFromCurrentProject(Dependency dep) {
+        if (dep.getLocation("version") == null) {
+//            If the dependency getLocation is null, it means its managed by the <scope>import</scope> in the dependency management block.
+            log.warn("Artifact Not Found :", dep.getArtifactId());
+            return true;
+        }
+        String versionLoc = dep.getLocation("version").getSource().toString();
+        return versionFromCurrentProject(versionLoc);
     }
     public String getRelativeModulePath(MavenProject reactorProject, MavenProject rootProject) {
         try {
@@ -32,37 +54,29 @@ public class MavenSharedLibrarySmell extends BaseSmell {
             return reactorProject.getFile().getPath();
         }
     }
-    public boolean isVersionSelfManaged(Dependency dep) {
-//         return dep.versionLocation.equals(curPom);
-        String versionLoc = dep.getLocation("version").getSource().toString();
-        String artifactLoc = dep.getLocation("artifactId").getSource().toString();
-        return versionLoc.equals(artifactLoc);
-    }
-    public boolean isVersionSelfManaged(Dependency dep, List<Dependency> managedDeps) {
+    public boolean isVersionSelfManaged(Dependency dep, MavenProject reactorProject) {
         if (dep.getLocation("version") == null) {
-//            If the dependency getLocation is null, it means its managed by the <scope>import</scope> in the dependency management block.
+            log.warn("Artifact Not Found :", dep.getArtifactId());
             return true;
         }
         String versionLoc = dep.getLocation("version").getSource().toString();
         String artifactLoc = dep.getLocation("artifactId").getSource().toString();
-        // If is declared in dependencyManagement, then it is self declared only if the version is different.
-        if (managedDeps != null) {
-            for (Dependency managedDep : managedDeps) {
-                if (managedDep.getManagementKey().equals(dep.getManagementKey())) {
-                    if (!managedDep.getVersion().equals(dep.getVersion())) {
-                        return true;
-                    }
-                    return false;
-                }
-            }
+//      The version is declared explicitly in the pom.xml, including dependencyManagment block or direct dependency.
+        if (versionLoc == artifactLoc) {
+            return true;
         }
-        return versionLoc.equals(artifactLoc);
+
+//      The version is declared in the dependencyManagement block, but the version is from outside the project, so the artifactLoc is not current pom.xml
+        if (depManagementBlockToProject.containsKey(dep.getManagementKey())) {
+            return true;
+        }
+
+        return false;
     }
     @Override
     public void detect() {
         appendToResult("========SharedLibrarySmell========");
         Set<Dependency> allDependencies = new HashSet<>();
-        Set<String> managedDependencies = new HashSet<>();
         HashMap<Dependency, Set<MavenProject>> unManagedDependencyToModule = new HashMap<>();
         HashMap<String,Set<Dependency>> managementKeytoDependency = new HashMap<>();
         HashMap<String, Set<MavenProject>> managedDependencyToModule = new HashMap<>();
@@ -72,7 +86,9 @@ public class MavenSharedLibrarySmell extends BaseSmell {
             if (reactorProject.getDependencyManagement() != null) {
                 managedDeps = reactorProject.getDependencyManagement().getDependencies();
                 for (Dependency managedDep : managedDeps) {
-                    managedDependencies.add(managedDep.getManagementKey());
+                    if (!depManagementBlockToProject.containsKey(managedDep.getManagementKey())) {
+                        depManagementBlockToProject.put(managedDep.getManagementKey(), reactorProject);
+                    }
                 }
             }
             // String moduleName = getRelativeModulePath(reactorProject, project);
@@ -82,7 +98,7 @@ public class MavenSharedLibrarySmell extends BaseSmell {
                 if (!dependency.getLocation("groupId").getSource().getLocation().equals(reactorProject.getFile().getPath())) {
                     continue;
                 }
-                if (!isVersionSelfManaged(dependency,managedDeps)) {
+                if (!isVersionSelfManaged(dependency,reactorProject)) {
                     managedDependencyToModule.computeIfAbsent(dependency.getManagementKey(), k -> new HashSet<>()).add(reactorProject);
                     continue;
                 }
