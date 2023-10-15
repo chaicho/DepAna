@@ -1,8 +1,6 @@
 package nju.lab.DScheckerMaven.core.analyze;
 
 import nju.lab.DSchecker.core.analyze.BaseSmell;
-import nju.lab.DScheckerMaven.model.DepJar;
-import nju.lab.DScheckerMaven.model.GroupArtifact;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 
@@ -34,13 +32,13 @@ public class MavenSharedLibrarySmell extends BaseSmell {
             return reactorProject.getFile().getPath();
         }
     }
-    public boolean isVersionSelfDeclared(Dependency dep) {
+    public boolean isVersionSelfManaged(Dependency dep) {
 //         return dep.versionLocation.equals(curPom);
         String versionLoc = dep.getLocation("version").getSource().toString();
         String artifactLoc = dep.getLocation("artifactId").getSource().toString();
         return versionLoc.equals(artifactLoc);
     }
-    public boolean isVersionSelfDeclared(Dependency dep, List<Dependency> managedDeps) {
+    public boolean isVersionSelfManaged(Dependency dep, List<Dependency> managedDeps) {
         if (dep.getLocation("version") == null) {
 //            If the dependency getLocation is null, it means its managed by the <scope>import</scope> in the dependency management block.
             return true;
@@ -84,7 +82,7 @@ public class MavenSharedLibrarySmell extends BaseSmell {
                 if (!dependency.getLocation("groupId").getSource().getLocation().equals(reactorProject.getFile().getPath())) {
                     continue;
                 }
-                if (!isVersionSelfDeclared(dependency,managedDeps)) {
+                if (!isVersionSelfManaged(dependency,managedDeps)) {
                     managedDependencyToModule.computeIfAbsent(dependency.getManagementKey(), k -> new HashSet<>()).add(reactorProject);
                     continue;
                 }
@@ -97,14 +95,14 @@ public class MavenSharedLibrarySmell extends BaseSmell {
 
         for (String managementKey : managementKeytoDependency.keySet()) {
             Set<Dependency> dependencies = managementKeytoDependency.get(managementKey);
-            if ( (managedDependencies.contains(managementKey) && !dependencies.isEmpty()) || dependencies.size() > 1) {
+            if ( (managedDependencyToModule.containsKey(managementKey) && !dependencies.isEmpty()) || dependencies.size() > 1) {
                 appendToResult("Dependency " + managementKey + " is shared by multiple modules");
                 for (Dependency dependency : dependencies) {
                     for (MavenProject module : unManagedDependencyToModule.get(dependency)) {
                         appendToResult("    " + getRelativeModulePath(module, project) + " : " + dependency.getGroupId()+ ":" + dependency.getArtifactId() + ":" + dependency.getVersion());
                     }
                 }
-                if (managedDependencies.contains(managementKey)) {
+                if (managedDependencyToModule.containsKey(managementKey)) {
                     appendToResult("    " + "Some Are Managed by the dependencyManagement block");
                     for (MavenProject module : managedDependencyToModule.get(managementKey)) {
                         appendToResult("    " + getRelativeModulePath(module, project) + " : " + managementKey);
