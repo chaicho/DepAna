@@ -25,7 +25,9 @@ public class MavenSharedLibrarySmell extends BaseSmell {
 
     public boolean queryIfTheDependencyComesFromCurDepMngBlk(Dependency dep, MavenProject curProject) {
         if (depManagementBlockToProject.containsKey(dep.getManagementKey())) {
-            return curProject.equals(depManagementBlockToProject.get(dep.getManagementKey()));
+            if (curProject.equals(depManagementBlockToProject.get(dep.getManagementKey()))) {
+                return true;
+            }
         }
         return false;
     }
@@ -122,7 +124,8 @@ public class MavenSharedLibrarySmell extends BaseSmell {
                     continue;
                 }
                 if (!isVersionSelfManaged(dependency, reactorProject)) {
-                    managedDependencyToModule.computeIfAbsent(dependency.getManagementKey(), k -> new HashSet<>()).add(reactorProject);
+//                    When reaching here, it means the version must be controlled by depManagement block.
+                    managedDependencyToModule.computeIfAbsent(dependency.getManagementKey(), k -> new HashSet<>()).add(depManagementBlockToProject.get(dependency.getManagementKey()));
                     continue;
                 }
                 String managementKey = dependency.getManagementKey();
@@ -146,9 +149,17 @@ public class MavenSharedLibrarySmell extends BaseSmell {
                         appendToResult("    " + getRelativeModulePath(module, project) + " : " + managementKey);
                     }
                 }
-                appendToResult("---------");
             }
+            else if (managedDependencyToModule.containsKey(managementKey) && managedDependencyToModule.get(managementKey).size() > 1) {
+                appendToResult("Dependency " + managementKey + " is managed but in different blocks");
+                for (MavenProject module : managedDependencyToModule.get(managementKey)) {
+                    appendToResult("    " + getRelativeModulePath(module, project) + " : " + managementKey);
+                }
+            }
+            appendToResult("---------");
+
         }
+
     }
 }
 
