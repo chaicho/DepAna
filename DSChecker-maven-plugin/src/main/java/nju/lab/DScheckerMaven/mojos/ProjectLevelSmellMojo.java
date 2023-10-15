@@ -129,7 +129,7 @@ public class ProjectLevelSmellMojo extends AbstractMojo {
     }
     @Override
     public void execute() throws MojoExecutionException {
-        if (project.getPackaging() != null && !project.getPackaging().equals("pom")) {
+        if (project.getPackaging() == null && !project.getPackaging().equals("pom")) {
             return;
         }
         if (project.getParent() != null) {
