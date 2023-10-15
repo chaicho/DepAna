@@ -63,8 +63,11 @@ public abstract class BaseSmell {
             detect();
         }
         catch (Exception e) {
+            log.error("Error in detecting smell");
+            log.error(getClass().toString());
             log.error(e.getMessage());
-//            appendToResult("ERRROR");
+            e.printStackTrace();
+            //            appendToResult("ERRROR");
 //            appendToResult("gg");
 //            appendToResult(e.getMessage());
 //            appendToResult(getClass().toString());

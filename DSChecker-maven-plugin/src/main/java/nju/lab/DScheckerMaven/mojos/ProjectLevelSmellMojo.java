@@ -129,6 +129,9 @@ public class ProjectLevelSmellMojo extends AbstractMojo {
     }
     @Override
     public void execute() throws MojoExecutionException {
+        if (!project.equals(mavenSession.getTopLevelProject())) {
+            return;
+        }
         if (project.getPackaging() == null && !project.getPackaging().equals("pom")) {
             return;
         }
