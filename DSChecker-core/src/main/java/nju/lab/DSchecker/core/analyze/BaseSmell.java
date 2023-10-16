@@ -69,7 +69,7 @@ public abstract class BaseSmell {
             e.printStackTrace();
             //            appendToResult("ERRROR");
 //            appendToResult("gg");
-//            appendToResult(e.getMessage());
+//            appendToResult(e.getMessage());suppressedExceptions = {Collections$EmptyList@3921}  size = 0
 //            appendToResult(getClass().toString());
             // Output the stacktrace to the file
 //            for (StackTraceElement element : e.getStackTrace()) {

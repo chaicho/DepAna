@@ -149,14 +149,15 @@ public class MavenSharedLibrarySmell extends BaseSmell {
                         appendToResult("    " + getRelativeModulePath(module, project) + " : " + managementKey);
                     }
                 }
+                appendToResult("---------");
             }
             else if (managedDependencyToModule.containsKey(managementKey) && managedDependencyToModule.get(managementKey).size() > 1) {
                 appendToResult("Dependency " + managementKey + " is managed but in different blocks");
                 for (MavenProject module : managedDependencyToModule.get(managementKey)) {
                     appendToResult("    " + getRelativeModulePath(module, project) + " : " + managementKey);
                 }
+                appendToResult("---------");
             }
-            appendToResult("---------");
 
         }
 

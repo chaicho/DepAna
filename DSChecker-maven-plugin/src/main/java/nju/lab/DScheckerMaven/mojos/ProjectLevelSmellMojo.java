@@ -8,6 +8,7 @@ import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.util.monitor.PerformanceMonitor;
 import nju.lab.DSchecker.util.soot.TypeAna;
 import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
+import nju.lab.DScheckerMaven.core.analyze.MavenConflictLibrarySmell;
 import nju.lab.DScheckerMaven.core.analyze.MavenSharedLibrarySmell;
 import nju.lab.DScheckerMaven.model.*;
 import nju.lab.DScheckerMaven.core.analyze.MavenLibraryScopeMisuseSmell;
@@ -148,7 +149,9 @@ public class ProjectLevelSmellMojo extends AbstractMojo {
         SmellFactory smellFactory = new SmellFactory();
         smellFactory.initOnly(HostProjectInfo.i(), DepJars.i(), CallGraphMaven.i());
         MavenSharedLibrarySmell mavenSharedLibrarySmell = new MavenSharedLibrarySmell(project,reactorProjects);
+        MavenConflictLibrarySmell mavenConflictLibrarySmell = new MavenConflictLibrarySmell(project,reactorProjects);
         smellFactory.addSmell(mavenSharedLibrarySmell);
+        smellFactory.addSmell(mavenConflictLibrarySmell);
         smellFactory.detectAll();
     }
 }
