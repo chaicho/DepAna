@@ -1,14 +1,7 @@
 package nju.lab.DScheckerMaven.util;
 
-import org.apache.maven.project.MavenProject;
-import org.gradle.tooling.GradleConnector;
-import org.gradle.tooling.ProjectConnection;
-import org.gradle.tooling.model.GradleProject;
 
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GradleDependencyTreeFetcher {
-    static HashMap<String,String> projectDepResult;
+    static HashMap<String,String> projectDepResult = new HashMap<>();
 
     public static String extractDepTreeByConfiguration(String dependenciesOutput, String configurationName) {
         Pattern pattern = Pattern.compile(  configurationName + " - .*(?:\\r\\n|\\n)(.+(?:\\r\\n|\\n))*(?:\\r\\n|\\n)");
@@ -73,39 +66,69 @@ public class GradleDependencyTreeFetcher {
         String dependenciesOutput = projectDepResult.get(projectPath);
         return getDepVersFromConfiguration(dependenciesOutput, configuration);
     }
-
     public static String runDependenciesTask(String projectPath) {
+        // Specify the Gradle executable and the task
 
-        // Create a Gradle Connector
-        GradleConnector connector = GradleConnector.newConnector();
-        connector.forProjectDirectory(new File(projectPath));
 
-        // Connect to the Gradle project
-        ProjectConnection connection = connector.connect();
+        ProcessBuilder processBuilder = new ProcessBuilder("java", "-version");
+        Map<String, String> environment = processBuilder.environment();
+        environment.forEach((key, value) -> System.out.println(key + value));
+        processBuilder.directory(new File(projectPath));
+        processBuilder.redirectErrorStream(true);
 
         try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
-            GradleProject project = connection.model(GradleProject.class).get();
-            List<String> arguments = new ArrayList<>();
-            arguments.add("-q"); // Quiet mode (no logs
-//            arguments.add()
-            // Run the ":dependencies" task
-            connection.newBuild()
-                    .forTasks("dependencies")
-                    .withArguments(arguments)
-                    .setStandardOutput(outputStream)
-                    .setStandardError(errorStream)
-                    .run();
+            Process process = processBuilder.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder output = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append(System.lineSeparator());
+            }
 
-            // Print the dependencies
-
-            return outputStream.toString();
-        } catch (Exception e) {
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                return output.toString();
+            } else {
+                System.err.println("Gradle task execution failed with exit code " + exitCode);
+            }
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-        } finally {
-            connection.close();
         }
+
         return "";
     }
+//    public static String runDependenciesTask(String projectPath) {
+//
+//        // Create a Gradle Connector
+//        GradleConnector connector = GradleConnector.newConnector();
+//        connector.forProjectDirectory(new File(projectPath));
+//
+//        // Connect to the Gradle project
+//        ProjectConnection connection = connector.connect();
+//
+//        try {
+//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//            ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
+//            GradleProject project = connection.model(GradleProject.class).get();
+//            List<String> arguments = new ArrayList<>();
+//            arguments.add("-q"); // Quiet mode (no logs
+////            arguments.add()
+//            // Run the ":dependencies" task
+//            connection.newBuild()
+//                    .forTasks("dependencies")
+//                    .withArguments(arguments)
+//                    .setStandardOutput(outputStream)
+//                    .setStandardError(errorStream)
+//                    .run();
+//
+//            // Print the dependencies
+//
+//            return outputStream.toString();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            connection.close();
+//        }
+//        return "";
+//    }
 }
