@@ -16,6 +16,7 @@ public abstract class IHostProjectInfo  {
     protected ICallGraph callGraph;
     protected File buildDir;
 
+    protected File moduleFile;
     protected File rootDir;
 
     protected File resultFile;
@@ -232,6 +233,10 @@ public abstract class IHostProjectInfo  {
             e.printStackTrace();
         }
     }
+
+    public void setModuleFile(File moduleFile) {
+        this.moduleFile = moduleFile;
+    }
     /**
      * Get the  path of the host project which contains the .classes files.
      * @return
@@ -310,6 +315,9 @@ public abstract class IHostProjectInfo  {
 
     public abstract String getBuildTool();
 
+    public String getModulePath() {
+        return moduleFile.getAbsolutePath();
+    }
 
 
     public Set<IDepJar> getActualDepJarsUsedAtScene(String scene) {

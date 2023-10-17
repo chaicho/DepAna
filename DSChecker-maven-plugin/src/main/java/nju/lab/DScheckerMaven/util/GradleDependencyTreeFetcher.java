@@ -1,14 +1,10 @@
 package nju.lab.DScheckerMaven.util;
 
-import fj.Hash;
 import org.apache.maven.project.MavenProject;
-import org.gradle.internal.impldep.jcifs.dcerpc.msrpc.LsaPolicyHandle;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ProjectConnection;
 import org.gradle.tooling.model.GradleProject;
-import org.gradle.tooling.model.GradleTask;
-import org.gradle.api.Plugin;
-import org.gradle.api.Project;
+
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -70,12 +66,12 @@ public class GradleDependencyTreeFetcher {
         String projectPath = "C:\\Users\\DELL\\OneDrive\\dependency-graph-as-task-inputs\\app"; // Replace with your project path
         runDependenciesTask(projectPath);
     }
-    public static Map<String,String> getDepVersFromProject(String projectPath) {
+    public static Map<String,String> getDepVersFromProject(String projectPath, String configuration) {
         if (!projectDepResult.containsKey(projectPath)) {
             projectDepResult.put(projectPath, runDependenciesTask(projectPath));
         }
         String dependenciesOutput = projectDepResult.get(projectPath);
-        return getDepVersFromConfiguration(dependenciesOutput, "runtimeClasspath");
+        return getDepVersFromConfiguration(dependenciesOutput, configuration);
     }
 
     public static String runDependenciesTask(String projectPath) {

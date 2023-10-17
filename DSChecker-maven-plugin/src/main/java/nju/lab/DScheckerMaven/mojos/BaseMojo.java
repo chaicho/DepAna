@@ -8,6 +8,7 @@ import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.util.monitor.PerformanceMonitor;
 import nju.lab.DSchecker.util.soot.TypeAna;
 import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
+import nju.lab.DScheckerMaven.core.analyze.GradleConflictDepSmell;
 import nju.lab.DScheckerMaven.model.*;
 import nju.lab.DScheckerMaven.core.analyze.MavenLibraryScopeMisuseSmell;
 import nju.lab.DScheckerMaven.util.Conf;
@@ -99,6 +100,7 @@ public class BaseMojo extends AbstractMojo {
         HostProjectInfo.i().setTestOutputDir(testOutputDir);
         HostProjectInfo.i().setCompileSrcPaths(compileSourceRoots);
         HostProjectInfo.i().setTestCompileSrcPaths(testCompileSourceRoots);
+        HostProjectInfo.i().setModuleFile(project.getFile());
         HostProjectInfo.i().setRootDir(new File(mavenSession.getExecutionRootDirectory()));
         PerformanceMonitor.stop("initHostProjectInfo");
 
@@ -167,7 +169,9 @@ public class BaseMojo extends AbstractMojo {
             SmellFactory smellFactory = new SmellFactory();
             smellFactory.init(HostProjectInfo.i(), DepJars.i(), CallGraphMaven.i());
             MavenLibraryScopeMisuseSmell mavenLibraryScopeMisuseSmell = new MavenLibraryScopeMisuseSmell();
+            GradleConflictDepSmell gradleConflictDepSmell = new GradleConflictDepSmell();
             smellFactory.addSmell(mavenLibraryScopeMisuseSmell);
+            smellFactory.addSmell(gradleConflictDepSmell);
             smellFactory.detectAll();
             PerformanceMonitor.stop("detectSmells");
             PerformanceMonitor.close();

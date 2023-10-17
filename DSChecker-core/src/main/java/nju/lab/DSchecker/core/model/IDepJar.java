@@ -16,6 +16,7 @@ public interface IDepJar {
     String getGroupId();
     String getArtifactId();
     String getName();
+    String getVersion();
     Set<String> getAllCls();
 
 
