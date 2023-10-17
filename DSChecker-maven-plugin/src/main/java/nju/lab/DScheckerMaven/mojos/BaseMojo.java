@@ -100,7 +100,7 @@ public class BaseMojo extends AbstractMojo {
         HostProjectInfo.i().setTestOutputDir(testOutputDir);
         HostProjectInfo.i().setCompileSrcPaths(compileSourceRoots);
         HostProjectInfo.i().setTestCompileSrcPaths(testCompileSourceRoots);
-        HostProjectInfo.i().setModuleFile(project.getFile());
+        HostProjectInfo.i().setModuleFile(project.getBasedir());
         HostProjectInfo.i().setRootDir(new File(mavenSession.getExecutionRootDirectory()));
         PerformanceMonitor.stop("initHostProjectInfo");
 

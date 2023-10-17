@@ -70,9 +70,8 @@ public class GradleDependencyTreeFetcher {
         // Specify the Gradle executable and the task
 
 
-        ProcessBuilder processBuilder = new ProcessBuilder("java", "-version");
+        ProcessBuilder processBuilder = new ProcessBuilder("gradle", "-v");
         Map<String, String> environment = processBuilder.environment();
-        environment.forEach((key, value) -> System.out.println(key + value));
         processBuilder.directory(new File(projectPath));
         processBuilder.redirectErrorStream(true);
 
@@ -87,6 +86,8 @@ public class GradleDependencyTreeFetcher {
 
             int exitCode = process.waitFor();
             if (exitCode == 0) {
+                System.out.println("Gradle task execution successful.");
+                System.out.println(output);
                 return output.toString();
             } else {
                 System.err.println("Gradle task execution failed with exit code " + exitCode);
