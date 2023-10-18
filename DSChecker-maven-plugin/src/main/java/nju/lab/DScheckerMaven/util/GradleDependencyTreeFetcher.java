@@ -70,8 +70,7 @@ public class GradleDependencyTreeFetcher {
         // Specify the Gradle executable and the task
 
 
-        ProcessBuilder processBuilder = new ProcessBuilder("gradle", "-v");
-        Map<String, String> environment = processBuilder.environment();
+        ProcessBuilder processBuilder = new ProcessBuilder("gradle", "-q", "dependencies");
         processBuilder.directory(new File(projectPath));
         processBuilder.redirectErrorStream(true);
 
