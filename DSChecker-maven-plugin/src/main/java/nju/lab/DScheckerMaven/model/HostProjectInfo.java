@@ -27,19 +27,6 @@ public class HostProjectInfo extends IHostProjectInfo {
     }
 
     @Override
-    public void buildDepClassMap() {
-        super.buildDepClassMap();
-        for ( String compileSrcDir: compileSrcDirs){
-            consumerClasses.addAll(SourceLocator.v().getClassesUnder(compileSrcDir)
-                    .stream()
-                    .map(ClassVO::new)
-                    .collect(Collectors.toSet()));
-            consumerClasses.forEach(consumerClass -> {
-                log.warn("consumerClass: " + consumerClass.getClsSig());
-            });
-        }
-    }
-    @Override
     public String getWrapperPath(){
         return rootDir.getPath() + File.separator + ".mvn" + File.separator + "wrapper";
     }

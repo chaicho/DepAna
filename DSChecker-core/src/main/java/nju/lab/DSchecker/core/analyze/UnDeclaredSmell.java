@@ -24,10 +24,12 @@ public class UnDeclaredSmell extends BaseSmell {
         Set<IDepJar> actualCompileDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("compile");
         // The line is needed to calculate runtime used classes
         Set<IDepJar> actualRuntimeDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("runtime");
+        Set<IDepJar> actualByteCodeDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("bytecode");
         Set<IDepJar> allUsedDepJars = new HashSet<>();
         allUsedDepJars.addAll(actualTestDepJars);
         allUsedDepJars.addAll(actualCompileDepJars);
-//        allUsedDepJars.addAll(actualRuntimeDepJars);
+        // allUsedDepJars.addAll(actualByteCodeDepJars);
+        // allUsedDepJars.addAll(actualRuntimeDepJars);
 
         allUsedDepJars.removeAll(declaredDepJars);
 

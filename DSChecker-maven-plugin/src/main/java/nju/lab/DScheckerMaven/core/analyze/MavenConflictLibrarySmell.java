@@ -64,6 +64,7 @@ public class MavenConflictLibrarySmell extends BaseSmell {
                     appendToResult("        " + getRelativeModulePath(module, rootProject));
                 }
             }
+            appendToResult("---------");
         }
 
     }

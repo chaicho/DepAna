@@ -38,6 +38,7 @@ public class GradleConflictDepSmell extends BaseSmell {
                         appendToResult("Dependency " + depJar.getName() + " has inconsistent versions between modules." );
                         appendToResult("    Maven : " + depJar.getVersion());
                         appendToResult("    Gradle: " + depVersionMap.get(dep));
+                        appendToResult("---------");
                     }
                 }
             }

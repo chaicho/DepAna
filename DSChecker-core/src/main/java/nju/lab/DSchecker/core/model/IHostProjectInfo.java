@@ -361,6 +361,18 @@ public abstract class IHostProjectInfo  {
             }
             return new HashSet<>(actualRuntimeDepJars);
         }
+        else if (scene.equals("bytecode")) {
+            Set<String> referencedClassesInByteCode =  GetRefedClasses.analyzeReferencedClasses(getBuildCp());
+            Set<IDepJar> depJars = new HashSet<>();
+            for (String referencedClass : referencedClassesInByteCode) {
+                IDepJar depJar = getFirstUsedDepFromClassWithTargetScene(referencedClass, "runtime");
+                if (depJar != null && !depJar.isHost()) {
+                    depJars.add(depJar);
+                    depJar.addClassToScene("runtime", referencedClass);
+                }
+            }
+            return depJars;
+        }
         return new HashSet<>();
     }
 
