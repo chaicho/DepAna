@@ -136,25 +136,32 @@ public class DepJars implements IDepJars<DepJar> {
 	}
 
 	@Override
-	public Set<DepJar> getDepJarsWithScope(String scope) {
+	public Set<DepJar> getDirectDepJarsWithScope(String scope) {
 		Set<DepJar> depJars = usedDepJars.stream()
-										 .filter(depJar -> depJar.getScope()!= null && depJar.getScope().equals(scope) && depJar.isSelected() && depJar.getDepth() == 1)
-										 .collect(Collectors.toSet());
+				.filter(depJar -> depJar.getScope()!= null && depJar.getScope().equals(scope) && depJar.isSelected() && depJar.getDepth() == 1)
+				.collect(Collectors.toSet());
 		return depJars;
 	}
 	@Override
-	public Set<DepJar> getDepJarsWithScene(String scene){
+	public Set<DepJar> getUsedDepJarsWithScope(String scope) {
+		Set<DepJar> depJars = usedDepJars.stream()
+				.filter(depJar -> depJar.getScope()!= null && depJar.getScope().equals(scope))
+				.collect(Collectors.toSet());
+		return depJars;
+	}
+	@Override
+	public Set<DepJar> getDirectDepJarsWithScene(String scene){
 		if (scene == "compile") {
-			Set<DepJar> compileScopeDeps = getDepJarsWithScope("compile");
-			Set<DepJar> runtimeDeps = getDepJarsWithScope("runtime");
+			Set<DepJar> compileScopeDeps = getDirectDepJarsWithScope("compile");
+			Set<DepJar> runtimeDeps = getDirectDepJarsWithScope("runtime");
 			compileScopeDeps.addAll(runtimeDeps);
 			return compileScopeDeps;
 		}
 		else if (scene == "runtime") {
-			return getDepJarsWithScope("runtime");
+			return getDirectDepJarsWithScope("runtime");
 		}
 		else if (scene == "test"){
-			return getDepJarsWithScope("test");
+			return getDirectDepJarsWithScope("test");
 		}
 		else {
 			log.error("Invalid Scnene" + scene);

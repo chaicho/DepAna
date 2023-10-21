@@ -24,9 +24,11 @@ public interface IDepJars<T extends IDepJar> {
      */
     public Set<T> getAllDepJar();
 
-    public Set<T> getDepJarsWithScope(String scope);
+    public Set<T> getDirectDepJarsWithScope(String scope);
 
-    public Set<T> getDepJarsWithScene(String scene);
+    public Set<T> getDirectDepJarsWithScene(String scene);
+
+    public Set<T> getUsedDepJarsWithScope(String scope);
 
     public Set<String> getUsedDepJarsPaths();
 }

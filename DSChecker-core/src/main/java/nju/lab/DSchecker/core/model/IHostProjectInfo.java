@@ -26,8 +26,8 @@ public abstract class IHostProjectInfo  {
 
     protected File testOutputDir;
     /**
-    compileSrcFiles represents the source files of the project;
-    */
+     compileSrcFiles represents the source files of the project;
+     */
     protected Set<File> compileSrcFiles ;
     /**
      * testCompileSrcFiles represents the test source files of the project;
@@ -71,11 +71,11 @@ public abstract class IHostProjectInfo  {
 
     /**
      * Set the root directory of the project.
-      * @param dir
+     * @param dir
      */
-     public void setRootDir(File dir){
-         this.rootDir = dir;
-     }
+    public void setRootDir(File dir){
+        this.rootDir = dir;
+    }
     /** Set the output directory of the project.
      * @param dir
      */
@@ -91,8 +91,8 @@ public abstract class IHostProjectInfo  {
      * @return
      */
     public File getRootDir(){
-         return rootDir;
-     }
+        return rootDir;
+    }
     /**
      * Get the duplicate class names.
      * @return the class names that are used by more than one jar.
@@ -192,7 +192,7 @@ public abstract class IHostProjectInfo  {
                 .map(File::getAbsolutePath)
                 .collect(Collectors.toSet());
     }
-    
+
     public void setTestCompileSrcFiles(Set<File> testCompileSrcFiles) {
         this.testCompileSrcFiles = testCompileSrcFiles;
         this.testCompileSrcDirs = testCompileSrcFiles.stream()
@@ -246,7 +246,7 @@ public abstract class IHostProjectInfo  {
     /**
      * Get all the jar files reachable by the host project.
      * @return Set of jar files
-    */
+     */
     public Set<IDepJar> getRuntimeDirectReachableJars() {
         Set<String> reachableClasses = new HashSet<>(callGraph.getReachableDirectClasses());
         Set<String> constantPoolClasses =  GetRefedClasses.analyzeReferencedClasses(getBuildCp());
