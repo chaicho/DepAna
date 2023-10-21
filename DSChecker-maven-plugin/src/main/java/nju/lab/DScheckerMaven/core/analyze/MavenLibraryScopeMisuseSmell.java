@@ -44,18 +44,22 @@ public class MavenLibraryScopeMisuseSmell extends BaseSmell{
         compileDepJarsUsedOnlyAtProvided.removeAll(actualRuntimeDepJars);
         compileDepJarsUsedOnlyAtProvided.removeAll(actualTestDepJars);
         compileDepJarsUsedOnlyAtProvided.retainAll(actualCompileDepJars);
+
+        // Check if provided scope dep is acutally used at test scene
+        Set<IDepJar> providedDepJarsUsedAtTest = new HashSet<>(providedDepJars);
+        providedDepJarsUsedAtTest.removeAll(actualCompileDepJars);
+        providedDepJarsUsedAtTest.retainAll(actualTestDepJars);
+
+        Set<IDepJar> runtimeDepJarsUsedAtTest = new HashSet<>(runtimeDepJars);
+        runtimeDepJarsUsedAtTest.removeAll(actualRuntimeDepJars);
+        runtimeDepJarsUsedAtTest.retainAll(actualTestDepJars);
+
         log.warn("actualCompileDepJars: " + actualCompileDepJars);
         log.warn("actualRuntimeDepJars: " + actualRuntimeDepJars);
         log.warn("actualTestDepJars: " + actualTestDepJars);
         log.warn("compileScopeDepJars: " + compileDepJars);
-
-//        // Check if provided scope dep is also used at runtime scene, which means the scope should be compile.
-//        Set<IDepJar> providedDepJarsUsedAtRuntime = new HashSet<>(providedDepJars);
-//        providedDepJarsUsedAtRuntime.retainAll(actualRuntimeDepJars);
-//
-//        // Check if runtime scope dep is also used at compile scene, which means the scope should be compile.
-//        Set<IDepJar> runtimeDepJarsUsedAtCompile = new HashSet<>(runtimeDepJars);
-//        runtimeDepJarsUsedAtCompile.retainAll(actualCompileDepJars);
+        
+    
 
         for (IDepJar depJar : compileDepJarsUsedOnlyAtTest) {
             appendToResult("compile scope dep " + depJar.getName() + " is acutally used only at test scene");
@@ -86,6 +90,18 @@ public class MavenLibraryScopeMisuseSmell extends BaseSmell{
 //            log.error("runtime scope dependency " + depJar.getName() + " is also used at compile scene");
 //        }
 
+        for (IDepJar depJar : providedDepJarsUsedAtTest) {
+            appendToResult("provided scope dep " + depJar.getName() + " is acutally used only at test scene");
+            appendToResult(depJar.getUsedClassesAsString());
+            appendToResult("---------");
+            log.error("provided scope dependency " + depJar.getName() + " is acutally used only at test scene");
+        }
+        for (IDepJar depJar : runtimeDepJarsUsedAtTest) {
+            appendToResult("runtime scope dep " + depJar.getName() + " is acutally used only at test scene");
+            appendToResult(depJar.getUsedClassesAsString());
+            appendToResult("---------");
+            log.error("runtime scope dependency " + depJar.getName() + " is acutally used only at test scene");
+        }
         return;
     }
 
