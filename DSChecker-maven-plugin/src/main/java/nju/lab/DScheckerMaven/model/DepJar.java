@@ -36,6 +36,7 @@ public class DepJar implements IDepJar {
      */
     private Set<NodeAdapter> nodeAdapters;
     private Set<NodeAdapter> nodeAdaptersWithSameGA;
+    private Set<NodeAdapter> nodeAdaptersWithSameGAC;
     private Set<String> allMthd;
     private Set<String> allCls;
     private Map<String, Collection<String>> allRefedCls;
@@ -134,6 +135,12 @@ public class DepJar implements IDepJar {
             nodeAdaptersWithSameGA = NodeAdapters.i().getNodeAdaptersWithSameGA(getGroupId(),getArtifactId());
         }
         return nodeAdaptersWithSameGA;
+    }
+    public Set<NodeAdapter> getNodeAdaptersWithSameGAC() {
+        if (nodeAdaptersWithSameGAC == null) {
+            nodeAdaptersWithSameGAC = NodeAdapters.i().getNodeAdaptersWithSameGAC(getGroupId(),getArtifactId(),getClassifier());
+        }
+        return nodeAdaptersWithSameGAC;
     }
     /**
      * maybe useful
@@ -361,7 +368,7 @@ public class DepJar implements IDepJar {
         Set<String> scopes = new HashSet<String>();
         log.error(getArtifactId());
         log.error(getNodeAdapters().toString());
-        for (NodeAdapter node : getNodeAdaptersWithSameGA()) {
+        for (NodeAdapter node : getNodeAdaptersWithSameGAC()) {
             if (node.getNodeDepth() == 1) {
                 return node.getScope();
             } else {

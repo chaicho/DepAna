@@ -203,6 +203,15 @@ public class NodeAdapters {
         return result;
     }
 
+    public Set<NodeAdapter> getNodeAdaptersWithSameGAC(String groupId, String artifactId, String classifier) {
+        Set<NodeAdapter> result = new HashSet<NodeAdapter>();
+        for (NodeAdapter nodeAdapter : container) {
+            if (nodeAdapter.getGroupId().equals(groupId) && nodeAdapter.getArtifactId().equals(artifactId) && nodeAdapter.getClassifier().equals(classifier)) {
+                result.add(nodeAdapter);
+            }
+        }
+        return result;
+    }
     /**
      * 获取所有依赖树节点适配器
      *
