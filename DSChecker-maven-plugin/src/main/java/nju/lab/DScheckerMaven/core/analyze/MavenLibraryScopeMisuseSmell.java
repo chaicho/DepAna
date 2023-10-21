@@ -12,10 +12,10 @@ public class MavenLibraryScopeMisuseSmell extends BaseSmell{
     public void detect(){
         appendToResult("========LibraryScopeSmell========");
         // Get DepJars with their declared scope.
-        Set<? extends IDepJar> testDepJars = depJars.getDirectDepJarsWithScope("test");
-        Set<? extends IDepJar> compileDepJars = depJars.getDirectDepJarsWithScope("compile");
-        Set<? extends IDepJar> runtimeDepJars = depJars.getDirectDepJarsWithScope("runtime");
-        Set<? extends IDepJar> providedDepJars = depJars.getDirectDepJarsWithScope("provided");
+        Set<? extends IDepJar> testDepJars = depJars.getUsedDepJarsWithScope("test");
+        Set<? extends IDepJar> compileDepJars = depJars.getUsedDepJarsWithScope("compile");
+        Set<? extends IDepJar> runtimeDepJars = depJars.getUsedDepJarsWithScope("runtime");
+        Set<? extends IDepJar> providedDepJars = depJars.getUsedDepJarsWithScope("provided");
 
         // Get DepJars with their used scenario.
         Set<IDepJar> actualTestDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("test");
