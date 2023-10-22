@@ -57,6 +57,9 @@ public interface ICallGraph {
     public default Set<String> getReachableDirectClasses() {
         Set<String> reachableClasses = new HashSet<String>();
         List<SootMethod> entryMthds = new ArrayList<SootMethod>();
+        if (!Scene.v().hasCallGraph()) {
+            return reachableClasses;
+        }
         CallGraph cg = Scene.v().getCallGraph();
         for (SootClass sootClass : Scene.v().getApplicationClasses()) {
             for (SootMethod method : sootClass.getMethods()) {
