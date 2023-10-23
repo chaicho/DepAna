@@ -3,6 +3,9 @@ package nju.lab.DScheckerMaven.mojos;
 
 import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.analyze.SmellFactory;
+import nju.lab.DSchecker.core.analyze.WrapperConfMissingSmell;
+import nju.lab.DSchecker.core.analyze.WrapperJarAbnormalSmell;
+import nju.lab.DSchecker.core.analyze.WrapperJarMissingSmell;
 import nju.lab.DSchecker.core.model.DepModel;
 import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.util.monitor.PerformanceMonitor;
@@ -150,6 +153,9 @@ public class ProjectLevelSmellMojo extends AbstractMojo {
         smellFactory.initOnly(HostProjectInfo.i(), DepJars.i(), CallGraphMaven.i());
         MavenSharedLibrarySmell mavenSharedLibrarySmell = new MavenSharedLibrarySmell(project,reactorProjects);
         MavenConflictLibrarySmell mavenConflictLibrarySmell = new MavenConflictLibrarySmell(project,reactorProjects);
+        smellFactory.addSmell(new WrapperJarMissingSmell());
+        smellFactory.addSmell(new WrapperConfMissingSmell());
+        smellFactory.addSmell(new WrapperJarAbnormalSmell());
         smellFactory.addSmell(mavenSharedLibrarySmell);
         smellFactory.addSmell(mavenConflictLibrarySmell);
         smellFactory.detectAll();
