@@ -22,6 +22,8 @@ public abstract class IHostProjectInfo  {
     protected File resultFile;
     protected String buildPath;
 
+    protected String resultFileName = null;
+
     protected File outputDir;
 
     protected File testOutputDir;
@@ -55,7 +57,9 @@ public abstract class IHostProjectInfo  {
 
     private Set<IDepJar> actualRuntimeDepJars = new HashSet<>();
 
-
+    public void setResultFileName(String resultFileName) {
+        this.resultFileName = resultFileName;
+    }
     /**
      * Construct the class to Depjar map.
      * @param
@@ -200,11 +204,13 @@ public abstract class IHostProjectInfo  {
                 .collect(Collectors.toSet());
     }
 
-
     public void setBuildDir(File buildDir) {
         this.buildDir = buildDir;
         this.buildPath = buildDir.getAbsolutePath();
-        this.resultFile =new File(buildDir, "DScheckerResult.txt");
+        if (resultFileName == null) {
+            resultFileName = "DScheckerResult.txt";
+        }
+        this.resultFile = new File(buildDir, resultFileName);
         // Check if the directory exists; if not, create it
         if (!buildDir.exists()) {
             if (buildDir.mkdirs()) {

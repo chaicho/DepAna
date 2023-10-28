@@ -103,6 +103,7 @@ public class ProjectLevelSmellMojo extends AbstractMojo {
 //        PerformanceMonitor.start("initHostProjectInfo");
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().setOutputDir(outputDir);
+        HostProjectInfo.i().setResultFileName("DScheckerResultProjectLevel.txt");
         HostProjectInfo.i().setTestOutputDir(testOutputDir);
         HostProjectInfo.i().setCompileSrcPaths(compileSourceRoots);
         HostProjectInfo.i().setTestCompileSrcPaths(testCompileSourceRoots);
