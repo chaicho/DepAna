@@ -95,6 +95,7 @@ public class BaseMojo extends AbstractMojo {
 //        validateSysSize();
         // 项目信息处理
         PerformanceMonitor.start("initHostProjectInfo");
+        HostProjectInfo.i().setResultFileName("DScheckerResultModuleLevel.txt");
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().setOutputDir(outputDir);
         HostProjectInfo.i().setTestOutputDir(testOutputDir);
