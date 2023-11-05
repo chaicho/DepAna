@@ -101,9 +101,9 @@ public class ProjectLevelSmellMojo extends AbstractMojo {
 //        validateSysSize();
         // 项目信息处理
 //        PerformanceMonitor.start("initHostProjectInfo");
+        HostProjectInfo.i().setResultFileName("DScheckerResultProjectLevel.txt");
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().setOutputDir(outputDir);
-        HostProjectInfo.i().setResultFileName("DScheckerResultProjectLevel.txt");
         HostProjectInfo.i().setTestOutputDir(testOutputDir);
         HostProjectInfo.i().setCompileSrcPaths(compileSourceRoots);
         HostProjectInfo.i().setTestCompileSrcPaths(testCompileSourceRoots);
@@ -135,15 +135,18 @@ public class ProjectLevelSmellMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException {
         if (!project.equals(mavenSession.getTopLevelProject())) {
+            System.out.println("not top level project");
             return;
         }
-        if (project.getPackaging() == null && !project.getPackaging().equals("pom")) {
-            return;
-        }
-        if (project.getParent() != null) {
-            return;
-        }
-
+        // if (project.getPackaging() == null && !project.getPackaging().equals("pom")) {
+        //     return;
+        // }
+        // if (project.getParent() != null) {
+        //     System.out.println(project.getParent().getArtifactId());
+        //     return;
+        // }
+        
+        System.out.println("project level smell");
         try {
             initGlobalVar();
         } catch (Exception e) {
