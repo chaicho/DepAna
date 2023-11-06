@@ -94,7 +94,14 @@ public class MavenSharedLibrarySmell extends BaseSmell {
         }
         return ret;
     }
-
+    public boolean isReactorProject(Dependency dep) {
+        for (MavenProject reactorProject : reactorProjects) {
+            if (dep.getGroupId().equals(reactorProject.getGroupId()) && dep.getArtifactId().equals(reactorProject.getArtifactId())) {
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     public void detect() {
         appendToResult("========SharedLibrarySmell========");
@@ -123,6 +130,10 @@ public class MavenSharedLibrarySmell extends BaseSmell {
                 if (!dependency.getLocation("groupId").getSource().getLocation().equals(reactorProject.getFile().getPath())) {
                     continue;
                 }
+                // If the dependency is one of the reactor projects, skip it
+                if (isReactorProject(dependency)) {
+                    continue;
+                }
                 if (!isVersionSelfManaged(dependency, reactorProject)) {
 //                    When reaching here, it means the version must be controlled by depManagement block.
                     managedDependencyToModule.computeIfAbsent(dependency.getManagementKey(), k -> new HashSet<>()).add(depManagementBlockToProject.get(dependency.getManagementKey()));
@@ -136,6 +147,7 @@ public class MavenSharedLibrarySmell extends BaseSmell {
 
         for (String managementKey : managementKeytoDependency.keySet()) {
             Set<Dependency> dependencies = managementKeytoDependency.get(managementKey);
+            //
             if ((managedDependencyToModule.containsKey(managementKey) && !dependencies.isEmpty()) || dependencies.size() > 1) {
                 appendToResult("Dependency " + managementKey + " is shared by multiple modules");
                 for (Dependency dependency : dependencies) {
