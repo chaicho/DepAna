@@ -25,7 +25,7 @@ public class SmellFactory {
 //        smells.add(new LibraryScopeSmell());
         smells.add(new UnDeclaredSmell());
         smells.add(new UnUsedSmell());
-        smells.add(new LibraryScopeConflictSmell());
+//        smells.add(new LibraryScopeConflictSmell());
         // smells.add(new WrapperJarMissingSmell());
         // smells.add(new WrapperConfMissingSmell());
         // smells.add(new WrapperJarAbnormalSmell());
@@ -54,6 +54,7 @@ public class SmellFactory {
         smells.add(smell);
         System.out.println(smells);
     }
+
     public void init(IHostProjectInfo hostProjectInfo, IDepJars depJars, ICallGraph callGraph) {
         this.hostProjectInfo = hostProjectInfo;
         this.callGraph = callGraph;
