@@ -34,7 +34,7 @@ public class DSchecker implements Plugin<Project> {
             ConfigurationContainer configurations = project.getConfigurations();
             TaskContainer tasks = project.getTasks();
             tasks.register("DScheck", BaseConflictTask.class, task->{
-                ResolvableDependencies resolvableDependencies = configurations.getByName("runtimeClasspath").getIncoming();
+                ResolvableDependencies resolvableDependencies = configurations.getByName("compileClasspath").getIncoming();
                 Provider<Set<ResolvedArtifactResult>> resolvedArtifacts = resolvableDependencies.getArtifacts().getResolvedArtifacts();
 
                 task.getArtifactFiles().from(resolvableDependencies.getArtifacts().getArtifactFiles());

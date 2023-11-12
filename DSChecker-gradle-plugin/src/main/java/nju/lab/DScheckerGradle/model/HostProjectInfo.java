@@ -45,6 +45,11 @@ public class HostProjectInfo extends IHostProjectInfo {
         return rootDir.getPath() + File.separator + "gradle" + File.separator + "wrapper";
     }
 
+    @Override
+    public String getBuildTestCp() {
+        return null;
+    }
+
     /**
      * Get the compiled classes path of the sources of the project, separated by commas.
      * @return

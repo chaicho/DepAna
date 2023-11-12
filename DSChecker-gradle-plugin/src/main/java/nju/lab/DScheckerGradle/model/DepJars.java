@@ -121,6 +121,27 @@ public class DepJars implements IDepJars<DepJar> {
     public Set<DepJar> getAllDepJar() {
         return container;
     }
+
+    @Override
+    public Set<DepJar> getDirectDepJarsWithScope(String s) {
+        return null;
+    }
+
+    @Override
+    public Set<DepJar> getDirectDepJarsWithScene(String s) {
+        return null;
+    }
+
+    @Override
+    public Set<DepJar> getUsedDepJarsWithScope(String s) {
+        return null;
+    }
+
+    @Override
+    public Set<String> getUsedDepJarsPaths() {
+        return null;
+    }
+
     /**
      * 获取所有jar包的本地路径
      * @return
@@ -278,14 +299,7 @@ public class DepJars implements IDepJars<DepJar> {
         return null;
     }
 
-    @Override
-    public Set<DepJar> getDepJarsWithScope (String scope) {
-        return null;
-    }
-    @Override
-    public Set<DepJar> getDepJarsWithScene (String scene) {
-        return null;
-    }
+
 }
 
 

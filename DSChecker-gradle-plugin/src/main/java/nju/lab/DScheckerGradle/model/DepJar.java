@@ -112,6 +112,12 @@ public class DepJar implements IDepJar {
     public String getDisplayName(){
         return getGroupId() +":" + getArtifactId() + ":" + getVersion() + ":" + getClassifier();
     }
+
+    @Override
+    public String getUsedDepTrail() {
+        return null;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof DepJar) {
@@ -165,6 +171,11 @@ public class DepJar implements IDepJar {
         return sb.toString();
     }
 
+    @Override
+    public Set<String> getDepTrails() {
+        return null;
+    }
+
 
     /**
      * maybe useful
@@ -181,6 +192,32 @@ public class DepJar implements IDepJar {
     public String getScope(){
        return "implementation";
     }
+
+    @Override
+    public Set<String> getScopes() {
+        return null;
+    }
+
+    @Override
+    public Map<String, Set<String>> getUsedClasses() {
+        return null;
+    }
+
+    @Override
+    public Set<String> getUsedClassesAtScene(String s) {
+        return null;
+    }
+
+    @Override
+    public void addClassToScene(String s, String s1) {
+
+    }
+
+    @Override
+    public String getUsedClassesAsString() {
+        return null;
+    }
+
     public Set<NodeAdapter> getNodeAdapters() {
         return nodeAdapters;
     }
