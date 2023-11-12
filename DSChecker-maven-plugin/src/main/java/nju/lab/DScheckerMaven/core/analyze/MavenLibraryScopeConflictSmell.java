@@ -8,6 +8,23 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class MavenLibraryScopeConflictSmell extends BaseSmell {
+    public boolean isHarmful(String finalScope, Set<String> declaredScopes) {
+        if (finalScope.equals("test") && declaredScopes.size() > 1) {
+            return true;
+        }
+        else if (finalScope.equals("provided") && declaredScopes.size() > 1) {
+            if (declaredScopes.contains("compile") || declaredScopes.contains("runtime")) {
+                return true;
+            }
+        }
+        else if (finalScope.equals("runtime") && declaredScopes.size() > 1) {
+            if (declaredScopes.contains("compile") || declaredScopes.contains("provided")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void detect() {
         Set<? extends IDepJar> allDepJars = depJars.getAllDepJar();
@@ -28,6 +45,9 @@ public class MavenLibraryScopeConflictSmell extends BaseSmell {
         appendToResult("========LibraryScopeConflictSmell========");
         for (String name : scopeMap.keySet()) {
             if (scopeMap.get(name).size() > 1) {
+                if (!isHarmful(selectedScopeMap.get(name), scopeMap.get(name))) {
+                    continue;
+                }
                 appendToResult("Library name: " + name);
                 appendToResult("Declared Scopes: " + scopeMap.get(name));
                 appendToResult("Final Scope: " + selectedScopeMap.get(name));
