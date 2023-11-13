@@ -13,7 +13,7 @@ public class HostProjectInfo extends IHostProjectInfo {
     private static HostProjectInfo instance;
     private Set<String> apiDepJars = new HashSet<>();
     private FileCollection classesDirs;
-
+    private String buildTestCp;
     private HostProjectInfo() {
     }
 
@@ -44,10 +44,12 @@ public class HostProjectInfo extends IHostProjectInfo {
     public String getWrapperPath(){
         return rootDir.getPath() + File.separator + "gradle" + File.separator + "wrapper";
     }
-
+    public void setBuildTestCp(String buildTestCp) {
+        this.buildTestCp = buildTestCp;
+    }
     @Override
     public String getBuildTestCp() {
-        return null;
+        return buildTestCp;
     }
 
     /**

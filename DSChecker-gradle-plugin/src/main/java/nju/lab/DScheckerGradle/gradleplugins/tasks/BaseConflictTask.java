@@ -33,6 +33,7 @@ public abstract class BaseConflictTask extends DefaultTask {
 
 
     private SourceSet mainSourceSet;
+    private SourceSet testSourceSet;
     private SourceSetOutput mainOutput;
     private FileCollection classesDirs;
 
@@ -155,6 +156,9 @@ public abstract class BaseConflictTask extends DefaultTask {
 
         mainSourceSet = project.getExtensions().getByType(SourceSetContainer.class)
                     .getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+        testSourceSet = project.getExtensions().getByType(SourceSetContainer.class)
+                    .getByName(SourceSet.TEST_SOURCE_SET_NAME);
+
 
         compileSrcDirs = mainSourceSet.getAllJava().getSrcDirs();
 
@@ -194,11 +198,14 @@ public abstract class BaseConflictTask extends DefaultTask {
 //        AllCls.i().init(DepJars.i());
         getApiElements();
 
+        HostProjectInfo.i().setResultFileName("DScheckerResultModuleLevel.txt");
         HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
         HostProjectInfo.i().setClassesDirs(classesDirs);
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().setRootDir(project.getRootDir());
-
+//        HostProjectInfo.i().setTestOutputDir(new File(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes"));
+        HostProjectInfo.i().setBuildTestCp(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes");
+        HostProjectInfo.i().setTestCompileSrcFiles(testSourceSet.getAllJava().getSrcDirs());
         TypeAna.i().setHostProjectInfo(HostProjectInfo.i());
         TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
 
@@ -210,7 +217,6 @@ public abstract class BaseConflictTask extends DefaultTask {
         SmellFactory smellFactory = new SmellFactory();
         smellFactory.init(HostProjectInfo.i(), DepJars.i(), MyCallGraph.i());
         smellFactory.detectAll();
-
 
 
 

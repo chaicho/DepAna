@@ -53,7 +53,7 @@ public class NodeAdapters {
                         walk(selectedComponent, newArtifactMap, seen, dep + 1, nodeAdapter);
                     }
                     else{
-                        //                        Artifact Unresolved, the node is not selected.
+                        // Artifact Unresolved, the node is not selected.
                         ComponentSelector selector = resolvedDependency.getRequested();
                         if(selector instanceof ModuleComponentSelector){
                             ModuleComponentSelector moduleComponentSelector = (ModuleComponentSelector) selector;

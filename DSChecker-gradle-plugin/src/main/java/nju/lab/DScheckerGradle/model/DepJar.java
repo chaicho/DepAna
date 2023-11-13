@@ -115,7 +115,17 @@ public class DepJar implements IDepJar {
 
     @Override
     public String getUsedDepTrail() {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        for (NodeAdapter node : getNodeAdapters()) {
+            if (!node.isNodeSelected()) {
+                continue;
+            }
+            sb.append("  [");
+            sb.append(node.getWholePath());
+            sb.append("]");
+            break;
+        }
+        return sb.toString();
     }
 
     @Override
@@ -159,14 +169,14 @@ public class DepJar implements IDepJar {
     /**
      * @return the import path of depJar.
      */
+    @Override
     public String getDepTrail() {
-        StringBuilder sb = new StringBuilder(toString() + ":");
+        StringBuilder sb = new StringBuilder();
         for (NodeAdapter node : getNodeAdapters()) {
-            if (node.isNodeSelected()) {
-                sb.append("  [");
-                sb.append(node.getWholePath());
-                sb.append("]");
-            }
+            sb.append("  [");
+            sb.append(node.getWholePath());
+            sb.append("]");
+            break;
         }
         return sb.toString();
     }
