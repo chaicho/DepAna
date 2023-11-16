@@ -23,16 +23,14 @@ public class DepJar implements IDepJar {
     private String version;// version
     private String classifier;
     private List<String> jarFilePaths;
-
     private File file;
     private Set<String> allCls;
     private Map<String, ClassVO> clsTb = null;// all class in jar
-
     private Set<NodeAdapter> nodeAdapters;// all
     private Map<String, Collection<String>> allRefedCls;
     private int priority;
     private HashSet<String> allMthd;
-
+    private Map<String, Set<String>> classesUsedScopes;
     public String scope;
 
     public DepJar(String groupId, String artifactId, String version, String classifier, List<String> jarFilePaths,int priority,int depth) {
@@ -43,6 +41,11 @@ public class DepJar implements IDepJar {
         this.jarFilePaths = jarFilePaths;
         this.priority = priority;
         this.depth = depth;
+
+        classesUsedScopes = new HashMap<>();
+        classesUsedScopes.put("compile", new HashSet<>());
+        classesUsedScopes.put("runtime", new HashSet<>());
+        classesUsedScopes.put("test", new HashSet<>());
     }
 
     public String getGroupId() {
@@ -224,18 +227,32 @@ public class DepJar implements IDepJar {
     }
 
     @Override
-    public Set<String> getUsedClassesAtScene(String s) {
-        return null;
+    public Set<String> getUsedClassesAtScene(String scene) {
+        if (classesUsedScopes.containsKey(scene)) {
+            return classesUsedScopes.get(scene);
+        } else {
+            return new HashSet<>();
+        }
+    }
+    @Override
+    public void addClassToScene(String scene, String cls) {
+        if (classesUsedScopes.containsKey(scene)) {
+            classesUsedScopes.get(scene).add(cls);
+        } else {
+            Set<String> clsSet = new HashSet<>();
+            clsSet.add(cls);
+            classesUsedScopes.put(scene, clsSet);
+        }
     }
 
-    @Override
-    public void addClassToScene(String s, String s1) {
-
-    }
-
-    @Override
     public String getUsedClassesAsString() {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        for (String scene : classesUsedScopes.keySet()) {
+            sb.append("		scene " + scene + " : ");
+            sb.append(classesUsedScopes.get(scene).toString());
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
     public Set<NodeAdapter> getNodeAdapters() {

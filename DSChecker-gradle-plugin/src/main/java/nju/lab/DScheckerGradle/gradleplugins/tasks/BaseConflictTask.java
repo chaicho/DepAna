@@ -3,6 +3,7 @@ package nju.lab.DScheckerGradle.gradleplugins.tasks;
 import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.DepModel;
 import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
+import nju.lab.DScheckerGradle.core.analyze.GradleLibraryScopeMisuseSmell;
 import nju.lab.DScheckerGradle.model.DepJars;
 import nju.lab.DSchecker.core.analyze.SmellFactory;
 import nju.lab.DScheckerGradle.model.HostProjectInfo;
@@ -236,6 +237,8 @@ public abstract class BaseConflictTask extends DefaultTask {
 //        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
         SmellFactory smellFactory = new SmellFactory();
         smellFactory.init(HostProjectInfo.i(), DepJars.i(), MyCallGraph.i());
+        GradleLibraryScopeMisuseSmell gradleScopeSmell = new GradleLibraryScopeMisuseSmell();
+        smellFactory.addSmell(gradleScopeSmell);
         smellFactory.detectAll();
 
 

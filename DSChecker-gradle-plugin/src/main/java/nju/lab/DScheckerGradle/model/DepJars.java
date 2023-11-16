@@ -10,6 +10,7 @@ import soot.Scene;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class DepJars implements IDepJars<DepJar> {
@@ -199,8 +200,11 @@ public class DepJars implements IDepJars<DepJar> {
     }
 
     @Override
-    public Set<DepJar> getDirectDepJarsWithScope(String s) {
-        return null;
+    public Set<DepJar> getDirectDepJarsWithScope(String scope) {
+        Set<DepJar> depJars = usedDepJars.stream()
+                .filter(depJar -> depJar.getScope()!= null && depJar.getScope().equals(scope) && depJar.isSelected() && depJar.getDepth() == 1)
+                .collect(Collectors.toSet());
+        return depJars;
     }
 
     @Override
