@@ -11,7 +11,7 @@ public interface IDepJars<T extends IDepJar> {
     /**
      * Get all the jar files used by the host project.
      */
-    public Set<T> getUsedDepJars();
+    public Set<T>  getUsedDepJars();
 
     /**
      * Get the jar file of the given groupId and the artifactId;

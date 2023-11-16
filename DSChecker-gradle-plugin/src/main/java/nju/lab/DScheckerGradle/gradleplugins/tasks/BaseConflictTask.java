@@ -1,6 +1,8 @@
 package nju.lab.DScheckerGradle.gradleplugins.tasks;
 
 import lombok.extern.slf4j.Slf4j;
+import nju.lab.DSchecker.core.model.DepModel;
+import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
 import nju.lab.DScheckerGradle.model.DepJars;
 import nju.lab.DSchecker.core.analyze.SmellFactory;
 import nju.lab.DScheckerGradle.model.HostProjectInfo;
@@ -37,6 +39,7 @@ public abstract class BaseConflictTask extends DefaultTask {
     private SourceSetOutput mainOutput;
     private FileCollection classesDirs;
 
+    private List<ResolvedComponentResult> roots = new LinkedList<>();
     @Input
     public abstract ListProperty<ComponentArtifactIdentifier> getArtifactIdentifiers();
 
@@ -61,15 +64,9 @@ public abstract class BaseConflictTask extends DefaultTask {
     private FileCollection fileCollection;
     private Set<ResolvedDependency> firstLevelModuleDependencies;
     private long systemFileSize;
-
     private long allJarNum;
     private int systemSize;
-
-    public String target = "default";
-
-
     public Configuration configuration;
-
     public Project project;
     protected Map<ComponentIdentifier, Set<ResolvedArtifact> >  artifactMap;
     public String configurationName = "runtimeClasspath";
@@ -100,12 +97,22 @@ public abstract class BaseConflictTask extends DefaultTask {
     }
     protected  Map<ComponentIdentifier, Set<ResolvedArtifact> >  initMapArtifactByIdentifiers() {
         Map<ComponentIdentifier, Set<ResolvedArtifact> >  map = new HashMap<>();
-        for (ResolvedArtifact artifact : resolvedArtifacts) {
-            ComponentIdentifier identifier = artifact.getId().getComponentIdentifier();
-            if (!map.containsKey(identifier)) {
-                map.put(identifier, new HashSet<>());
+        Set<ResolvedArtifact> compileResolvedArtifacts = project.getConfigurations().getByName("compileClasspath").getResolvedConfiguration().getResolvedArtifacts();
+        Set<ResolvedArtifact> runtimeResolvedArtifacts = project.getConfigurations().getByName("runtimeClasspath").getResolvedConfiguration().getResolvedArtifacts();
+        Set<ResolvedArtifact> testCompileResolvedArtifacts = project.getConfigurations().getByName("testCompileClasspath").getResolvedConfiguration().getResolvedArtifacts();
+        List<Set<ResolvedArtifact>> resolvedArtifactsList = new ArrayList<>();
+        resolvedArtifactsList.add(compileResolvedArtifacts);
+        resolvedArtifactsList.add(runtimeResolvedArtifacts);
+        resolvedArtifactsList.add(testCompileResolvedArtifacts);
+
+        for (Set<ResolvedArtifact> resolvedArtifacts : resolvedArtifactsList) {
+            for (ResolvedArtifact artifact : resolvedArtifacts) {
+                ComponentIdentifier identifier = artifact.getId().getComponentIdentifier();
+                if (!map.containsKey(identifier)) {
+                    map.put(identifier, new HashSet<>());
+                }
+                map.get(identifier).add(artifact);
             }
-            map.get(identifier).add(artifact);
         }
         return map;
     }
@@ -172,6 +179,9 @@ public abstract class BaseConflictTask extends DefaultTask {
 
         buildDir = project.getBuildDir();
 
+        roots.add(project.getConfigurations().getByName("compileClasspath").getIncoming().getResolutionResult().getRoot());
+        roots.add(project.getConfigurations().getByName("runtimeClasspath").getIncoming().getResolutionResult().getRoot());
+        roots.add(project.getConfigurations().getByName("testCompileClasspath").getIncoming().getResolutionResult().getRoot());
     }
 
 
@@ -190,12 +200,18 @@ public abstract class BaseConflictTask extends DefaultTask {
 //        log.warn("Executing");
         initGlobalValues();
         GradleUtil.init(this);
-        NodeAdapters.i().init(getRootComponent().get(),artifactMap);
+//        NodeAdapters.i().init(getRootComponent().get(),artifactMap);
+        for (ResolvedComponentResult root : roots) {
+            NodeAdapters.i().init(root,artifactMap);
+        }
         DepJars.init(NodeAdapters.i());
-        validateSysSize();
-//        System.out.println("Calculate classes");
+        DepJars.i().setProject(project);
+        DepJars.i().initDepJarsScope();
+        DepJars.i().initDepJarsWithScenes();
 
-//        AllCls.i().init(DepJars.i());
+//        DepJars.i().initDepJarsWithScene("runtimeClasspath");
+        validateSysSize();
+
         getApiElements();
 
         HostProjectInfo.i().setResultFileName("DScheckerResultModuleLevel.txt");
@@ -206,11 +222,15 @@ public abstract class BaseConflictTask extends DefaultTask {
 //        HostProjectInfo.i().setTestOutputDir(new File(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes"));
         HostProjectInfo.i().setBuildTestCp(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes");
         HostProjectInfo.i().setTestCompileSrcFiles(testSourceSet.getAllJava().getSrcDirs());
+        HostProjectInfo.i().init(MyCallGraph.i(), DepJars.i());
+        HostProjectInfo.i().buildDepClassMap();
+
         TypeAna.i().setHostProjectInfo(HostProjectInfo.i());
         TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
 
-        HostProjectInfo.i().init(MyCallGraph.i(), DepJars.i());
-        HostProjectInfo.i().buildDepClassMap();
+        DepModel depModel = new DepModel(MyCallGraph.i(), DepJars.i(), HostProjectInfo.i());
+
+        FullClassExtractor.setDepModel(depModel);
 
 
 //        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
@@ -226,8 +246,10 @@ public abstract class BaseConflictTask extends DefaultTask {
         try ( PrintWriter writer = new PrintWriter(new FileWriter(outputFile))){
             writer.println("=================ReportComponent===================");
             Set<ResolvedComponentResult> seen = new HashSet<>();
-            reportComponent(root, writer, seen, "");
-
+            for (ResolvedComponentResult root : roots) {
+                reportComponent(root, writer, seen, "");
+            }
+//            reportComponent(root, writer, seen, "");
         }
 
 //        Set<ResolvedComponentResult> seen = new HashSet<>();

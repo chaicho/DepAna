@@ -50,7 +50,13 @@ public class FullClassExtractor {
                 .map(
                         jarPath -> {
                             try {
-                                return new JarTypeSolver(jarPath);
+                                if (jarPath.endsWith("main")) {
+                                    srcPaths.add(jarPath);
+                                    return null;
+                                }
+                                else {
+                                    return new JarTypeSolver(jarPath);
+                                }
                             } catch (IOException e) {
                                 System.out.println("jarPath: " + jarPath);
                                 e.printStackTrace();

@@ -2,6 +2,7 @@ package nju.lab.DScheckerGradle.model;
 
 import nju.lab.DSchecker.core.model.*;
 import org.gradle.api.file.FileCollection;
+import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Str;
 import soot.SourceLocator;
 
 import java.io.File;
@@ -75,7 +76,36 @@ public class HostProjectInfo extends IHostProjectInfo {
         }
         return hostClasses;
     }
-
+    @Override
+    public IDepJar getFirstUsedDepFromClassWithTargetScene(String className, String scene) {
+        if(usedDependenciesPerClass.get(className).size() == 0)
+            return null;
+        Set<String> appropriateScopes = new HashSet<String>();
+        if (scene == "compile") {
+            appropriateScopes.add("compileOnly");
+            appropriateScopes.add("implementation");
+            appropriateScopes.add("api");
+            appropriateScopes.add("compileOnlyApi");
+        }
+        else if (scene == "runtime") {
+            appropriateScopes.add("runtimeOnly");
+            appropriateScopes.add("implementation");
+            appropriateScopes.add("api");
+        }
+        else if (scene == "test") {
+            appropriateScopes.add("compileOnlyApi");
+            appropriateScopes.add("testCompileOnly");
+            appropriateScopes.add("implementation");
+            appropriateScopes.add("testImplementation");
+            appropriateScopes.add("runtime");
+            appropriateScopes.add("testRuntimeOnly");
+        }
+        for (IDepJar depJar : usedDependenciesPerClass.get(className)) {
+            if(appropriateScopes.contains(depJar.getScope()))
+                return depJar;
+        }
+        return null;
+    }
     @Override
     public String getBuildTool() {
         return "gradle";

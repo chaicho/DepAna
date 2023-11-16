@@ -25,11 +25,8 @@ dependencies {
     implementation 'org.ow2.asm:asm:8.0.1'
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
-
-    // implementation 'com.kiwigrid.maven.enforce:pom-release-rules:1.0.3'
-    // implementation 'com.github.kwart.jd:jd-lib:1.2.1'
-    // implementation 'com.mycila:license-maven-plugin:4.2.rc1'
-    // implementation 'org.apache.toree:toree-assembly:0.5.0-incubating'
+    implementation 'com.github.javaparser:javaparser-core:3.25.4'
+    implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.25.4'
     implementation 'org.soot-oss:soot:4.2.1'
     implementation 'org.apache.commons:commons-csv:1.9.0'
     implementation 'org.dom4j:dom4j:2.1.3'

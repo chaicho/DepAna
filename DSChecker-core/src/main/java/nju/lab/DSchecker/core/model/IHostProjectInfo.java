@@ -2,6 +2,7 @@ package nju.lab.DSchecker.core.model;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.util.javassist.GetRefedClasses;
 import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
 import soot.SourceLocator;
@@ -10,6 +11,7 @@ import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public abstract class IHostProjectInfo  {
 
     protected IDepJars<? extends IDepJar> depJars;
@@ -266,6 +268,9 @@ public abstract class IHostProjectInfo  {
                 System.out.println(className + " is reachable by methods");
                 System.out.println(callGraph.getSourceMethods(className));
                 System.out.println(depJar.getDisplayName());
+            }
+            else {
+                log.warn("No depjar for " + className);
             }
         }
         return ret;

@@ -1,7 +1,12 @@
 package nju.lab.DScheckerGradle.model;
 
 import lombok.extern.slf4j.Slf4j;
+import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.core.model.IDepJars;
+import org.gradle.api.Project;
+import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.artifacts.Dependency;
+import soot.Scene;
 
 import java.io.File;
 import java.util.*;
@@ -11,6 +16,8 @@ public class DepJars implements IDepJars<DepJar> {
     private static DepJars instance;
     private Set<DepJar> container;
 
+    private Project project;
+
     // sequenced container, jar classpath sequence same as the
     private List<DepJar> seqContainer;
     private Set<DepJar> usedDepJars;
@@ -18,6 +25,8 @@ public class DepJars implements IDepJars<DepJar> {
     private List<DepJar> seqUsedDepJars;
     private DepJar hostDepJar;
 
+    private HashMap<String, Set<IDepJar>> depJarsWithScene;
+    private HashMap<String, Set<IDepJar>> depJarsWithScope;
     /**
      *
      * @return
@@ -35,6 +44,64 @@ public class DepJars implements IDepJars<DepJar> {
             instance = new DepJars(nodeAdapters);
         }
     }
+    public void setProject(Project project) {
+        this.project = project;
+    }
+    public void initDepJarsWithScope(String scope) {
+
+    }
+    public void initDepJarsWithScene(String scene) {
+
+    }
+    public void initDepJarsWithScenes() {
+        Set<File> compileFiles = project.getConfigurations().getByName("compileClasspath").resolve();
+        Set<File> testFiles = project.getConfigurations().getByName("testCompileClasspath").resolve();
+        Set<File> runtimeFiles = project.getConfigurations().getByName("runtimeClasspath").resolve();
+
+    }
+
+    public void initDepJarsScope() {
+        HashMap<String, Set<String>> scopeToDepNames = new HashMap<>();
+        for (Configuration configuration : project.getConfigurations()) {
+            if (!configuration.isCanBeConsumed() && !configuration.isCanBeResolved()) {
+                log.error("configuration: " + configuration.getName());
+                for (Dependency dep : configuration.getDependencies()) {
+                    DepJar targetDep = getDep(dep.getGroup(), dep.getName(), dep.getVersion());
+                    if (targetDep == null) {
+                        log.error(dep.getGroup() + ":" + dep.getName() + ":" + dep.getVersion() + " not found");
+                        continue;
+                    }
+                    targetDep.setScope(configuration.getName());
+                }
+            }
+        }
+        for (NodeAdapter nodeAdapter : NodeAdapters.i().getAllNodeAdapter()) {
+            if (nodeAdapter.getDepJar().scope == null) {
+               nodeAdapter.getDepJar().scope = nodeAdapter.parent.getDepJar().scope;
+            }
+        }
+        for (DepJar depJar : container) {
+            if (depJar.getDepth() == 1 && !depJar.isSelected()) {
+                DepJar selectedDepJar = getSelectedDep(depJar.getGroupId(),depJar.getArtifactId());
+                if (selectedDepJar == null) {
+                    log.error(depJar.getGroupId() + ":" + depJar.getArtifactId() + " not found");
+                    assert false;
+                    continue;
+                }
+                selectedDepJar.setDepth(1);
+            }
+        }
+    }
+
+    private DepJar getSelectedDep(String groupId, String artifactId) {
+        for (DepJar depJar : container) {
+            if (depJar.getGroupId().equals(groupId) && depJar.getArtifactId().equals(artifactId) && depJar.isSelected()) {
+                return depJar;
+            }
+        }
+        return null;
+    }
+
     private DepJars(NodeAdapters nodeAdapters) throws Exception {
         container = new HashSet<>();
         seqContainer = new ArrayList<>();
@@ -114,6 +181,15 @@ public class DepJars implements IDepJars<DepJar> {
         log.warn("cant find dep:" + groupId + ":" + artifactId + ":" + version + ":" + classifier);
         return null;
     }
+    public DepJar getDep(String groupId, String artifactId, String version) {
+        for (DepJar dep : container) {
+            if (dep.isSame(groupId, artifactId, version)) {
+                return dep;
+            }
+        }
+        log.warn("cant find dep:" + groupId + ":" + artifactId + ":" + version );
+        return null;
+    }
     /**
      * 获取依赖树中所有节点jar包
      * @return
@@ -139,7 +215,16 @@ public class DepJars implements IDepJars<DepJar> {
 
     @Override
     public Set<String> getUsedDepJarsPaths() {
-        return null;
+        Set<String> usedJarPaths = new HashSet<>();
+        for (DepJar depJar : getUsedDepJars()) {
+            if (depJar.isHost()) {
+                continue;
+            }
+            for (String path : depJar.getJarFilePaths(true)) {
+                usedJarPaths.add(path);
+            }
+        }
+        return usedJarPaths;
     }
 
     /**

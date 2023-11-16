@@ -33,7 +33,7 @@ public class DepJar implements IDepJar {
     private int priority;
     private HashSet<String> allMthd;
 
-    
+    public String scope;
 
     public DepJar(String groupId, String artifactId, String version, String classifier, List<String> jarFilePaths,int priority,int depth) {
         this.groupId = groupId;
@@ -57,7 +57,9 @@ public class DepJar implements IDepJar {
     public String getClassifier() {
         return classifier;
     }
-    public int getDepth() { return depth; }
+    public int getDepth() {
+        return depth;
+    }
 
     /**
      * @param useTarget:
@@ -106,11 +108,16 @@ public class DepJar implements IDepJar {
         return groupId.equals(groupId2) && artifactId.equals(artifactId2) && version.equals(version2)
                 && classifier.equals(classifier2);
     }
+
     public boolean isSelf(DepJar dep) {
         return isSame(dep.getGroupId(), dep.getArtifactId(), dep.getVersion(), dep.getClassifier());
     }
+
+    /**
+     * @return groupId:artifactId:version
+     */
     public String getDisplayName(){
-        return getGroupId() +":" + getArtifactId() + ":" + getVersion() + ":" + getClassifier();
+        return getGroupId() +":" + getArtifactId() + ":" + getVersion();
     }
 
     @Override
@@ -199,8 +206,11 @@ public class DepJar implements IDepJar {
         }
         return null;
     }
-    public String getScope(){
-       return "implementation";
+    public String getScope() {
+       return scope;
+    }
+    public void setScope(String scope) {
+        this.scope = scope;
     }
 
     @Override
@@ -359,5 +369,8 @@ public class DepJar implements IDepJar {
         return fatherJars;
     }
 
+    public boolean isSame(String groupId, String artifactId, String version) {
+        return this.groupId.equals(groupId) && this.artifactId.equals(artifactId) && this.version.equals(version);
+    }
 }
 
