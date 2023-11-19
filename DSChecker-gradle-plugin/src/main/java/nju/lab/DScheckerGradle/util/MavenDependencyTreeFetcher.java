@@ -31,10 +31,12 @@ public class MavenDependencyTreeFetcher {
         // Loop through each line
         for (String line : lines) {
             // Remove the [INFO] prefix and any leading or trailing whitespace
-            line = line.replace("[INFO]", "").trim();
-            if (line.split(" ").length <= 1){
+            line = line.replace("[INFO]", "");
+            // System.out.println(line);
+            if (!line.startsWith(" +-") && !line.startsWith(" \\-")) {
                 continue;
             }
+            line = line.trim();
             line = line.split(" ")[1];
             // Skip empty lines
             if (line.isEmpty()) {

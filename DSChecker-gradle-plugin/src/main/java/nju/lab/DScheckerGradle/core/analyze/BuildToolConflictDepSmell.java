@@ -19,7 +19,6 @@ public class BuildToolConflictDepSmell extends BaseSmell {
             appendToResult("The project is managed by gradle only.");
             return;
         }
-
         String modulePath = hostProjectInfo.getModulePath();
         Set<IDepJar> firstLevelDepJars =  depJars.getAllDepJar().stream().filter(depJar -> depJar.getDepth() == 1).collect(Collectors.toSet());
         Map<String,String> depVersionMap = MavenDependencyTreeFetcher.getDepVersFromProject(modulePath);
@@ -35,6 +34,28 @@ public class BuildToolConflictDepSmell extends BaseSmell {
                         appendToResult("---------");
                     }
                 }
+            }
+        }
+        for (IDepJar depJar : firstLevelDepJars) {
+            if (!depVersionMap.containsKey(depJar.getName())) {
+                appendToResult("Dependency " + depJar.getName() + " has inconsistent versions between modules.");
+                appendToResult("    Gradle : " + depJar.getVersion());
+                appendToResult("    Maven: *");
+                appendToResult("---------");
+            }
+        }
+        for (String dep : depVersionMap.keySet()) {
+            boolean flag = false;
+            for (IDepJar depJar : firstLevelDepJars) {
+                if (depJar.getName().equals(dep)) {
+                    flag = true;
+                }
+            }
+            if (!flag) {
+                appendToResult("Dependency " + dep + " has inconsistent versions between modules.");
+                appendToResult("    Gradle : *");
+                appendToResult("    Maven: " + depVersionMap.get(dep));
+                appendToResult("---------");
             }
         }
     }
