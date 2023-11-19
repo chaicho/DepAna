@@ -43,6 +43,6 @@ public class MavenDependencyTreeFetcher {
             e.printStackTrace();
         }
 
-        return "";
+         return "";
     }
 }

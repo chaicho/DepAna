@@ -72,7 +72,7 @@ public class NodeAdapters {
                         ComponentSelector selector = resolvedDependency.getRequested();
                         if(selector instanceof ModuleComponentSelector){
                             ModuleComponentSelector moduleComponentSelector = (ModuleComponentSelector) selector;
-                            GradleUtil.i().resolveArtifact(selector.getDisplayName(),nodeAdapter);
+                            // GradleUtil.i().resolveArtifact(selector.getDisplayName(),nodeAdapter);
                         } else if (selector instanceof ProjectComponentSelector) {
 //                            TODO
                         }
