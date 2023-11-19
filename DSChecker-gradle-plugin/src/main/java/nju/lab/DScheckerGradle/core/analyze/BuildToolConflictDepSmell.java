@@ -23,6 +23,11 @@ public class BuildToolConflictDepSmell extends BaseSmell {
         String modulePath = hostProjectInfo.getModulePath();
         Set<IDepJar> firstLevelDepJars =  depJars.getAllDepJar().stream().filter(depJar -> depJar.getDepth() == 1).collect(Collectors.toSet());
         Map<String,String> depVersionMap = MavenDependencyTreeFetcher.getDepVersFromProject(modulePath);
+        for (IDepJar depJar : depJars.getAllDepJar()) {
+            System.out.println(depJar.getName());
+            System.out.println(depJar.getVersion());
+        }
+        System.out.println("---------");
         for (String dep : depVersionMap.keySet()) {
             System.out.println(dep);
             System.out.println(depVersionMap.get(dep));
