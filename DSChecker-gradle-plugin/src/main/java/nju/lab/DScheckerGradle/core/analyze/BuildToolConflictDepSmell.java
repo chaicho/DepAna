@@ -12,21 +12,17 @@ import java.util.stream.Collectors;
 public class BuildToolConflictDepSmell extends BaseSmell {
     @Override
     public void detect() {
-        appendToResult("========GradleConflictDepSmell========");
+        appendToResult("========BuildToolConflictDepSmell========");
         String rootPath = hostProjectInfo.getRootDir().getAbsolutePath();
-        File gradleFile = new File(rootPath + File.separator + "build.gradle");
+        File gradleFile = new File(rootPath + File.separator + "pom.xml");
         if (!gradleFile.exists()) {
-            appendToResult("The project is managed by maven only.");
+            appendToResult("The project is managed by gradle only.");
             return;
         }
 
         String modulePath = hostProjectInfo.getModulePath();
-        Set<IDepJar> firstLevelDepJars =  depJars.getUsedDepJars().stream().filter(depJar -> depJar.getDepth() == 1).collect(Collectors.toSet());
-        Map<String,String> depVersionMap = MavenDependencyTreeFetcher.getDepVersFromProject(modulePath,"testCompileClasspath");
-        Map<String,String> depVersionMap1 = MavenDependencyTreeFetcher.getDepVersFromProject(modulePath,"runtimeClasspath");
-        Map<String,String> depVersionMap2 = MavenDependencyTreeFetcher.getDepVersFromProject(modulePath,"compileClasspath");
-        depVersionMap.putAll(depVersionMap2);
-        depVersionMap.putAll(depVersionMap1);
+        Set<IDepJar> firstLevelDepJars =  depJars.getAllDepJar().stream().filter(depJar -> depJar.getDepth() == 1).collect(Collectors.toSet());
+        Map<String,String> depVersionMap = MavenDependencyTreeFetcher.getDepVersFromProject(modulePath);
         for (String dep : depVersionMap.keySet()) {
             System.out.println(dep);
             System.out.println(depVersionMap.get(dep));
