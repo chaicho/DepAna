@@ -74,10 +74,10 @@ public class NodeAdapter {
         }
         else {
             if (displayName.split(":").length != 3) {
-                log.warn("Wrong Display name");
+                log.warn("Unstandard Display name");
                 this.group = displayName.split(":")[0];
                 this.name = displayName.split(":")[1];
-                this.version = "unspecified";
+                this.version = Objects.requireNonNull(componentResult.getModuleVersion()).getVersion();
             } else {
                 this.group = displayName.split(":")[0];
                 this.name = displayName.split(":")[1];
@@ -193,6 +193,10 @@ public class NodeAdapter {
                 .stream()
                 .filter(desc -> desc.getCause() != null)
                 .anyMatch(desc -> desc.getCause().equals(COMPOSITE_BUILD));
+        boolean isVersionRange = dependencyResult.getRequested().getDisplayName().contains("{");
+        if (isVersionRange) {
+            return true;
+        }
         if (containsCompositeBuildResolution) {
             return true;
         }
