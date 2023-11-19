@@ -3,6 +3,7 @@ package nju.lab.DScheckerGradle.gradleplugins.tasks;
 import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.DepModel;
 import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
+import nju.lab.DScheckerGradle.core.analyze.BuildToolConflictDepSmell;
 import nju.lab.DScheckerGradle.core.analyze.GradleLibraryScopeMisuseSmell;
 import nju.lab.DScheckerGradle.model.DepJars;
 import nju.lab.DSchecker.core.analyze.SmellFactory;
@@ -220,6 +221,7 @@ public abstract class BaseConflictTask extends DefaultTask {
         HostProjectInfo.i().setClassesDirs(classesDirs);
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().setRootDir(project.getRootDir());
+        HostProjectInfo.i().setModuleFile(project.getProjectDir());
 //        HostProjectInfo.i().setTestOutputDir(new File(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes"));
         HostProjectInfo.i().setBuildTestCp(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes");
         HostProjectInfo.i().setTestCompileSrcFiles(testSourceSet.getAllJava().getSrcDirs());
@@ -238,7 +240,9 @@ public abstract class BaseConflictTask extends DefaultTask {
         SmellFactory smellFactory = new SmellFactory();
         smellFactory.init(HostProjectInfo.i(), DepJars.i(), MyCallGraph.i());
         GradleLibraryScopeMisuseSmell gradleScopeSmell = new GradleLibraryScopeMisuseSmell();
+        BuildToolConflictDepSmell buildToolConflictDepSmell = new BuildToolConflictDepSmell();
         smellFactory.addSmell(gradleScopeSmell);
+        smellFactory.addSmell(buildToolConflictDepSmell);
         smellFactory.detectAll();
 
 
