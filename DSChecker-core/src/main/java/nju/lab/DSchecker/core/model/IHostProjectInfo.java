@@ -69,9 +69,11 @@ public abstract class IHostProjectInfo  {
      */
     public void buildDepClassMap() {
         for (IDepJar depJar : depJars.getSeqUsedDepJars()) {
+            System.out.println(depJar.getDisplayName());
             for (String className : depJar.getAllCls()) {
                 usedDependenciesPerClass.put(className, depJar);
             }
+            System.out.println(depJar.getAllCls());
         }
     }
 
@@ -134,7 +136,12 @@ public abstract class IHostProjectInfo  {
             return null;
         return usedDependenciesPerClass.get(className).iterator().next();
     }
-
+    /**
+     * This method is used to get the first used Depjar that a class belongs to with the target scene.
+     * @param className
+     * @param scene
+     * @return
+     */
     public IDepJar getFirstUsedDepFromClassWithTargetScene(String className, String scene) {
         if(usedDependenciesPerClass.get(className).size() == 0)
             return null;
@@ -158,7 +165,11 @@ public abstract class IHostProjectInfo  {
             if(appropriateScopes.contains(depJar.getScope()))
                 return depJar;
         }
-        return null;
+        // When reach here, it means that there is no class at given scene, so it means that there should be a scope problem
+        // We return the first one, though not in the scope.
+        IDepJar depJar = usedDependenciesPerClass.get(className).iterator().next();
+        log.warn("Class " + className + " is not in the scene " + scene + " but in " + depJar.getScope());
+        return depJar;
     }
     /**
      * Get the single used Depjar that a class belongs to since there are multiple classes with the same name.

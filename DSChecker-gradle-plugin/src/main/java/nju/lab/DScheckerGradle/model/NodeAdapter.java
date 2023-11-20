@@ -194,6 +194,7 @@ public class NodeAdapter {
                 .filter(desc -> desc.getCause() != null)
                 .anyMatch(desc -> desc.getCause().equals(COMPOSITE_BUILD));
         boolean isVersionRange = dependencyResult.getRequested().getDisplayName().contains("{");
+        isVersionRange |= displayName.split(":").length == 2;
         if (isVersionRange) {
             return true;
         }

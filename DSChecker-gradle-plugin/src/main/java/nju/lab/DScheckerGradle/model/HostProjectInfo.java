@@ -97,14 +97,18 @@ public class HostProjectInfo extends IHostProjectInfo {
             appropriateScopes.add("testCompileOnly");
             appropriateScopes.add("implementation");
             appropriateScopes.add("testImplementation");
-            appropriateScopes.add("runtime");
+            appropriateScopes.add("runtimeOnly");
             appropriateScopes.add("testRuntimeOnly");
         }
         for (IDepJar depJar : usedDependenciesPerClass.get(className)) {
             if(appropriateScopes.contains(depJar.getScope()))
                 return depJar;
         }
-        return null;
+        // When reach here, it means that there is no class at given scene, so it means that there should be a scope problem
+        // We return the first one, though not in the scope.
+        IDepJar depJar = usedDependenciesPerClass.get(className).iterator().next();
+        log.warn("Class " + className + " is not in the scene " + scene + " but in " + depJar.getScope());
+        return depJar;
     }
     @Override
     public String getBuildTool() {
