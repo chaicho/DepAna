@@ -72,7 +72,9 @@ public class DepJars implements IDepJars<DepJar> {
                         log.error(dep.getGroup() + ":" + dep.getName() + ":" + dep.getVersion() + " not found");
                         continue;
                     }
-                    targetDep.setScope(configuration.getName());
+                    if (targetDep.scope == null || targetDep.scope.startsWith("test")) {
+                        targetDep.setScope(configuration.getName());
+                    }
                 }
             }
         }
