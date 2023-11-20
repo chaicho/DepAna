@@ -80,7 +80,9 @@ public class DepJars implements IDepJars<DepJar> {
         }
         for (NodeAdapter nodeAdapter : NodeAdapters.i().getAllNodeAdapter()) {
             if (nodeAdapter.getDepJar().scope == null) {
-               nodeAdapter.getDepJar().scope = nodeAdapter.parent.getDepJar().scope;
+                if (nodeAdapter.parent != null) {
+                    nodeAdapter.getDepJar().scope = nodeAdapter.parent.getDepJar().scope;
+                }
             }
         }
         for (DepJar depJar : container) {
