@@ -67,18 +67,22 @@ public class DepJars implements IDepJars<DepJar> {
             if (!configuration.isCanBeConsumed() && !configuration.isCanBeResolved()) {
                 log.error("configuration: " + configuration.getName());
                 for (Dependency dep : configuration.getDependencies()) {
-                    DepJar targetDep = getDep(dep.getGroup(), dep.getName(), dep.getVersion());
+                    DepJar targetDep = getDirectDep(dep.getGroup(), dep.getName());
                     if (targetDep == null) {
                         log.error(dep.getGroup() + ":" + dep.getName() + ":" + dep.getVersion() + " not found");
                         continue;
                     }
-                    targetDep.setScope(configuration.getName());
+                    if (targetDep.scope == null || targetDep.scope.startsWith("test")) {
+                        targetDep.setScope(configuration.getName());
+                    }
                 }
             }
         }
         for (NodeAdapter nodeAdapter : NodeAdapters.i().getAllNodeAdapter()) {
             if (nodeAdapter.getDepJar().scope == null) {
-               nodeAdapter.getDepJar().scope = nodeAdapter.parent.getDepJar().scope;
+                if (nodeAdapter.parent != null) {
+                    nodeAdapter.getDepJar().scope = nodeAdapter.parent.getDepJar().scope;
+                }
             }
         }
         for (DepJar depJar : container) {
@@ -122,8 +126,8 @@ public class DepJars implements IDepJars<DepJar> {
                         .filter(depJar -> depJar.equals(addDepJar))
                         .findFirst()
                         .orElse(null);
-                existingDepJar.setDepth(Math.min(existingDepJar.getDepth(), nodeAdapter.getDepth()));
                 if (existingDepJar != null) {
+                    existingDepJar.setDepth(Math.min(existingDepJar.getDepth(), nodeAdapter.getDepth()));
                     existingDepJar.addNodeAdapter(nodeAdapter);
                     nodeAdapter.setDepJar(existingDepJar);
                 }
@@ -180,6 +184,14 @@ public class DepJars implements IDepJars<DepJar> {
             }
         }
         log.warn("cant find dep:" + groupId + ":" + artifactId + ":" + version + ":" + classifier);
+        return null;
+    }
+    public DepJar getDirectDep(String groupId, String artifactId) {
+        for (DepJar dep : container) {
+            if (dep.getDepth() == 1 && dep.getGroupId().equals(groupId) && dep.getArtifactId().equals(artifactId)) {
+                return dep;
+            }
+        }
         return null;
     }
     public DepJar getDep(String groupId, String artifactId, String version) {

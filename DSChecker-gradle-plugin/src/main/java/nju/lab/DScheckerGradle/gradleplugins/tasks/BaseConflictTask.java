@@ -102,11 +102,12 @@ public abstract class BaseConflictTask extends DefaultTask {
         Set<ResolvedArtifact> compileResolvedArtifacts = project.getConfigurations().getByName("compileClasspath").getResolvedConfiguration().getResolvedArtifacts();
         Set<ResolvedArtifact> runtimeResolvedArtifacts = project.getConfigurations().getByName("runtimeClasspath").getResolvedConfiguration().getResolvedArtifacts();
         Set<ResolvedArtifact> testCompileResolvedArtifacts = project.getConfigurations().getByName("testCompileClasspath").getResolvedConfiguration().getResolvedArtifacts();
+        Set<ResolvedArtifact> testRuntimeResolvedArtifacts = project.getConfigurations().getByName("testRuntimeClasspath").getResolvedConfiguration().getResolvedArtifacts();
         List<Set<ResolvedArtifact>> resolvedArtifactsList = new ArrayList<>();
         resolvedArtifactsList.add(compileResolvedArtifacts);
         resolvedArtifactsList.add(runtimeResolvedArtifacts);
         resolvedArtifactsList.add(testCompileResolvedArtifacts);
-
+        resolvedArtifactsList.add(testRuntimeResolvedArtifacts);
         for (Set<ResolvedArtifact> resolvedArtifacts : resolvedArtifactsList) {
             for (ResolvedArtifact artifact : resolvedArtifacts) {
                 ComponentIdentifier identifier = artifact.getId().getComponentIdentifier();
@@ -184,6 +185,7 @@ public abstract class BaseConflictTask extends DefaultTask {
         roots.add(project.getConfigurations().getByName("compileClasspath").getIncoming().getResolutionResult().getRoot());
         roots.add(project.getConfigurations().getByName("runtimeClasspath").getIncoming().getResolutionResult().getRoot());
         roots.add(project.getConfigurations().getByName("testCompileClasspath").getIncoming().getResolutionResult().getRoot());
+        roots.add(project.getConfigurations().getByName("testRuntimeClasspath").getIncoming().getResolutionResult().getRoot());
     }
 
 

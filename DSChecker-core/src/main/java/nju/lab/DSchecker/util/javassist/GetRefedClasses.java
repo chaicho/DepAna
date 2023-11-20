@@ -15,7 +15,7 @@ import javassist.bytecode.ConstPool;
 public class GetRefedClasses{
     public static void main(String[] args) {
         // Input directory containing .class files
-        String inputDir = "D:\\Pathtodoc\\dependency-graph-as-task-inputs\\app\\target";
+        String inputDir = "/root/dependencySmell/evaluation/happenedSmells/projectsDir/payment-service-9464b11e5296f755dedd18a97c817748ca64934e/build/classes/java/main/com/itransition/payment/auth/security/crypto/impl";
 
         // Analyze the referenced classes in the input directory
         Set<String> referencedClasses = analyzeReferencedClasses(inputDir);

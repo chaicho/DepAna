@@ -37,6 +37,9 @@ public class HostClassSmell extends BaseSmell{
 
         for(List<IDepJar> depJarSets : jarToDuplicateClassMap.keySet()) {
             Set<String> duplicateClasses = jarToDuplicateClassMap.get(depJarSets);
+            if (depJarSets.size() == 0) {
+                continue;
+            }
             appendToResult("Host Project");
             for (IDepJar depJar : depJarSets) {
                 log.warn("Dep " + depJar.getSig());
