@@ -273,7 +273,7 @@ public abstract class IHostProjectInfo  {
         Set<IDepJar> ret = new java.util.HashSet<>();
         for (String className : reachableClasses) {
             IDepJar depJar = getFirstUsedDepFromClassWithTargetScene(className,"runtime");
-            if (depJar != null) {
+            if (depJar != null && !callGraph.getSourceMethods(className).isEmpty()) {
                 ret.add(depJar);
                 depJar.addClassToScene("runtime", className);
                 System.out.println(className + " is reachable by methods");

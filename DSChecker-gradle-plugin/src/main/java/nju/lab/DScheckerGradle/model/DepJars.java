@@ -124,8 +124,8 @@ public class DepJars implements IDepJars<DepJar> {
                         .filter(depJar -> depJar.equals(addDepJar))
                         .findFirst()
                         .orElse(null);
-                existingDepJar.setDepth(Math.min(existingDepJar.getDepth(), nodeAdapter.getDepth()));
                 if (existingDepJar != null) {
+                    existingDepJar.setDepth(Math.min(existingDepJar.getDepth(), nodeAdapter.getDepth()));
                     existingDepJar.addNodeAdapter(nodeAdapter);
                     nodeAdapter.setDepJar(existingDepJar);
                 }
