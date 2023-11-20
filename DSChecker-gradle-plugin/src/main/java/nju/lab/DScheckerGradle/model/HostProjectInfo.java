@@ -8,8 +8,9 @@ import soot.SourceLocator;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 public class HostProjectInfo extends IHostProjectInfo {
     private static HostProjectInfo instance;
     private Set<String> apiDepJars = new HashSet<>();
