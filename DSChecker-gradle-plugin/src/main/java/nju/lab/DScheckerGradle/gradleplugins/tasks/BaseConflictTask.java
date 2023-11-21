@@ -25,6 +25,7 @@ import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.*;
 import nju.lab.DScheckerGradle.util.GradleUtil;
 import nju.lab.DScheckerGradle.model.DepJar;
+import org.gradle.api.tasks.Optional;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -36,22 +37,26 @@ import java.util.*;
 public abstract class BaseConflictTask extends DefaultTask {
 
 
-    private SourceSet mainSourceSet;
-    private SourceSet testSourceSet;
-    private SourceSetOutput mainOutput;
-    private FileCollection classesDirs;
+    protected SourceSet mainSourceSet;
+    protected SourceSet testSourceSet;
+    protected SourceSetOutput mainOutput;
+    protected FileCollection classesDirs;
 
     private List<ResolvedComponentResult> roots = new LinkedList<>();
     @Input
+    @Optional
     public abstract ListProperty<ComponentArtifactIdentifier> getArtifactIdentifiers();
 
     @InputFiles
+    @Optional
     public abstract ConfigurableFileCollection getArtifactFiles();
 
     @Input
+    @Optional
     public abstract Property<ResolvedComponentResult> getRootComponent();
 
     @OutputFile
+    @Optional
     public abstract RegularFileProperty getOutputFile();
 
 

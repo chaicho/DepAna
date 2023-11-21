@@ -1,5 +1,6 @@
 package nju.lab.DScheckerGradle.gradleplugins;
 
+import nju.lab.DScheckerGradle.gradleplugins.tasks.ProjectLevelSmellTask;
 import nju.lab.DScheckerGradle.gradleplugins.tasks.ReportArtifactMetadataTask;
 import nju.lab.DScheckerGradle.gradleplugins.tasks.ReportDependencyGraphTask;
 import nju.lab.DScheckerGradle.gradleplugins.tasks.BaseConflictTask;
@@ -44,6 +45,9 @@ public class DSchecker implements Plugin<Project> {
 //                task.getSourceFiles().setFrom(project.getExtensions().getByType(SourceSetContainer.class)
 //                                            .getByName("main").getAllJava().get());
             });
+            tasks.register("DScheckProject", ProjectLevelSmellTask.class, task -> {
+            return;
+          });
         });
         project.getTasks().register("artifacts-report", ReportArtifactMetadataTask.class, t -> {
             Provider<Set<ResolvedArtifactResult>> artifacts = project.getConfigurations().getByName("runtimeClasspath").getIncoming().getArtifacts().getResolvedArtifacts();
