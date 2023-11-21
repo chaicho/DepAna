@@ -7,6 +7,7 @@ import nju.lab.DSchecker.core.analyze.WrapperJarMissingSmell;
 import nju.lab.DSchecker.core.model.DepModel;
 import nju.lab.DSchecker.util.soot.TypeAna;
 import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
+import nju.lab.DScheckerGradle.core.analyze.GradleConflictLibrarySmell;
 import nju.lab.DScheckerGradle.core.analyze.GradleSharedLibrarySmell;
 import nju.lab.DScheckerGradle.model.DepJars;
 import nju.lab.DScheckerGradle.model.HostProjectInfo;
@@ -32,6 +33,9 @@ public abstract class ProjectLevelSmellTask extends BaseConflictTask {
     }
     @Override
     void execute() throws Exception {
+        if (getProject().getParent() != null) {
+            return;
+        }
         System.out.println("ProjectLevelSmellTask");
         initValues();
 
@@ -41,28 +45,24 @@ public abstract class ProjectLevelSmellTask extends BaseConflictTask {
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().setRootDir(project.getRootDir());
         HostProjectInfo.i().setModuleFile(project.getProjectDir());
-//        HostProjectInfo.i().setTestOutputDir(new File(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes"));
         HostProjectInfo.i().setBuildTestCp(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes");
         HostProjectInfo.i().setTestCompileSrcFiles(testSourceSet.getAllJava().getSrcDirs());
         HostProjectInfo.i().init(MyCallGraph.i(), DepJars.i());
 
-
         DepModel depModel = new DepModel(MyCallGraph.i(), DepJars.i(), HostProjectInfo.i());
 
-//        FullClassExtractor.setDepModel(depModel);
-
-
-//        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
         SmellFactory smellFactory = new SmellFactory();
         smellFactory.initOnly(HostProjectInfo.i(), DepJars.i(), MyCallGraph.i());
         WrapperConfMissingSmell wrapperConfMissingSmell = new WrapperConfMissingSmell();
         WrapperJarMissingSmell wrapperJarMissingSmell = new WrapperJarMissingSmell();
         WrapperJarAbnormalSmell wrapperJarAbnormalSmell = new WrapperJarAbnormalSmell();
         GradleSharedLibrarySmell gradleSharedLibrarySmell = new GradleSharedLibrarySmell(project, project.getChildProjects());
-
+        GradleConflictLibrarySmell gradleConflictLibrarySmell = new GradleConflictLibrarySmell(project, project.getChildProjects());
         smellFactory.addSmell(wrapperConfMissingSmell);
         smellFactory.addSmell(wrapperJarMissingSmell);
         smellFactory.addSmell(wrapperJarAbnormalSmell);
+        smellFactory.addSmell(gradleSharedLibrarySmell);
+        smellFactory.addSmell(gradleConflictLibrarySmell);
         smellFactory.detectAll();
         return;
     }
