@@ -185,7 +185,6 @@ public abstract class BaseConflictTask extends DefaultTask {
         artifactMap = initMapArtifactByIdentifiers();
 
         buildDir = project.getBuildDir();
-
         roots.add(project.getConfigurations().getByName("compileClasspath").getIncoming().getResolutionResult().getRoot());
         roots.add(project.getConfigurations().getByName("runtimeClasspath").getIncoming().getResolutionResult().getRoot());
         roots.add(project.getConfigurations().getByName("testCompileClasspath").getIncoming().getResolutionResult().getRoot());

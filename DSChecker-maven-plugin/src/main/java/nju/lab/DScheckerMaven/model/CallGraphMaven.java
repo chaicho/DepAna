@@ -7,6 +7,7 @@ public class CallGraphMaven  implements ICallGraph {
     private static CallGraphMaven INSTANCE;
 
     private CallGraphMaven() {
+        INSTANCE = null;
     }
 
     public static CallGraphMaven i() {
