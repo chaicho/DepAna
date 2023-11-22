@@ -174,7 +174,6 @@ public abstract class BaseConflictTask extends DefaultTask {
         testSourceSet = project.getExtensions().getByType(SourceSetContainer.class)
                     .getByName(SourceSet.TEST_SOURCE_SET_NAME);
 
-
         compileSrcDirs = mainSourceSet.getAllJava().getSrcDirs();
 
         // Get the output of the main source set
@@ -224,6 +223,12 @@ public abstract class BaseConflictTask extends DefaultTask {
         getApiElements();
 
         HostProjectInfo.i().setResultFileName("DScheckerResultModuleLevel.txt");
+        for (File compileSrcDir : compileSrcDirs) {
+            if (!compileSrcDir.exists()) {
+                log.error("compileSrcDir not exist: " + compileSrcDir.getAbsolutePath());
+                return;
+            }
+        }
         HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
         HostProjectInfo.i().setClassesDirs(classesDirs);
         HostProjectInfo.i().setBuildDir(buildDir);
