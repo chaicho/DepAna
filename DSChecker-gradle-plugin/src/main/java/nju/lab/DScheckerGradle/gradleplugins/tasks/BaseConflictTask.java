@@ -228,6 +228,7 @@ public abstract class BaseConflictTask extends DefaultTask {
                 return;
             }
         }
+        HostProjectInfo.i().init();
         HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
         HostProjectInfo.i().setClassesDirs(classesDirs);
         HostProjectInfo.i().setBuildDir(buildDir);

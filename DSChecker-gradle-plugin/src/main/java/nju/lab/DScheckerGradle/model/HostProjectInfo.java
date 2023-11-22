@@ -18,7 +18,9 @@ public class HostProjectInfo extends IHostProjectInfo {
     private String buildTestCp;
     private HostProjectInfo() {
     }
-
+    public static void init() {
+        instance = null;
+    }
     public static HostProjectInfo i() {
         if (instance == null) {
             instance = new HostProjectInfo();
