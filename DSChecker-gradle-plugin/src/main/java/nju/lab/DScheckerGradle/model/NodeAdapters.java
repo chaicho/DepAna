@@ -20,6 +20,9 @@ public class NodeAdapters {
     public static NodeAdapters i() {
         return instance;
     }
+    public static void reset() {
+        instance = null;
+    }
     private List<NodeAdapter> container;
     public Map<ComponentIdentifier, ResolvedArtifact> artifactMap;
     public NodeAdapter rootNodeAdapter;

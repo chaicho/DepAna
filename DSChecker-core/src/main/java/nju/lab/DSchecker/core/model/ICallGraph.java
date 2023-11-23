@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 
 public interface ICallGraph {
     // Record the possible methods that invoke specific classes.
-    Map<String , Set<SootMethod> > invokedMethods = new HashMap<String , Set<SootMethod>>();
-    CallGraph runtimeCallGraph = null;
-    CallGraph testCallGraph = null;
+    public Map<String , Set<SootMethod> > invokedMethods = new HashMap<String , Set<SootMethod>>();
+    public CallGraph runtimeCallGraph = null;
+    public CallGraph testCallGraph = null;
     public default Set<String> getSourceMethods (String className) {
         if (!invokedMethods.containsKey(className)) {
             return new HashSet<String>();

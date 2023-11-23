@@ -19,6 +19,9 @@ public class TypeAna extends AbstractSootAna{
         return instance;
     }
 
+    public static void clear() {
+        instance = null;
+    }
     /*
     Use the APITypeTransformer to get the ABI type of the AnalyzedClass
     */
@@ -38,13 +41,21 @@ public class TypeAna extends AbstractSootAna{
         addExcludeArgs(args);
 //        args.add("-no-bodies-for-excluded");
         APITypeTransformer apiTypeTransformer = new APITypeTransformer();
-        PackManager.v().getPack("wjtp").add(new Transform("wjtp.APIType", apiTypeTransformer));
-
+        if (PackManager.v().getPack("wjtp").get("wjtp.APIType") != null) {
+            System.out.println("-------------Remove-----------");
+            PackManager.v().getPack("wjtp").remove("wjtp.APIType");
+        }
+        try {
+            PackManager.v().getPack("wjtp").add(new Transform("wjtp.APIType", apiTypeTransformer));
+        } catch (Exception e){
+            System.out.println("-------------ClearTransformer-----------");
+            System.out.println(e);
+        }
         try {
             System.out.println(args);
             soot.Main.main(args.toArray(new String[0]));
-        }
-        catch (Exception e){
+            G.reset();
+        } catch (Exception e){
             System.out.println("-------------Reset-----------");
             G.reset();
             System.out.println(e);

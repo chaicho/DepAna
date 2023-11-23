@@ -41,7 +41,10 @@ public class DepJars implements IDepJars<DepJar> {
      * @throws Exception
      */
     public static void init(NodeAdapters nodeAdapters) throws Exception {
-            instance = new DepJars(nodeAdapters);
+        instance = new DepJars(nodeAdapters);
+    }
+    public static void reset() {
+        instance = null;
     }
     public void setProject(Project project) {
         this.project = project;

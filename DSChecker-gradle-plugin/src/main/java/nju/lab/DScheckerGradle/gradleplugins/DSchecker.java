@@ -8,6 +8,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
 import org.gradle.api.Transformer;
+import org.gradle.api.UnknownTaskException;
 import org.gradle.api.artifacts.ConfigurationContainer;
 import org.gradle.api.artifacts.ResolvableDependencies;
 import org.gradle.api.artifacts.component.ComponentArtifactIdentifier;
@@ -19,6 +20,8 @@ import org.gradle.api.file.ProjectLayout;
 import org.gradle.api.file.RegularFile;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.TaskContainer;
+import org.gradle.api.tasks.TaskProvider;
+import org.gradle.api.tasks.compile.JavaCompile;
 
 import java.util.Collection;
 import java.util.List;
@@ -44,10 +47,22 @@ public class DSchecker implements Plugin<Project> {
                 task.getOutputFile().set(project.getLayout().getBuildDirectory().file("DS.txt"));
 //                task.getSourceFiles().setFrom(project.getExtensions().getByType(SourceSetContainer.class)
 //                                            .getByName("main").getAllJava().get());
+                try {
+                    TaskProvider<JavaCompile> compileJavaTask = project.getTasks().named("compileJava", JavaCompile.class);
+                    task.dependsOn(compileJavaTask);
+                } catch (UnknownTaskException e) {
+                    System.out.println("Task with name 'compileJava' not found in project " + project.getName());
+                }
+                try {
+                    TaskProvider<JavaCompile> compileGeneratedJavaTask = project.getTasks().named("compileGeneratedJava", JavaCompile.class);
+                    task.dependsOn(compileGeneratedJavaTask);
+                } catch (UnknownTaskException e) {
+                    System.out.println("Task with name 'compileGeneratedJava' not found in project " + project.getName());
+                }
             });
             tasks.register("DScheckProject", ProjectLevelSmellTask.class, task -> {
-            return;
-          });
+                return;
+            });
         });
         project.getTasks().register("artifacts-report", ReportArtifactMetadataTask.class, t -> {
             Provider<Set<ResolvedArtifactResult>> artifacts = project.getConfigurations().getByName("runtimeClasspath").getIncoming().getArtifacts().getResolvedArtifacts();

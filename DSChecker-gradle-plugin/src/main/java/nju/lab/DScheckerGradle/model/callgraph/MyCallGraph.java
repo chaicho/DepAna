@@ -17,4 +17,8 @@ public class MyCallGraph  implements ICallGraph {
         return INSTANCE;
     }
 
+    public static void reset() {
+        INSTANCE = null;
+    }
+
 }

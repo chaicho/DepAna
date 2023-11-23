@@ -21,6 +21,9 @@ public class HostProjectInfo extends IHostProjectInfo {
     public static void init() {
         instance = null;
     }
+    public static void reset() {
+        instance =  null;
+    }
     public static HostProjectInfo i() {
         if (instance == null) {
             instance = new HostProjectInfo();
@@ -102,6 +105,7 @@ public class HostProjectInfo extends IHostProjectInfo {
             appropriateScopes.add("testImplementation");
             appropriateScopes.add("runtimeOnly");
             appropriateScopes.add("testRuntimeOnly");
+            appropriateScopes.add("api");
         }
         for (IDepJar depJar : usedDependenciesPerClass.get(className)) {
             if(appropriateScopes.contains(depJar.getScope()))
