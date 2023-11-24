@@ -24,6 +24,13 @@ public class LibraryClassConflictSmell extends BaseSmell {
                 continue;
             }
             Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(className);
+            Set<String> jarNames = new HashSet<>();
+            for (IDepJar depJar : depJars) {
+                if (jarNames.contains(depJar.getName())) {
+                    depJars.remove(depJar);
+                }
+                jarNames.add(depJar.getName());
+            }
             if (depJars.size() == 1 && containsHost(depJars)) {
 //                  The conflicting classes are in host jar, not in dependency.
                 continue;
