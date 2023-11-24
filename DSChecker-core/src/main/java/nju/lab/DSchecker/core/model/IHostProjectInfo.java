@@ -311,8 +311,10 @@ public abstract class IHostProjectInfo  {
         Set<IDepJar> depJars = new HashSet<>();
         for(String ABIName : ABIClasses){
             IDepJar dep = getSingleUsedDepFromClass(ABIName);
-            if(dep != null)
+            if(dep != null) {
                 depJars.add(dep);
+                dep.addClassToScene("abi", ABIName);
+            }
         }
         return depJars;
     }
