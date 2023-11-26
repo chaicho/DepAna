@@ -366,14 +366,26 @@ public class DepJar implements IDepJar {
      */
     public String getScope() {
         Set<String> scopes = new HashSet<String>();
+        Set<String> directScopes = new HashSet<String>();
         log.error(getArtifactId());
         log.error(getNodeAdapters().toString());
         for (NodeAdapter node : getNodeAdaptersWithSameGAC()) {
             if (node.getNodeDepth() == 1) {
-                return node.getScope();
+                directScopes.add(node.getScope());
             } else {
                 scopes.add(node.getScope());
             }
+        }
+        if (!directScopes.isEmpty()) {
+          if (directScopes.contains("compile")) {
+              return "compile";
+          } else if (directScopes.contains("runtime")) {
+              return "runtime";
+          } else if (directScopes.contains("provided")) {
+              return "provided";
+          } else if (directScopes.contains("test")) {
+              return "test";
+          }
         }
         if (scopes.contains("compile")) {
             return "compile";
