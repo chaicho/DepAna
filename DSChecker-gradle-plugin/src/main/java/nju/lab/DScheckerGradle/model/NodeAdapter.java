@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import static org.gradle.api.artifacts.result.ComponentSelectionCause.COMPOSITE_BUILD;
 import static org.gradle.api.artifacts.result.ComponentSelectionCause.CONFLICT_RESOLUTION;
 
 @Data
@@ -67,14 +68,16 @@ public class NodeAdapter {
             this.group = componentResult.getModuleVersion().getGroup();
             this.name = componentResult.getModuleVersion().getName();
             this.version = componentResult.getModuleVersion().getVersion();
+            if (version == "unspecified" && displayName.split(":").length == 3) {
+                this.version = displayName.split(":")[2];
+            }
         }
         else {
-
             if (displayName.split(":").length != 3) {
-                log.warn("Wrong Display name");
+                log.warn("Unstandard Display name");
                 this.group = displayName.split(":")[0];
                 this.name = displayName.split(":")[1];
-                this.version = "unspecified";
+                this.version = Objects.requireNonNull(componentResult.getModuleVersion()).getVersion();
             } else {
                 this.group = displayName.split(":")[0];
                 this.name = displayName.split(":")[1];
@@ -183,10 +186,25 @@ public class NodeAdapter {
                 .stream()
                 .filter(desc -> desc.getCause() != null)
                 .anyMatch(desc -> desc.getCause().equals(CONFLICT_RESOLUTION));
+        boolean containsCompositeBuildResolution = dependencyResult
+                .getSelected()
+                .getSelectionReason()
+                .getDescriptions()
+                .stream()
+                .filter(desc -> desc.getCause() != null)
+                .anyMatch(desc -> desc.getCause().equals(COMPOSITE_BUILD));
+        boolean isVersionRange = dependencyResult.getRequested().getDisplayName().contains("{");
+        isVersionRange |= displayName.split(":").length == 2;
+        if (isVersionRange) {
+            return true;
+        }
+        if (containsCompositeBuildResolution) {
+            return true;
+        }
         if(containsConflictResolution) {
             return dependencyResult.getRequested().matchesStrictly(dependencyResult.getSelected().getId());
         }
-        return true;
+        return dependencyResult.getRequested().matchesStrictly(dependencyResult.getSelected().getId());
     }
 
     public String getWholePath() {
@@ -199,6 +217,9 @@ public class NodeAdapter {
         return sb.toString();
     }
 
+    public boolean sameGAV(NodeAdapter nodeAdapter) {
+        return getGroupId().equals(nodeAdapter.getGroupId()) && getArtifactId().equals(nodeAdapter.getArtifactId()) && getVersion().equals(nodeAdapter.getVersion());
+    }
     public int getPriority() {
         if (isNodeSelected()) {
             return 1;

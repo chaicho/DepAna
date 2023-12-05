@@ -1,6 +1,11 @@
 package nju.lab.DScheckerGradle.gradleplugins.tasks;
 
 import lombok.extern.slf4j.Slf4j;
+import nju.lab.DSchecker.core.model.DepModel;
+import nju.lab.DSchecker.core.model.ICallGraph;
+import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
+import nju.lab.DScheckerGradle.core.analyze.BuildToolConflictDepSmell;
+import nju.lab.DScheckerGradle.core.analyze.GradleLibraryScopeMisuseSmell;
 import nju.lab.DScheckerGradle.model.DepJars;
 import nju.lab.DSchecker.core.analyze.SmellFactory;
 import nju.lab.DScheckerGradle.model.HostProjectInfo;
@@ -21,6 +26,7 @@ import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.*;
 import nju.lab.DScheckerGradle.util.GradleUtil;
 import nju.lab.DScheckerGradle.model.DepJar;
+import org.gradle.api.tasks.Optional;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -32,20 +38,26 @@ import java.util.*;
 public abstract class BaseConflictTask extends DefaultTask {
 
 
-    private SourceSet mainSourceSet;
-    private SourceSetOutput mainOutput;
-    private FileCollection classesDirs;
+    protected SourceSet mainSourceSet;
+    protected SourceSet testSourceSet;
+    protected SourceSetOutput mainOutput;
+    protected FileCollection classesDirs;
 
+    private List<ResolvedComponentResult> roots = new LinkedList<>();
     @Input
+    @Optional
     public abstract ListProperty<ComponentArtifactIdentifier> getArtifactIdentifiers();
 
     @InputFiles
+    @Optional
     public abstract ConfigurableFileCollection getArtifactFiles();
 
     @Input
+    @Optional
     public abstract Property<ResolvedComponentResult> getRootComponent();
 
     @OutputFile
+    @Optional
     public abstract RegularFileProperty getOutputFile();
 
 
@@ -60,15 +72,9 @@ public abstract class BaseConflictTask extends DefaultTask {
     private FileCollection fileCollection;
     private Set<ResolvedDependency> firstLevelModuleDependencies;
     private long systemFileSize;
-
     private long allJarNum;
     private int systemSize;
-
-    public String target = "default";
-
-
     public Configuration configuration;
-
     public Project project;
     protected Map<ComponentIdentifier, Set<ResolvedArtifact> >  artifactMap;
     public String configurationName = "runtimeClasspath";
@@ -99,12 +105,23 @@ public abstract class BaseConflictTask extends DefaultTask {
     }
     protected  Map<ComponentIdentifier, Set<ResolvedArtifact> >  initMapArtifactByIdentifiers() {
         Map<ComponentIdentifier, Set<ResolvedArtifact> >  map = new HashMap<>();
-        for (ResolvedArtifact artifact : resolvedArtifacts) {
-            ComponentIdentifier identifier = artifact.getId().getComponentIdentifier();
-            if (!map.containsKey(identifier)) {
-                map.put(identifier, new HashSet<>());
+        Set<ResolvedArtifact> compileResolvedArtifacts = project.getConfigurations().getByName("compileClasspath").getResolvedConfiguration().getResolvedArtifacts();
+        Set<ResolvedArtifact> runtimeResolvedArtifacts = project.getConfigurations().getByName("runtimeClasspath").getResolvedConfiguration().getResolvedArtifacts();
+        Set<ResolvedArtifact> testCompileResolvedArtifacts = project.getConfigurations().getByName("testCompileClasspath").getResolvedConfiguration().getResolvedArtifacts();
+        Set<ResolvedArtifact> testRuntimeResolvedArtifacts = project.getConfigurations().getByName("testRuntimeClasspath").getResolvedConfiguration().getResolvedArtifacts();
+        List<Set<ResolvedArtifact>> resolvedArtifactsList = new ArrayList<>();
+        resolvedArtifactsList.add(compileResolvedArtifacts);
+        resolvedArtifactsList.add(runtimeResolvedArtifacts);
+        resolvedArtifactsList.add(testCompileResolvedArtifacts);
+        resolvedArtifactsList.add(testRuntimeResolvedArtifacts);
+        for (Set<ResolvedArtifact> resolvedArtifacts : resolvedArtifactsList) {
+            for (ResolvedArtifact artifact : resolvedArtifacts) {
+                ComponentIdentifier identifier = artifact.getId().getComponentIdentifier();
+                if (!map.containsKey(identifier)) {
+                    map.put(identifier, new HashSet<>());
+                }
+                map.get(identifier).add(artifact);
             }
-            map.get(identifier).add(artifact);
         }
         return map;
     }
@@ -155,6 +172,8 @@ public abstract class BaseConflictTask extends DefaultTask {
 
         mainSourceSet = project.getExtensions().getByType(SourceSetContainer.class)
                     .getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+        testSourceSet = project.getExtensions().getByType(SourceSetContainer.class)
+                    .getByName(SourceSet.TEST_SOURCE_SET_NAME);
 
         compileSrcDirs = mainSourceSet.getAllJava().getSrcDirs();
 
@@ -167,7 +186,10 @@ public abstract class BaseConflictTask extends DefaultTask {
         artifactMap = initMapArtifactByIdentifiers();
 
         buildDir = project.getBuildDir();
-
+        roots.add(project.getConfigurations().getByName("compileClasspath").getIncoming().getResolutionResult().getRoot());
+        roots.add(project.getConfigurations().getByName("runtimeClasspath").getIncoming().getResolutionResult().getRoot());
+        roots.add(project.getConfigurations().getByName("testCompileClasspath").getIncoming().getResolutionResult().getRoot());
+        roots.add(project.getConfigurations().getByName("testRuntimeClasspath").getIncoming().getResolutionResult().getRoot());
     }
 
 
@@ -181,55 +203,76 @@ public abstract class BaseConflictTask extends DefaultTask {
         HostProjectInfo.i().setApiDepJars(apiArtifacts);
 
     }
+
+    public void resetAll() {
+        HostProjectInfo.reset();
+        NodeAdapters.reset();
+        DepJars.reset();
+        MyCallGraph.reset();
+    }
     @TaskAction
     void execute() throws Exception {
+        try {
 //        log.warn("Executing");
-        initGlobalValues();
-        GradleUtil.init(this);
-        NodeAdapters.i().init(getRootComponent().get(),artifactMap);
-        DepJars.init(NodeAdapters.i());
-        validateSysSize();
-//        System.out.println("Calculate classes");
+            initGlobalValues();
+            GradleUtil.init(this);
+//        NodeAdapters.i().init(getRootComponent().get(),artifactMap);
+            for (ResolvedComponentResult root : roots) {
+                NodeAdapters.i().init(root, artifactMap);
+            }
+            DepJars.init(NodeAdapters.i());
+            DepJars.i().setProject(project);
+            DepJars.i().initDepJarsScope();
+            DepJars.i().initDepJarsWithScenes();
 
-//        AllCls.i().init(DepJars.i());
-        getApiElements();
+//        DepJars.i().initDepJarsWithScene("runtimeClasspath");
+            validateSysSize();
 
-        HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
-        HostProjectInfo.i().setClassesDirs(classesDirs);
-        HostProjectInfo.i().setBuildDir(buildDir);
-        HostProjectInfo.i().setRootDir(project.getRootDir());
+            getApiElements();
 
-        TypeAna.i().setHostProjectInfo(HostProjectInfo.i());
-        TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
+            for (File compileSrcDir : compileSrcDirs) {
+                if (!compileSrcDir.exists()) {
+                    log.error("compileSrcDir not exist: " + compileSrcDir.getAbsolutePath());
+                    resetAll();
+                    return;
+                }
+            }
+            HostProjectInfo.i().init();
+            HostProjectInfo.i().setResultFileName("DScheckerResultModuleLevel.txt");
+            HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
+            HostProjectInfo.i().setClassesDirs(classesDirs);
+            HostProjectInfo.i().setBuildDir(buildDir);
+            HostProjectInfo.i().setRootDir(project.getRootDir());
+            HostProjectInfo.i().setModuleFile(project.getProjectDir());
+//        HostProjectInfo.i().setTestOutputDir(new File(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes"));
+            HostProjectInfo.i().setBuildTestCp(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes");
+            HostProjectInfo.i().setTestCompileSrcFiles(testSourceSet.getAllJava().getSrcDirs());
+            HostProjectInfo.i().init(MyCallGraph.i(), DepJars.i());
+            HostProjectInfo.i().buildDepClassMap();
 
-        HostProjectInfo.i().init(MyCallGraph.i(), DepJars.i());
-        HostProjectInfo.i().buildDepClassMap();
+            TypeAna.i().setHostProjectInfo(HostProjectInfo.i());
+            TypeAna.i().analyze(DepJars.i().getUsedJarPaths());
+
+            DepModel depModel = new DepModel(MyCallGraph.i(), DepJars.i(), HostProjectInfo.i());
+
+            FullClassExtractor.setDepModel(depModel);
 
 
 //        TypeAna.i().getABIType(DepJars.i().getUsedJarPaths());
-        SmellFactory smellFactory = new SmellFactory();
-        smellFactory.init(HostProjectInfo.i(), DepJars.i(), MyCallGraph.i());
-        smellFactory.detectAll();
+            SmellFactory smellFactory = new SmellFactory();
+            smellFactory.init(HostProjectInfo.i(), DepJars.i(), MyCallGraph.i());
+            GradleLibraryScopeMisuseSmell gradleScopeSmell = new GradleLibraryScopeMisuseSmell();
+            BuildToolConflictDepSmell buildToolConflictDepSmell = new BuildToolConflictDepSmell();
+            smellFactory.addSmell(gradleScopeSmell);
+            smellFactory.addSmell(buildToolConflictDepSmell);
+            smellFactory.detectAll();
 
-
-
-
-
-        File outputFile = getOutputFile().getAsFile().get();
-
-        try ( PrintWriter writer = new PrintWriter(new FileWriter(outputFile))){
-            writer.println("=================ReportComponent===================");
-            Set<ResolvedComponentResult> seen = new HashSet<>();
-            reportComponent(root, writer, seen, "");
-
+            resetAll();
+        } catch (Exception e) {
+            resetAll();
         }
-
-//        Set<ResolvedComponentResult> seen = new HashSet<>();
-
-
-
-
     }
+
     private void projectInfo(PrintWriter writer){
         writer.println("========================================");
         firstLevelModuleDependencies.forEach(dep -> {

@@ -1,1 +1,0 @@
-include(":DSChecker-gradle-plugin")

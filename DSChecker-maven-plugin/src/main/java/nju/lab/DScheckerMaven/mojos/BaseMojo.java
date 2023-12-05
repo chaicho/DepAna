@@ -4,15 +4,13 @@ package nju.lab.DScheckerMaven.mojos;
 import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.analyze.SmellFactory;
 import nju.lab.DSchecker.core.model.DepModel;
-import nju.lab.DSchecker.core.model.IDepJar;
 import nju.lab.DSchecker.util.monitor.PerformanceMonitor;
 import nju.lab.DSchecker.util.soot.TypeAna;
 import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
-import nju.lab.DScheckerMaven.core.analyze.GradleConflictDepSmell;
+import nju.lab.DScheckerMaven.core.analyze.BuildToolConflictDepSmell;
 import nju.lab.DScheckerMaven.core.analyze.MavenLibraryScopeConflictSmell;
 import nju.lab.DScheckerMaven.model.*;
 import nju.lab.DScheckerMaven.core.analyze.MavenLibraryScopeMisuseSmell;
-import nju.lab.DScheckerMaven.util.Conf;
 import nju.lab.DScheckerMaven.util.MavenUtil;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.handler.manager.ArtifactHandlerManager;
@@ -27,11 +25,9 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
-import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -171,11 +167,11 @@ public class BaseMojo extends AbstractMojo {
             SmellFactory smellFactory = new SmellFactory();
             smellFactory.init(HostProjectInfo.i(), DepJars.i(), CallGraphMaven.i());
             MavenLibraryScopeMisuseSmell mavenLibraryScopeMisuseSmell = new MavenLibraryScopeMisuseSmell();
-            GradleConflictDepSmell gradleConflictDepSmell = new GradleConflictDepSmell();
+            BuildToolConflictDepSmell buildToolConflictDepSmell = new BuildToolConflictDepSmell();
             MavenLibraryScopeConflictSmell mavenLibraryScopeConflictSmell = new MavenLibraryScopeConflictSmell();
             smellFactory.addSmell(mavenLibraryScopeConflictSmell);
             smellFactory.addSmell(mavenLibraryScopeMisuseSmell);
-            smellFactory.addSmell(gradleConflictDepSmell);
+            smellFactory.addSmell(buildToolConflictDepSmell);
             smellFactory.detectAll();
             PerformanceMonitor.stop("detectSmells");
             PerformanceMonitor.close();

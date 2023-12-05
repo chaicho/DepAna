@@ -23,17 +23,15 @@ public class DepJar implements IDepJar {
     private String version;// version
     private String classifier;
     private List<String> jarFilePaths;
-
     private File file;
     private Set<String> allCls;
     private Map<String, ClassVO> clsTb = null;// all class in jar
-
     private Set<NodeAdapter> nodeAdapters;// all
     private Map<String, Collection<String>> allRefedCls;
     private int priority;
     private HashSet<String> allMthd;
-
-    
+    private Map<String, Set<String>> classesUsedScopes;
+    public String scope;
 
     public DepJar(String groupId, String artifactId, String version, String classifier, List<String> jarFilePaths,int priority,int depth) {
         this.groupId = groupId;
@@ -43,6 +41,12 @@ public class DepJar implements IDepJar {
         this.jarFilePaths = jarFilePaths;
         this.priority = priority;
         this.depth = depth;
+
+        classesUsedScopes = new HashMap<>();
+        classesUsedScopes.put("compile", new HashSet<>());
+        classesUsedScopes.put("runtime", new HashSet<>());
+        classesUsedScopes.put("test", new HashSet<>());
+        classesUsedScopes.put("abi", new HashSet<>())
     }
 
     public String getGroupId() {
@@ -57,7 +61,9 @@ public class DepJar implements IDepJar {
     public String getClassifier() {
         return classifier;
     }
-    public int getDepth() { return depth; }
+    public int getDepth() {
+        return depth;
+    }
 
     /**
      * @param useTarget:
@@ -106,12 +112,33 @@ public class DepJar implements IDepJar {
         return groupId.equals(groupId2) && artifactId.equals(artifactId2) && version.equals(version2)
                 && classifier.equals(classifier2);
     }
+
     public boolean isSelf(DepJar dep) {
         return isSame(dep.getGroupId(), dep.getArtifactId(), dep.getVersion(), dep.getClassifier());
     }
+
+    /**
+     * @return groupId:artifactId:version
+     */
     public String getDisplayName(){
-        return getGroupId() +":" + getArtifactId() + ":" + getVersion() + ":" + getClassifier();
+        return getGroupId() +":" + getArtifactId() + ":" + getVersion();
     }
+
+    @Override
+    public String getUsedDepTrail() {
+        StringBuilder sb = new StringBuilder();
+        for (NodeAdapter node : getNodeAdapters()) {
+            if (!node.isNodeSelected()) {
+                continue;
+            }
+            sb.append("  [");
+            sb.append(node.getWholePath());
+            sb.append("]");
+            break;
+        }
+        return sb.toString();
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof DepJar) {
@@ -153,16 +180,21 @@ public class DepJar implements IDepJar {
     /**
      * @return the import path of depJar.
      */
+    @Override
     public String getDepTrail() {
-        StringBuilder sb = new StringBuilder(toString() + ":");
+        StringBuilder sb = new StringBuilder();
         for (NodeAdapter node : getNodeAdapters()) {
-            if (node.isNodeSelected()) {
-                sb.append("  [");
-                sb.append(node.getWholePath());
-                sb.append("]");
-            }
+            sb.append("  [");
+            sb.append(node.getWholePath());
+            sb.append("]");
+            break;
         }
         return sb.toString();
+    }
+
+    @Override
+    public Set<String> getDepTrails() {
+        return null;
     }
 
 
@@ -178,9 +210,52 @@ public class DepJar implements IDepJar {
         }
         return null;
     }
-    public String getScope(){
-       return "implementation";
+    public String getScope() {
+       return scope;
     }
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+
+    @Override
+    public Set<String> getScopes() {
+        return null;
+    }
+
+    @Override
+    public Map<String, Set<String>> getUsedClasses() {
+        return null;
+    }
+
+    @Override
+    public Set<String> getUsedClassesAtScene(String scene) {
+        if (classesUsedScopes.containsKey(scene)) {
+            return classesUsedScopes.get(scene);
+        } else {
+            return new HashSet<>();
+        }
+    }
+    @Override
+    public void addClassToScene(String scene, String cls) {
+        if (classesUsedScopes.containsKey(scene)) {
+            classesUsedScopes.get(scene).add(cls);
+        } else {
+            Set<String> clsSet = new HashSet<>();
+            clsSet.add(cls);
+            classesUsedScopes.put(scene, clsSet);
+        }
+    }
+
+    public String getUsedClassesAsString() {
+        StringBuilder sb = new StringBuilder();
+        for (String scene : classesUsedScopes.keySet()) {
+            sb.append("		scene " + scene + " : ");
+            sb.append(classesUsedScopes.get(scene).toString());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
     public Set<NodeAdapter> getNodeAdapters() {
         return nodeAdapters;
     }
@@ -312,5 +387,8 @@ public class DepJar implements IDepJar {
         return fatherJars;
     }
 
+    public boolean isSame(String groupId, String artifactId, String version) {
+        return this.groupId.equals(groupId) && this.artifactId.equals(artifactId) && this.version.equals(version);
+    }
 }
 

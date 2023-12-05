@@ -2,6 +2,7 @@ package nju.lab.DSchecker.core.model;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.util.javassist.GetRefedClasses;
 import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
 import soot.SourceLocator;
@@ -10,6 +11,7 @@ import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public abstract class IHostProjectInfo  {
 
     protected IDepJars<? extends IDepJar> depJars;
@@ -67,9 +69,11 @@ public abstract class IHostProjectInfo  {
      */
     public void buildDepClassMap() {
         for (IDepJar depJar : depJars.getSeqUsedDepJars()) {
+            System.out.println(depJar.getDisplayName());
             for (String className : depJar.getAllCls()) {
                 usedDependenciesPerClass.put(className, depJar);
             }
+            System.out.println(depJar.getAllCls());
         }
     }
 
@@ -132,7 +136,12 @@ public abstract class IHostProjectInfo  {
             return null;
         return usedDependenciesPerClass.get(className).iterator().next();
     }
-
+    /**
+     * This method is used to get the first used Depjar that a class belongs to with the target scene.
+     * @param className
+     * @param scene
+     * @return
+     */
     public IDepJar getFirstUsedDepFromClassWithTargetScene(String className, String scene) {
         if(usedDependenciesPerClass.get(className).size() == 0)
             return null;
@@ -156,7 +165,11 @@ public abstract class IHostProjectInfo  {
             if(appropriateScopes.contains(depJar.getScope()))
                 return depJar;
         }
-        return null;
+        // When reach here, it means that there is no class at given scene, so it means that there should be a scope problem
+        // We return the first one, though not in the scope.
+        IDepJar depJar = usedDependenciesPerClass.get(className).iterator().next();
+        log.warn("Class " + className + " is not in the scene " + scene + " but in " + depJar.getScope());
+        return depJar;
     }
     /**
      * Get the single used Depjar that a class belongs to since there are multiple classes with the same name.
@@ -260,12 +273,15 @@ public abstract class IHostProjectInfo  {
         Set<IDepJar> ret = new java.util.HashSet<>();
         for (String className : reachableClasses) {
             IDepJar depJar = getFirstUsedDepFromClassWithTargetScene(className,"runtime");
-            if (depJar != null) {
+            if (depJar != null && !callGraph.getSourceMethods(className).isEmpty()) {
                 ret.add(depJar);
                 depJar.addClassToScene("runtime", className);
                 System.out.println(className + " is reachable by methods");
                 System.out.println(callGraph.getSourceMethods(className));
                 System.out.println(depJar.getDisplayName());
+            }
+            else {
+                log.warn("No depjar for " + className);
             }
         }
         return ret;
@@ -295,8 +311,10 @@ public abstract class IHostProjectInfo  {
         Set<IDepJar> depJars = new HashSet<>();
         for(String ABIName : ABIClasses){
             IDepJar dep = getSingleUsedDepFromClass(ABIName);
-            if(dep != null)
+            if(dep != null) {
                 depJars.add(dep);
+                dep.addClassToScene("abi", ABIName);
+            }
         }
         return depJars;
     }

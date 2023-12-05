@@ -2,8 +2,6 @@ package nju.lab.DScheckerMaven.core.analyze;
 
 import nju.lab.DSchecker.core.analyze.BaseSmell;
 import nju.lab.DSchecker.core.model.IDepJar;
-import nju.lab.DSchecker.core.model.IHostProjectInfo;
-import nju.lab.DScheckerMaven.model.DepJar;
 import nju.lab.DScheckerMaven.util.GradleDependencyTreeFetcher;
 
 import java.io.File;
@@ -11,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class GradleConflictDepSmell extends BaseSmell {
+public class BuildToolConflictDepSmell extends BaseSmell {
     @Override
     public void detect() {
         appendToResult("========GradleConflictDepSmell========");

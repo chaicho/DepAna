@@ -24,7 +24,7 @@ public class HostClassSmell extends BaseSmell{
                 continue;
             }
             Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(hostClass);
-            if(depJars.size() == 1 && containsHost(depJars)){
+            if((depJars.size() == 1 && containsHost(depJars)) || depJars.size() == 0){
                 continue;
             }
             List<IDepJar> depJarSets = new ArrayList<>();
@@ -37,6 +37,9 @@ public class HostClassSmell extends BaseSmell{
 
         for(List<IDepJar> depJarSets : jarToDuplicateClassMap.keySet()) {
             Set<String> duplicateClasses = jarToDuplicateClassMap.get(depJarSets);
+            if (depJarSets.size() == 0) {
+                continue;
+            }
             appendToResult("Host Project");
             for (IDepJar depJar : depJarSets) {
                 log.warn("Dep " + depJar.getSig());

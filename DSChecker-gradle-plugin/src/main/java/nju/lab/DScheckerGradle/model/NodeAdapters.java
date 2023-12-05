@@ -20,6 +20,9 @@ public class NodeAdapters {
     public static NodeAdapters i() {
         return instance;
     }
+    public static void reset() {
+        instance = null;
+    }
     private List<NodeAdapter> container;
     public Map<ComponentIdentifier, ResolvedArtifact> artifactMap;
     public NodeAdapter rootNodeAdapter;
@@ -27,14 +30,23 @@ public class NodeAdapters {
     private NodeAdapters() {
         container = new ArrayList<NodeAdapter>();
     }
-
+    public NodeAdapter getNodeAdapter(NodeAdapter cur, NodeAdapter parent) {
+        for (NodeAdapter nodeAdapter : container) {
+            if (nodeAdapter == null) {
+                continue;
+            }
+            if(nodeAdapter.sameGAV(cur) && nodeAdapter.getParent() == parent) {
+                return nodeAdapter;
+            }
+        }
+        return null;
+    }
     public static void init(ResolvedComponentResult root, Map<ComponentIdentifier, Set<ResolvedArtifact>> newArtifactMap) {
         if(instance == null) {
             instance = new NodeAdapters();
-            Set<ResolvedComponentResult> seen = new HashSet<>();
-            walk(root,newArtifactMap,seen,1,null);
         }
-
+        Set<ResolvedComponentResult> seen = new HashSet<>();
+        walk(root,newArtifactMap,seen,1,null);
     }
     public void addNodeAdapter(NodeAdapter nodeAdapter) {
         container.add(nodeAdapter);
@@ -48,16 +60,22 @@ public class NodeAdapters {
                     ResolvedComponentResult selectedComponent = resolvedDependency.getSelected();
                     Set<ResolvedArtifact> artifacts = newArtifactMap.get(selectedComponent.getId());
                     NodeAdapter nodeAdapter =  new NodeAdapter(resolvedDependency.getSelected(),artifacts, resolvedDependency, dep, resolvedDependency.getRequested(),parent);
-                    i().container.add(nodeAdapter);
+                    NodeAdapter existedNodeAdapter = i().getNodeAdapter(nodeAdapter, parent);
+                    if (existedNodeAdapter != null) {
+                        nodeAdapter = existedNodeAdapter;
+                    }
+                    else {
+                        i().container.add(nodeAdapter);
+                    }
                     if(nodeAdapter.isNodeSelected()) {
                         walk(selectedComponent, newArtifactMap, seen, dep + 1, nodeAdapter);
                     }
                     else{
-                        //                        Artifact Unresolved, the node is not selected.
+                        // Artifact Unresolved, the node is not selected.
                         ComponentSelector selector = resolvedDependency.getRequested();
                         if(selector instanceof ModuleComponentSelector){
                             ModuleComponentSelector moduleComponentSelector = (ModuleComponentSelector) selector;
-                            GradleUtil.i().resolveArtifact(selector.getDisplayName(),nodeAdapter);
+                            // GradleUtil.i().resolveArtifact(selector.getDisplayName(),nodeAdapter);
                         } else if (selector instanceof ProjectComponentSelector) {
 //                            TODO
                         }
