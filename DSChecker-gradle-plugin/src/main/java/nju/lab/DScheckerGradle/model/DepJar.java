@@ -46,7 +46,7 @@ public class DepJar implements IDepJar {
         classesUsedScopes.put("compile", new HashSet<>());
         classesUsedScopes.put("runtime", new HashSet<>());
         classesUsedScopes.put("test", new HashSet<>());
-        classesUsedScopes.put("abi", new HashSet<>())
+        classesUsedScopes.put("abi", new HashSet<>());
     }
 
     public String getGroupId() {

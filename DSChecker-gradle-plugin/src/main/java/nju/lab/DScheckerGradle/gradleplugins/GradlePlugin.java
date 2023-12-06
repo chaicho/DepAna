@@ -35,13 +35,13 @@ public abstract class GradlePlugin implements Plugin<Project> {
 
             tasks.register("graphResolvedComponentsAndFiles", GraphResolvedComponentsAndFiles.class, task -> {
 
-                ResolvableDependencies resolvableDependencies = configurations.getByName("compileClasspath").getIncoming();
-                Provider<Set<ResolvedArtifactResult>> resolvedArtifacts = resolvableDependencies.getArtifacts().getResolvedArtifacts();
-                task.getArtifactFiles().from(resolvableDependencies.getArtifacts().getArtifactFiles());
-                task.getArtifactIdentifiers().set(resolvedArtifacts.map(result -> result.stream().map(ResolvedArtifactResult::getId).collect(toList())));
-                task.getRootComponent().set(resolvableDependencies.getResolutionResult().getRootComponent());
+                // ResolvableDependencies resolvableDependencies = configurations.getByName("compileClasspath").getIncoming();
+                // Provider<Set<ResolvedArtifactResult>> resolvedArtifacts = resolvableDependencies.getArtifacts().getResolvedArtifacts();
+                // task.getArtifactFiles().from(resolvableDependencies.getArtifacts().getArtifactFiles());
+                // task.getArtifactIdentifiers().set(resolvedArtifacts.map(result -> result.stream().map(ResolvedArtifactResult::getId).collect(toList())));
+                // task.getRootComponent().set(resolvableDependencies.getResolutionResult().getRootComponent());
 
-                task.getOutputFile().set(layout.getBuildDirectory().file(task.getName() + "/report.txt"));
+                // task.getOutputFile().set(layout.getBuildDirectory().file(task.getName() + "/report.txt"));
             });
 
 

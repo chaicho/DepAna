@@ -64,6 +64,7 @@ public class DepJars implements IDepJars<DepJar> {
 
     public void initDepJarsScope() {
         HashMap<String, Set<String>> scopeToDepNames = new HashMap<>();
+        log.info("initDepJarsScope");
         for (Configuration configuration : project.getConfigurations()) {
             if (!configuration.isCanBeConsumed() && !configuration.isCanBeResolved()) {
                 log.error("configuration: " + configuration.getName());

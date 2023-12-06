@@ -38,13 +38,13 @@ public class DSchecker implements Plugin<Project> {
             ConfigurationContainer configurations = project.getConfigurations();
             TaskContainer tasks = project.getTasks();
             tasks.register("DScheck", BaseConflictTask.class, task->{
-                ResolvableDependencies resolvableDependencies = configurations.getByName("compileClasspath").getIncoming();
-                Provider<Set<ResolvedArtifactResult>> resolvedArtifacts = resolvableDependencies.getArtifacts().getResolvedArtifacts();
+                // ResolvableDependencies resolvableDependencies = configurations.getByName("compileClasspath").getIncoming();
+                // Provider<Set<ResolvedArtifactResult>> resolvedArtifacts = resolvableDependencies.getArtifacts().getResolvedArtifacts();
 
-                task.getArtifactFiles().from(resolvableDependencies.getArtifacts().getArtifactFiles());
-                task.getArtifactIdentifiers().set(resolvedArtifacts.map(result -> result.stream().map(ResolvedArtifactResult::getId).collect(toList())));
-                task.getRootComponent().set(resolvableDependencies.getResolutionResult().getRootComponent());
-                task.getOutputFile().set(project.getLayout().getBuildDirectory().file("DS.txt"));
+                // task.getArtifactFiles().from(resolvableDependencies.getArtifacts().getArtifactFiles());
+                // task.getArtifactIdentifiers().set(resolvedArtifacts.map(result -> result.stream().map(ResolvedArtifactResult::getId).collect(toList())));
+                // task.getRootComponent().set(resolvableDependencies.getResolutionResult().getRootComponent());
+                // task.getOutputFile().set(project.getLayout().getBuildDirectory().file("DS.txt"));
 //                task.getSourceFiles().setFrom(project.getExtensions().getByType(SourceSetContainer.class)
 //                                            .getByName("main").getAllJava().get());
                 try {
@@ -64,20 +64,20 @@ public class DSchecker implements Plugin<Project> {
                 return;
             });
         });
-        project.getTasks().register("artifacts-report", ReportArtifactMetadataTask.class, t -> {
-            Provider<Set<ResolvedArtifactResult>> artifacts = project.getConfigurations().getByName("runtimeClasspath").getIncoming().getArtifacts().getResolvedArtifacts();
-            t.getArtifactIds().set(artifacts.map(new IdExtractor()));
-            t.getArtifactVariants().set(artifacts.map(new VariantExtractor()));
-            t.getArtifactFiles().set(artifacts.map(new FileExtractor(project.getLayout())));
-            t.getOutputFile().set(project.getLayout().getBuildDirectory().file("artifacts.txt"));
-        });
+//         project.getTasks().register("artifacts-report", ReportArtifactMetadataTask.class, t -> {
+//             Provider<Set<ResolvedArtifactResult>> artifacts = project.getConfigurations().getByName("runtimeClasspath").getIncoming().getArtifacts().getResolvedArtifacts();
+//             t.getArtifactIds().set(artifacts.map(new IdExtractor()));
+//             t.getArtifactVariants().set(artifacts.map(new VariantExtractor()));
+//             t.getArtifactFiles().set(artifacts.map(new FileExtractor(project.getLayout())));
+//             t.getOutputFile().set(project.getLayout().getBuildDirectory().file("artifacts.txt"));
+//         });
 
-//
-        project.getTasks().register("graph-report", ReportDependencyGraphTask.class, t -> {
-            Provider<ResolvedComponentResult> rootComponent = project.getConfigurations().getByName("runtimeClasspath").getIncoming().getResolutionResult().getRootComponent();
-            t.getRootComponent().set(rootComponent);
-            t.getOutputFile().set(project.getLayout().getBuildDirectory().file("graph.txt"));
-        });
+// //
+//         project.getTasks().register("graph-report", ReportDependencyGraphTask.class, t -> {
+//             Provider<ResolvedComponentResult> rootComponent = project.getConfigurations().getByName("runtimeClasspath").getIncoming().getResolutionResult().getRootComponent();
+//             t.getRootComponent().set(rootComponent);
+//             t.getOutputFile().set(project.getLayout().getBuildDirectory().file("graph.txt"));
+//         });
     }
 
     static class IdExtractor implements Transformer<List<ComponentArtifactIdentifier>, Collection<ResolvedArtifactResult>> {
