@@ -92,11 +92,15 @@ public class HostProjectInfo extends IHostProjectInfo {
             appropriateScopes.add("implementation");
             appropriateScopes.add("api");
             appropriateScopes.add("compileOnlyApi");
+            appropriateScopes.add("compile");
         }
         else if (scene == "runtime") {
             appropriateScopes.add("runtimeOnly");
             appropriateScopes.add("implementation");
             appropriateScopes.add("api");
+            appropriateScopes.add("compileOnlyApi");
+            appropriateScopes.add("runtime");
+            appropriateScopes.add("compile");
         }
         else if (scene == "test") {
             appropriateScopes.add("compileOnlyApi");
@@ -106,6 +110,11 @@ public class HostProjectInfo extends IHostProjectInfo {
             appropriateScopes.add("runtimeOnly");
             appropriateScopes.add("testRuntimeOnly");
             appropriateScopes.add("api");
+            appropriateScopes.add("testCompile");
+            appropriateScopes.add("testRuntime");
+            appropriateScopes.add("test");
+            appropriateScopes.add("compile");
+            appropriateScopes.add("runtime");
         }
         for (IDepJar depJar : usedDependenciesPerClass.get(className)) {
             if(appropriateScopes.contains(depJar.getScope()))
