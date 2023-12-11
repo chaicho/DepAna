@@ -24,6 +24,9 @@ public class UnUsedSmell extends BaseSmell{
 
         appendToResult("========UnUsedSmell========");
         for (IDepJar dep : allDirectDepJars) {
+                if (dep.getScope() == null ) {
+                    return;
+                }
                 log.warn("UnUsed Smell: " + dep.getDisplayName());
                 appendToResult("UnUsed Smell: " + dep.getDisplayName());
                 appendToResult("    Dep scope: " + dep.getScope());
