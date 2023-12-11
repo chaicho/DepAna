@@ -2,7 +2,6 @@ package nju.lab.DScheckerGradle.gradleplugins.tasks;
 
 import lombok.extern.slf4j.Slf4j;
 import nju.lab.DSchecker.core.model.DepModel;
-import nju.lab.DSchecker.core.model.ICallGraph;
 import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
 import nju.lab.DScheckerGradle.core.analyze.BuildToolConflictDepSmell;
 import nju.lab.DScheckerGradle.core.analyze.GradleLibraryScopeMisuseSmell;
@@ -15,23 +14,17 @@ import nju.lab.DSchecker.util.soot.TypeAna;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.*;
-import org.gradle.api.artifacts.component.ComponentArtifactIdentifier;
 import org.gradle.api.artifacts.component.ComponentIdentifier;
 import org.gradle.api.artifacts.result.*;
-import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
-import org.gradle.api.file.RegularFileProperty;
-import org.gradle.api.provider.ListProperty;
-import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.*;
 import nju.lab.DScheckerGradle.util.GradleUtil;
 import nju.lab.DScheckerGradle.model.DepJar;
-import org.gradle.api.tasks.Optional;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -41,26 +34,9 @@ public abstract class BaseConflictTask extends DefaultTask {
     protected SourceSet mainSourceSet;
     protected SourceSet testSourceSet;
     protected SourceSetOutput mainOutput;
-    protected FileCollection classesDirs;
+    protected FileCollection mainClassesDir;
 
     private List<ResolvedComponentResult> roots = new LinkedList<>();
-    @Input
-    @Optional
-    public abstract ListProperty<ComponentArtifactIdentifier> getArtifactIdentifiers();
-
-    @InputFiles
-    @Optional
-    public abstract ConfigurableFileCollection getArtifactFiles();
-
-    @Input
-    @Optional
-    public abstract Property<ResolvedComponentResult> getRootComponent();
-
-    @OutputFile
-    @Optional
-    public abstract RegularFileProperty getOutputFile();
-
-
 //    @InputFiles
 //    public abstract ConfigurableFileCollection getSourceFiles();
 
@@ -94,15 +70,15 @@ public abstract class BaseConflictTask extends DefaultTask {
         super();
     }
 
-    private Map<ComponentIdentifier, File> filesByIdentifiers() {
-        Map<ComponentIdentifier, File> map = new HashMap<>();
-        List<ComponentArtifactIdentifier> identifiers = getArtifactIdentifiers().get();
-        List<File> files = new ArrayList<>(getArtifactFiles().getFiles());
-        for (int index = 0; index < identifiers.size(); index++) {
-            map.put(identifiers.get(index).getComponentIdentifier(), files.get(index));
-        }
-        return map;
-    }
+    // private Map<ComponentIdentifier, File> filesByIdentifiers() {
+    //     Map<ComponentIdentifier, File> map = new HashMap<>();
+    //     List<ComponentArtifactIdentifier> identifiers = getArtifactIdentifiers().get();
+    //     List<File> files = new ArrayList<>(getArtifactFiles().getFiles());
+    //     for (int index = 0; index < identifiers.size(); index++) {
+    //         map.put(identifiers.get(index).getComponentIdentifier(), files.get(index));
+    //     }
+    //     return map;
+    // }
     protected  Map<ComponentIdentifier, Set<ResolvedArtifact> >  initMapArtifactByIdentifiers() {
         Map<ComponentIdentifier, Set<ResolvedArtifact> >  map = new HashMap<>();
         Set<ResolvedArtifact> compileResolvedArtifacts = project.getConfigurations().getByName("compileClasspath").getResolvedConfiguration().getResolvedArtifacts();
@@ -167,7 +143,6 @@ public abstract class BaseConflictTask extends DefaultTask {
         rootDependencies = root.getDependencies();
 
         artifactCollection = resolveableDependencies.getArtifacts();
-        fileCollection = artifactCollection.getArtifactFiles();
         resolvedArtifactResults = artifactCollection.getArtifacts();
 
         mainSourceSet = project.getExtensions().getByType(SourceSetContainer.class)
@@ -181,7 +156,7 @@ public abstract class BaseConflictTask extends DefaultTask {
         mainOutput = mainSourceSet.getOutput();
 
         // Get the classes directories of the main output
-        classesDirs = mainOutput.getClassesDirs();
+        mainClassesDir = mainOutput.getClassesDirs();
 
         artifactMap = initMapArtifactByIdentifiers();
 
@@ -230,17 +205,34 @@ public abstract class BaseConflictTask extends DefaultTask {
 
             getApiElements();
 
-            for (File compileSrcDir : compileSrcDirs) {
-                if (!compileSrcDir.exists()) {
-                    log.error("compileSrcDir not exist: " + compileSrcDir.getAbsolutePath());
-                    resetAll();
-                    return;
+            compileSrcDirs = compileSrcDirs.stream()
+                .filter(file -> {
+                    if (!file.exists()) {
+                        log.error("compileSrcDir not exist: " + file.getAbsolutePath());
+                        return false;
+                    }
+                    return true;
+                })
+                .collect(Collectors.toSet());
+            
+            mainClassesDir = mainClassesDir.filter(file -> {
+                if (!file.exists()) {
+                    log.error("classesDir not exist: " + file.getAbsolutePath());
+                    return false;
                 }
+                return true;
+            });
+            
+            if (compileSrcDirs.size() == 0) {
+                log.error("compileSrcDirs is empty");
+                resetAll();
+                return;
             }
+
             HostProjectInfo.i().init();
             HostProjectInfo.i().setResultFileName("DScheckerResultModuleLevel.txt");
             HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
-            HostProjectInfo.i().setClassesDirs(classesDirs);
+            HostProjectInfo.i().setClassesDirs(mainClassesDir);
             HostProjectInfo.i().setBuildDir(buildDir);
             HostProjectInfo.i().setRootDir(project.getRootDir());
             HostProjectInfo.i().setModuleFile(project.getProjectDir());
@@ -269,6 +261,7 @@ public abstract class BaseConflictTask extends DefaultTask {
 
             resetAll();
         } catch (Exception e) {
+            log.error("error in execute", e);
             resetAll();
         }
     }

@@ -5,8 +5,6 @@ import nju.lab.DSchecker.core.analyze.WrapperConfMissingSmell;
 import nju.lab.DSchecker.core.analyze.WrapperJarAbnormalSmell;
 import nju.lab.DSchecker.core.analyze.WrapperJarMissingSmell;
 import nju.lab.DSchecker.core.model.DepModel;
-import nju.lab.DSchecker.util.soot.TypeAna;
-import nju.lab.DSchecker.util.source.analyze.FullClassExtractor;
 import nju.lab.DScheckerGradle.core.analyze.GradleConflictLibrarySmell;
 import nju.lab.DScheckerGradle.core.analyze.GradleSharedLibrarySmell;
 import nju.lab.DScheckerGradle.model.DepJars;
@@ -28,7 +26,7 @@ public abstract class ProjectLevelSmellTask extends BaseConflictTask {
         // Get the output of the main source set
         mainOutput = mainSourceSet.getOutput();
         // Get the classes directories of the main output
-        classesDirs = mainOutput.getClassesDirs();
+        mainClassesDir = mainOutput.getClassesDirs();
         buildDir = project.getBuildDir();
     }
     @Override
@@ -41,7 +39,7 @@ public abstract class ProjectLevelSmellTask extends BaseConflictTask {
 
         HostProjectInfo.i().setResultFileName("DScheckerResultProjectLevel.txt");
         HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
-        HostProjectInfo.i().setClassesDirs(classesDirs);
+        HostProjectInfo.i().setClassesDirs(mainClassesDir);
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().setRootDir(project.getRootDir());
         HostProjectInfo.i().setModuleFile(project.getProjectDir());

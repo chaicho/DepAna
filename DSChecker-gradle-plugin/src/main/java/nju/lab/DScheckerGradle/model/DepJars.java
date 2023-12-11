@@ -116,6 +116,7 @@ public class DepJars implements IDepJars<DepJar> {
         for (NodeAdapter nodeAdapter : nodeAdapters.getAllNodeAdapter()) {
             DepJar addDepJar = new DepJar(nodeAdapter.getGroupId(), nodeAdapter.getArtifactId(), nodeAdapter.getVersion(),
                     nodeAdapter.getClassifier(), nodeAdapter.getFilePath(),nodeAdapter.getPriority(), nodeAdapter.getDepth());
+            log.error(addDepJar.toString());
             if (!container.contains(addDepJar)) {
                 container.add(addDepJar);
                 seqContainer.add(addDepJar);
