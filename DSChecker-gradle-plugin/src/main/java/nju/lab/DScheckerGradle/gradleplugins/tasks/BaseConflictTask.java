@@ -230,6 +230,7 @@ public abstract class BaseConflictTask extends DefaultTask {
             }
 
             HostProjectInfo.i().init();
+            HostProjectInfo.i().initAppropriateScopes(project);
             HostProjectInfo.i().setResultFileName("DScheckerResultModuleLevel.txt");
             HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
             HostProjectInfo.i().setClassesDirs(mainClassesDir);

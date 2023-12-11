@@ -1,8 +1,9 @@
 package nju.lab.DScheckerGradle.model;
 
 import nju.lab.DSchecker.core.model.*;
+import org.gradle.api.Project;
+import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.FileCollection;
-import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Str;
 import soot.SourceLocator;
 
 import java.io.File;
@@ -16,6 +17,8 @@ public class HostProjectInfo extends IHostProjectInfo {
     private Set<String> apiDepJars = new HashSet<>();
     private FileCollection classesDirs;
     private String buildTestCp;
+    private Project project;
+    private HashMap<String, Set<String> > appropriateScopesMap;
     private HostProjectInfo() {
     }
     public static void init() {
@@ -30,8 +33,42 @@ public class HostProjectInfo extends IHostProjectInfo {
         }
         return instance;
     }
+    public Set<Configuration> getAllExtendsFromConf(Configuration targetConf) {
+        Set<Configuration> extendsFrom = new HashSet<>();
+        if (!targetConf.isCanBeConsumed() && !targetConf.isCanBeResolved() ) {
+            extendsFrom.add(targetConf);
+        }
+        for (Configuration conf : targetConf.getExtendsFrom()) {
+            extendsFrom.addAll(getAllExtendsFromConf(conf));
+        }
+        return extendsFrom;
+    }
 
-
+    public void initAppropriateScopes(Project project) {
+        Set<String> compileConfNames = new HashSet<>();
+        Set<Configuration> compileConfs = getAllExtendsFromConf(project.getConfigurations().getByName("compileClasspath"));
+        for (Configuration conf : compileConfs) {
+            compileConfNames.add(conf.getName());
+        }
+        Set<String> runtimeConfNames = new HashSet<>();
+        Set<Configuration> runtimeConfs = getAllExtendsFromConf(project.getConfigurations().getByName("runtimeClasspath"));
+        for (Configuration conf : runtimeConfs) {
+            runtimeConfNames.add(conf.getName());
+        }
+        Set<String> testConfNames = new HashSet<>();
+        Set<Configuration> testCompileConfs = getAllExtendsFromConf(project.getConfigurations().getByName("testCompileClasspath"));
+        Set<Configuration> testRuntimeConfs = getAllExtendsFromConf(project.getConfigurations().getByName("testRuntimeClasspath"));
+        for (Configuration conf : testCompileConfs) {
+            testConfNames.add(conf.getName());
+        }
+        for (Configuration conf : testRuntimeConfs) {
+            testConfNames.add(conf.getName());
+        }
+        appropriateScopesMap = new HashMap<>();
+        appropriateScopesMap.put("compile", compileConfNames);
+        appropriateScopesMap.put("runtime", runtimeConfNames);
+        appropriateScopesMap.put("test", testConfNames);
+    }   
 
     @Override
     public void buildDepClassMap() {
@@ -86,36 +123,7 @@ public class HostProjectInfo extends IHostProjectInfo {
     public IDepJar getFirstUsedDepFromClassWithTargetScene(String className, String scene) {
         if(usedDependenciesPerClass.get(className).size() == 0)
             return null;
-        Set<String> appropriateScopes = new HashSet<String>();
-        if (scene == "compile") {
-            appropriateScopes.add("compileOnly");
-            appropriateScopes.add("implementation");
-            appropriateScopes.add("api");
-            appropriateScopes.add("compileOnlyApi");
-            appropriateScopes.add("compile");
-        }
-        else if (scene == "runtime") {
-            appropriateScopes.add("runtimeOnly");
-            appropriateScopes.add("implementation");
-            appropriateScopes.add("api");
-            appropriateScopes.add("compileOnlyApi");
-            appropriateScopes.add("runtime");
-            appropriateScopes.add("compile");
-        }
-        else if (scene == "test") {
-            appropriateScopes.add("compileOnlyApi");
-            appropriateScopes.add("testCompileOnly");
-            appropriateScopes.add("implementation");
-            appropriateScopes.add("testImplementation");
-            appropriateScopes.add("runtimeOnly");
-            appropriateScopes.add("testRuntimeOnly");
-            appropriateScopes.add("api");
-            appropriateScopes.add("testCompile");
-            appropriateScopes.add("testRuntime");
-            appropriateScopes.add("test");
-            appropriateScopes.add("compile");
-            appropriateScopes.add("runtime");
-        }
+        Set<String> appropriateScopes = appropriateScopesMap.get(scene);
         for (IDepJar depJar : usedDependenciesPerClass.get(className)) {
             if(appropriateScopes.contains(depJar.getScope()))
                 return depJar;

@@ -93,7 +93,7 @@ public class NodeAdapters {
     }
 
 
-    public List<NodeAdapter> getAllNodeAdapter() {
+    public List<NodeAdapter>getAllNodeAdapter() {
         return container;
     }
 
