@@ -237,6 +237,7 @@ public abstract class BaseConflictTask extends DefaultTask {
             HostProjectInfo.i().setBuildDir(buildDir);
             HostProjectInfo.i().setRootDir(project.getRootDir());
             HostProjectInfo.i().setModuleFile(project.getProjectDir());
+            HostProjectInfo.i().setProject(project);
 //        HostProjectInfo.i().setTestOutputDir(new File(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes"));
             HostProjectInfo.i().setBuildTestCp(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes");
             HostProjectInfo.i().setTestCompileSrcFiles(testSourceSet.getAllJava().getSrcDirs());

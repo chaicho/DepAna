@@ -348,6 +348,8 @@ public abstract class IHostProjectInfo  {
         if(scene.equals("compile")) {
             if (actualCompileDepJars.isEmpty()) {
                 Set<String> referencedClassesInSrcCode = getReferencedClassesFromSrc();
+                log.error("Compile Classes In Src Code");
+                log.error(referencedClassesInSrcCode.toString());
                 //  Import classes are not all classes for some classes within the same package do not need to be imported.
                 Set<IDepJar> depJars = new HashSet<>();
                 for (String referencedClass : referencedClassesInSrcCode) {

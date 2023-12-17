@@ -33,6 +33,20 @@ public class HostProjectInfo extends IHostProjectInfo {
         }
         return instance;
     }
+    public Project getProject() {
+        return project;
+    }
+    
+    public void setProject(Project project) {
+        this.project = project;
+    }
+    
+    public String getName() {
+        System.out.println("project.getName(): " + project.getName());
+        System.out.println(project.getName());
+        return project.getName();
+    }
+
     public Set<Configuration> getAllExtendsFromConf(Configuration targetConf) {
         Set<Configuration> extendsFrom = new HashSet<>();
         if (!targetConf.isCanBeConsumed() && !targetConf.isCanBeResolved() ) {

@@ -268,13 +268,9 @@ public class DepJar implements IDepJar {
     }
 
     public boolean isHost() {
-//        if (getNodeAdapters().size() == 1) {
-//            NodeAdapter node = getNodeAdapters().iterator().next();
-//            if (GradleUtil.i().isHost(node)) {
-//                return true;
-//            }
-//        }
-        return false;
+        System.out.println("getArtifactId(): " + getArtifactId());
+        System.out.println("HostProjectInfo.i().getName(): " + HostProjectInfo.i().getName());
+        return getArtifactId().equals(HostProjectInfo.i().getName());
     }
 
 
