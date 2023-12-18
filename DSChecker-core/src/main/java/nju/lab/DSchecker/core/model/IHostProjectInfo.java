@@ -167,9 +167,9 @@ public abstract class IHostProjectInfo  {
         }
         // When reach here, it means that there is no class at given scene, so it means that there should be a scope problem
         // We return the first one, though not in the scope.
-        IDepJar depJar = usedDependenciesPerClass.get(className).iterator().next();
-        log.warn("Class " + className + " is not in the scene " + scene + " but in " + depJar.getScope());
-        return depJar;
+        // IDepJar depJar = usedDependenciesPerClass.get(className).iterator().next();
+        // log.warn("Class " + className + " is not in the scene " + scene + " but in " + depJar.getScope());
+        return null;
     }
     /**
      * Get the single used Depjar that a class belongs to since there are multiple classes with the same name.
@@ -269,8 +269,17 @@ public abstract class IHostProjectInfo  {
     public Set<IDepJar> getRuntimeDirectReachableJars() {
         Set<String> reachableClasses = new HashSet<>(callGraph.getReachableDirectClasses());
         Set<String> constantPoolClasses =  GetRefedClasses.analyzeReferencedClasses(getBuildCp());
-        reachableClasses.addAll(constantPoolClasses);
         Set<IDepJar> ret = new java.util.HashSet<>();
+        for (String className : constantPoolClasses) {
+            IDepJar depJar = getFirstUsedDepFromClassWithTargetScene(className,"runtime");
+            if (depJar != null) {
+                ret.add(depJar);
+                depJar.addClassToScene("runtime", className);
+            }
+            else {
+                log.warn("No depjar for ByteCode" + className);
+            }
+        }
         for (String className : reachableClasses) {
             IDepJar depJar = getFirstUsedDepFromClassWithTargetScene(className,"runtime");
             if (depJar != null && !callGraph.getSourceMethods(className).isEmpty()) {
@@ -281,7 +290,7 @@ public abstract class IHostProjectInfo  {
                 System.out.println(depJar.getDisplayName());
             }
             else {
-                log.warn("No depjar for " + className);
+                log.warn("No depjar for CallGraph" + className);
             }
         }
         return ret;

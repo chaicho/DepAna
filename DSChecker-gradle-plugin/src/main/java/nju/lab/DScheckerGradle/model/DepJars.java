@@ -85,6 +85,8 @@ public class DepJars implements IDepJars<DepJar> {
                 if (nodeAdapter.parent != null) {
                     nodeAdapter.getDepJar().scope = nodeAdapter.parent.getDepJar().scope;
                 }
+                System.out.println(nodeAdapter.getName());
+                System.out.println(nodeAdapter.getDepJar().scope);
             }
         }
         for (DepJar depJar : container) {

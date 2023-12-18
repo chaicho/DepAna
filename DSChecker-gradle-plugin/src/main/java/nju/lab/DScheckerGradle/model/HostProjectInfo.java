@@ -49,7 +49,7 @@ public class HostProjectInfo extends IHostProjectInfo {
 
     public Set<Configuration> getAllExtendsFromConf(Configuration targetConf) {
         Set<Configuration> extendsFrom = new HashSet<>();
-        if (!targetConf.isCanBeConsumed() && !targetConf.isCanBeResolved() ) {
+        if ((!targetConf.isCanBeConsumed() && !targetConf.isCanBeResolved()) || (targetConf.isCanBeResolved() && targetConf.isCanBeConsumed()) ) {
             extendsFrom.add(targetConf);
         }
         for (Configuration conf : targetConf.getExtendsFrom()) {
@@ -82,6 +82,7 @@ public class HostProjectInfo extends IHostProjectInfo {
         appropriateScopesMap.put("compile", compileConfNames);
         appropriateScopesMap.put("runtime", runtimeConfNames);
         appropriateScopesMap.put("test", testConfNames);
+        System.out.println("appropriateScopesMap: " + appropriateScopesMap);
     }   
 
     @Override
@@ -144,9 +145,10 @@ public class HostProjectInfo extends IHostProjectInfo {
         }
         // When reach here, it means that there is no class at given scene, so it means that there should be a scope problem
         // We return the first one, though not in the scope.
-        IDepJar depJar = usedDependenciesPerClass.get(className).iterator().next();
-        log.warn("Class " + className + " is not in the scene " + scene + " but in " + depJar.getScope());
-        return depJar;
+        // IDepJar depJar = usedDependenciesPerClass.get(className).iterator().next();
+        // log.warn("Class " + className + " is not in the scene " + scene + " but in " + depJar.getScope());
+        log.warn("Class " + className + "not found in scene" + scene);
+        return null;
     }
     @Override
     public String getBuildTool() {
