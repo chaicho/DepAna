@@ -147,7 +147,7 @@ public class HostProjectInfo extends IHostProjectInfo {
         // We return the first one, though not in the scope.
         // IDepJar depJar = usedDependenciesPerClass.get(className).iterator().next();
         // log.warn("Class " + className + " is not in the scene " + scene + " but in " + depJar.getScope());
-        log.warn("Class " + className + "not found in scene" + scene);
+        log.warn("Class " + className + "not found in scene  " + scene);
         return null;
     }
     @Override

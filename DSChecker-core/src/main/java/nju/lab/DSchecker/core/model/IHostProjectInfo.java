@@ -277,7 +277,7 @@ public abstract class IHostProjectInfo  {
                 depJar.addClassToScene("runtime", className);
             }
             else {
-                log.warn("No depjar for ByteCode" + className);
+                log.warn("No depjar for ByteCode " + className);
             }
         }
         for (String className : reachableClasses) {
@@ -290,7 +290,7 @@ public abstract class IHostProjectInfo  {
                 System.out.println(depJar.getDisplayName());
             }
             else {
-                log.warn("No depjar for CallGraph" + className);
+                log.warn("No depjar for CallGraph " + className);
             }
         }
         return ret;
