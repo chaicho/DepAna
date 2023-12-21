@@ -6,6 +6,7 @@ import nju.lab.DSchecker.core.analyze.BaseSmell;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
+import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Has;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,16 +21,18 @@ public class GradleSharedLibrarySmell extends BaseSmell {
 
     Project project;
     Map<String, Project> childProjects;
+    HashMap<String, Set<Project>> selfAssignedDeps = new HashMap<>();
 
     public GradleSharedLibrarySmell(Project project, Map<String, Project> childProjects) {
         this.project = project;
         this.childProjects = childProjects;
     }
 
-    public static void parseBuildGradle(File buildGradleFile) {
+    public void getDependenciesOfProject(Project project) {
+        File buildScriptFile = project.getBuildFile();
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader(buildGradleFile));
+            reader = new BufferedReader(new FileReader(buildScriptFile));
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -41,7 +44,8 @@ public class GradleSharedLibrarySmell extends BaseSmell {
                         String group = matcher.group(1);
                         String name = matcher.group(2);
                         String version = matcher.group(3);
-                        System.out.println("Dependency: " + group + ":" + name + ":" + version);
+                        String depName = group + ":" + name;
+                        selfAssignedDeps.computeIfAbsent(depName, k -> new HashSet<>()).add(project);
                     }
                 }
             }
@@ -50,21 +54,20 @@ public class GradleSharedLibrarySmell extends BaseSmell {
             e.printStackTrace();
         }
     }
-
-    public void getDependenciesOfProject(Project project) {
-        File buildScriptFile = project.getBuildFile();
-        parseBuildGradle(buildScriptFile);
-//        for (Configuration configuration : project.getConfigurations()) {
-//            for (Dependency dependency : configuration.getDependencies()) {
-//                log.warn("dependency: {}", dependency);
-//            }
-//        }
-    }
     @Override
     public void detect() {
         appendToResult("========SharedLibrarySmell========");
         for (Project childProject : project.getAllprojects()) {
             getDependenciesOfProject(childProject);
+        }
+        for (String dep : selfAssignedDeps.keySet()) {
+            if (selfAssignedDeps.get(dep).size() > 1) {
+                appendToResult("Dependency " + dep + " is shared by multiple modules but assigned versions individually." );
+                for (Project project : selfAssignedDeps.get(dep)) {
+                    appendToResult("    " + project.getName());
+                }
+                appendToResult("---------");
+            }
         }
 //        getDependenciesOfProject(project);
 //        project.getDependencies().getComponents().all()
