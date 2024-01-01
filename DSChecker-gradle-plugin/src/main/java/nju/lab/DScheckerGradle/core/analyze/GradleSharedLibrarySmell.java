@@ -28,6 +28,15 @@ public class GradleSharedLibrarySmell extends BaseSmell {
         this.childProjects = childProjects;
     }
 
+    public static boolean containsDigit(String str) {
+        for (char c : str.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public void getDependenciesOfProject(Project project) {
         File buildScriptFile = project.getBuildFile();
         BufferedReader reader;
@@ -45,7 +54,9 @@ public class GradleSharedLibrarySmell extends BaseSmell {
                         String name = matcher.group(2);
                         String version = matcher.group(3);
                         String depName = group + ":" + name;
-                        selfAssignedDeps.computeIfAbsent(depName, k -> new HashSet<>()).add(project);
+                        if (containsDigit(version)) {
+                            selfAssignedDeps.computeIfAbsent(depName, k -> new HashSet<>()).add(project);
+                        }
                     }
                 }
             }
