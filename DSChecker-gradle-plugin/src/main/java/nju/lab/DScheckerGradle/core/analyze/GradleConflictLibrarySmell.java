@@ -21,8 +21,9 @@ public class GradleConflictLibrarySmell extends BaseSmell {
         Map<String, String> depVersionSingleProjectMap = new HashMap<>();
         for (Configuration configuration : project.getConfigurations()) {
             for (Dependency dependency : configuration.getDependencies()) {
+                String depName = dependency.getGroup() + ":" + dependency.getName();
                 if (dependency.getVersion() != null) {
-                    depVersionSingleProjectMap.put(dependency.getName(), dependency.getVersion());
+                    depVersionSingleProjectMap.put(depName, dependency.getVersion());
                 }
             }
         }
