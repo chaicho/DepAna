@@ -27,7 +27,14 @@ public class GradleSharedLibrarySmell extends BaseSmell {
         this.project = project;
         this.childProjects = childProjects;
     }
-
+    public static boolean containsDigit(String str) {
+        for (char c : str.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
     public void getDependenciesOfProject(Project project) {
         File buildScriptFile = project.getBuildFile();
         BufferedReader reader;
@@ -36,7 +43,7 @@ public class GradleSharedLibrarySmell extends BaseSmell {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
-                if (line.startsWith("implementation") || line.startsWith("compile")) {
+                if (line.startsWith("implementation") || line.startsWith("compile") || line.startsWith("runtime") || line.startsWith("api")) {
                     // Regular expression to match dependency declaration
                     Pattern pattern = Pattern.compile("[\"']([^:]+):([^:]+):([^'\"]+)[\"']");
                     Matcher matcher = pattern.matcher(line);
@@ -45,7 +52,9 @@ public class GradleSharedLibrarySmell extends BaseSmell {
                         String name = matcher.group(2);
                         String version = matcher.group(3);
                         String depName = group + ":" + name;
-                        selfAssignedDeps.computeIfAbsent(depName, k -> new HashSet<>()).add(project);
+                        if (containsDigit(version)) {
+                            selfAssignedDeps.computeIfAbsent(depName, k -> new HashSet<>()).add(project);
+                        }
                     }
                 }
             }
