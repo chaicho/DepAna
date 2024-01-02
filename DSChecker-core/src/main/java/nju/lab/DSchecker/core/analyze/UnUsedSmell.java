@@ -21,6 +21,9 @@ public class UnUsedSmell extends BaseSmell{
         allDirectDepJars.removeAll(actualTestDepJars);
         allDirectDepJars.removeAll(actualCompileDepJars);
         allDirectDepJars.removeAll(actualRuntimeDepJars);
+        removeDepJarsWithSameGA(allDirectDepJars, actualTestDepJars);
+        removeDepJarsWithSameGA(allDirectDepJars, actualCompileDepJars);
+        removeDepJarsWithSameGA(allDirectDepJars, actualRuntimeDepJars);
 
         appendToResult("========UnUsedSmell========");
         for (IDepJar dep : allDirectDepJars) {

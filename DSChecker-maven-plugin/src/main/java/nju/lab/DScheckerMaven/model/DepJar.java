@@ -239,6 +239,13 @@ public class DepJar implements IDepJar {
     }
 
     /**
+     * @return groupId:artifactId
+     */
+    public String getGA() {
+        return groupId + ":" + artifactId;
+    }
+
+    /**
      * @return artifactId
      */
     public String getArtifactId() {

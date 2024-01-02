@@ -61,6 +61,9 @@ public class DepJar implements IDepJar {
     public String getClassifier() {
         return classifier;
     }
+    public String getGA() {
+        return groupId + ":" + artifactId;
+    }
     public int getDepth() {
         return depth;
     }

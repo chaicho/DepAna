@@ -77,5 +77,16 @@ public abstract class BaseSmell {
 //            }
         }
     }
+
+    public void removeDepJarsWithSameGA(Set< ? extends IDepJar> container, Set<IDepJar> conflictJars){
+        for (IDepJar depJar : container) {
+            for (IDepJar dep : conflictJars) {
+                if(depJar.getGA().equals(dep.getGA())){
+                    container.remove(depJar);
+                    break;
+                }
+            }
+        }
+    }
     public abstract void detect();
 }
