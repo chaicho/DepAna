@@ -47,4 +47,6 @@ public interface IDepJar {
     Set<String> getUsedClassesAtScene(String scene);
     void addClassToScene(String scene, String cls);
     public String getUsedClassesAsString();
+
+    public boolean sameGA(IDepJar depJar);
 }
