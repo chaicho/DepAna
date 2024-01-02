@@ -32,7 +32,11 @@ public class UnDeclaredSmell extends BaseSmell {
         // allUsedDepJars.addAll(actualRuntimeDepJars);
 
         allUsedDepJars.removeAll(declaredDepJars);
-
+        for (IDepJar depJar : allUsedDepJars) {
+            if (IDepJar directDepJar : declaredDepJars) {
+                if (depJar.sameGA(dir))
+            }
+        }
         for (IDepJar dep : allUsedDepJars) {
             if(dep.isHost()) {
                 continue;

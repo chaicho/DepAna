@@ -132,7 +132,8 @@ public class FullClassExtractor {
             cu.findAll(SimpleName.class).forEach(sn -> {
                 try {
                     if (importNameToClass.containsKey(sn.asString())) {
-                        referencedClassesInJavaFile.add(importNameToClass.get(sn.asString()));
+                        referencedClassesInJavaFile.add(importNameToClass.get(sn.asString()) + ":" + sn.asString() );
+
                     }
                 }
                 catch (Exception e) {
@@ -198,12 +199,12 @@ public class FullClassExtractor {
             System.out.println("Exception in getReferencesFromJavaFile: " + file.getAbsolutePath());
             e.printStackTrace();
         }
-        
+
         return referencedClassesInJavaFile;
     }
 
     public static void main(String[] args) {
-        Set<String> classes = getClassesFromJavaFiles("D:\\Pathtodoc\\dependency-graph-as-task-inputs\\app\\src\\main");
+        Set<String> classes = getReferencesFromJavaFile(new File("/root/dependencySmell/evaluation/realProjects/gradle/projectsDir/digdag/digdag-0.10.5/digdag-core/src/main/java/io/digdag/core/agent/GraalJsEngine.java"));
         for (String className : classes) {
             System.out.println(className);
         }

@@ -27,6 +27,7 @@ public class GradleSharedLibrarySmell extends BaseSmell {
         this.project = project;
         this.childProjects = childProjects;
     }
+
     public static boolean containsDigit(String str) {
         for (char c : str.toCharArray()) {
             if (Character.isDigit(c)) {
@@ -35,6 +36,8 @@ public class GradleSharedLibrarySmell extends BaseSmell {
         }
         return false;
     }
+
+    
     public void getDependenciesOfProject(Project project) {
         File buildScriptFile = project.getBuildFile();
         BufferedReader reader;
