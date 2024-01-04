@@ -132,7 +132,7 @@ public class FullClassExtractor {
             cu.findAll(SimpleName.class).forEach(sn -> {
                 try {
                     if (importNameToClass.containsKey(sn.asString())) {
-                        referencedClassesInJavaFile.add(importNameToClass.get(sn.asString()) + ":" + sn.asString() );
+                        referencedClassesInJavaFile.add(importNameToClass.get(sn.asString()) + "." + sn.asString() );
 
                     }
                 }
@@ -204,7 +204,7 @@ public class FullClassExtractor {
     }
 
     public static void main(String[] args) {
-        Set<String> classes = getReferencesFromJavaFile(new File("/root/dependencySmell/evaluation/realProjects/gradle/projectsDir/digdag/digdag-0.10.5/digdag-core/src/main/java/io/digdag/core/agent/GraalJsEngine.java"));
+        Set<String> classes = getReferencesFromJavaFile(new File("/root/dependencySmell/evaluation/realProjects/gradle/projectsDir/sonarqube-community-branch-plugin/sonarqube-community-branch-plugin-1.14.0/src/main/java/com/github/mc1arke/sonarqube/plugin/almclient/github/v3/RestApplicationAuthenticationProvider.java"));
         for (String className : classes) {
             System.out.println(className);
         }
