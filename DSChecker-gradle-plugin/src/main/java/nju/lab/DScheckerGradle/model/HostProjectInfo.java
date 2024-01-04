@@ -101,6 +101,11 @@ public class HostProjectInfo extends IHostProjectInfo {
     }
     @Override
     public String getWrapperPath(){
+        String possibleWrapperPath = rootDir.getPath() + File.separator + ".gradle-wrapper";
+        File wrapperDir = new File(possibleWrapperPath);
+        if (wrapperDir.exists()) {
+            return possibleWrapperPath;
+        }
         return rootDir.getPath() + File.separator + "gradle" + File.separator + "wrapper";
     }
     public void setBuildTestCp(String buildTestCp) {
