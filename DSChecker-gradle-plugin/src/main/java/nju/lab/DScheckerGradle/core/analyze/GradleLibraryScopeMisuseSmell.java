@@ -22,13 +22,12 @@ public class GradleLibraryScopeMisuseSmell extends BaseSmell{
         Set<IDepJar> actualCompileDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("compile");
         Set<IDepJar> actualRuntimeDepJars = hostProjectInfo.getActualDepJarsUsedAtScene("runtime");
         if (hostProjectInfo.useJavaLibraryPlugin()) {
-            actualRuntimeDepJars.addAll(actualCompileDepJars);
-        }
-        for (IDepJar depJar : projectABIDepJars) {
-            if (implementationDepJars.contains(depJar)) {
-                appendToResult("implementation scope dep " + depJar.getName() + " is acutally used only at api scene");
-                appendToResult(depJar.getUsedClassesAsString());
-                appendToResult("---------");
+            for (IDepJar depJar : projectABIDepJars) {
+                if (implementationDepJars.contains(depJar)) {
+                    appendToResult("implementation scope dep " + depJar.getName() + " is acutally used only at api scene");
+                    appendToResult(depJar.getUsedClassesAsString());
+                    appendToResult("---------");
+                }
             }
         }
         for (IDepJar depJar : actualRuntimeDepJars) {
