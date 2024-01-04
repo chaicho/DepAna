@@ -464,4 +464,8 @@ public abstract class IHostProjectInfo  {
     public boolean isUsedByHost(String className) {
         return  callGraph.getReachableClasses().contains(className);
     }
+
+    public boolean useJavaLibraryPlugin() {
+        return false;
+    }
 }

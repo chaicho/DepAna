@@ -154,4 +154,8 @@ public class HostProjectInfo extends IHostProjectInfo {
     public String getBuildTool() {
         return "gradle";
     }
+    @Override
+    public boolean useJavaLibraryPlugin() {
+        return project.getPlugins().hasPlugin("java-library");
+    }
 }
