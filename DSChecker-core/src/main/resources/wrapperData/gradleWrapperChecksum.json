@@ -1,4 +1,24 @@
 {
+  "8.5": {
+    "binary_checksum": "9d926787066a081739e8200858338b4a69e837c3a821a33aca9db09dd4a41026",
+    "complete_checksum": "c16d517b50dd28b3f5838f0e844b7520b8f1eb610f2f29de7e4e04a1b7c9c79b",
+    "wrapper_jar_checksum": "d3b261c2820e9e3d8d639ed084900f11f4a86050a8f83342ade7b6bc9b0d2bdd"
+  },
+  "8.4": {
+    "binary_checksum": "3e1af3ae886920c3ac87f7a91f816c0c7c436f276a6eefdb3da152100fef72ae",
+    "complete_checksum": "f2b9ed0faf8472cbe469255ae6c86eddb77076c75191741b4a462f33128dd419",
+    "wrapper_jar_checksum": "0336f591bc0ec9aa0c9988929b93ecc916b3c1d52aed202c7381db144aa0ef15"
+  },
+  "7.6.3": {
+    "binary_checksum": "740c2e472ee4326c33bf75a5c9f5cd1e69ecf3f9b580f6e236c86d1f3d98cfac",
+    "complete_checksum": "6001aba9b2204d26fa25a5800bb9382cf3ee01ccb78fe77317b2872336eb2f80",
+    "wrapper_jar_checksum": "14dfa961b6704bb3decdea06502781edaa796a82e6da41cd2e1962b14fbe21a3"
+  },
+  "8.3": {
+    "binary_checksum": "591855b517fc635b9e04de1d05d5e76ada3f89f5fc76f87978d1b245b4f69225",
+    "complete_checksum": "bb09982fdf52718e4c7b25023d10df6d35a5fff969860bdf5a5bd27a3ab27a9e",
+    "wrapper_jar_checksum": "0336f591bc0ec9aa0c9988929b93ecc916b3c1d52aed202c7381db144aa0ef15"
+  },
   "8.2.1": {
     "binary_checksum": "03ec176d388f2aa99defcadc3ac6adf8dd2bce5145a129659537c0874dea5ad1",
     "complete_checksum": "7c3ad722e9b0ce8205b91560fd6ce8296ac3eadf065672242fd73c06b8eeb6ee",

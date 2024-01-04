@@ -98,8 +98,7 @@ public class WrapperJarAbnormalSmell extends BaseSmell{
                     // Get the checksum of the wrapper jar
                     String expected_checksum = jsonMap.getJSONObject(wrapperVersion).getString("wrapper_jar_checksum");
                     String actual_checksum = calculateSHA256Hash(wrapperJarPath);
-                    if (!
-                            actual_checksum.equals(expected_checksum)) {
+                    if (!actual_checksum.equals(expected_checksum)) {
                         log.warn("Wrapper Jar Abnormal Smell: " + wrapperJarPath);
                         appendToResult("Wrapper Jar Abnormal Smell: " + wrapperJarPath);
                         appendToResult(String.format("Expected checksum for version %s :", wrapperVersion ) + expected_checksum);
