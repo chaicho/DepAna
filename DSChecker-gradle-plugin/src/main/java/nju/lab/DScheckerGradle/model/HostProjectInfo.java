@@ -150,10 +150,10 @@ public class HostProjectInfo extends IHostProjectInfo {
         }
         // When reach here, it means that there is no class at given scene, so it means that there should be a scope problem
         // We return the first one, though not in the scope.
-        // IDepJar depJar = usedDependenciesPerClass.get(className).iterator().next();
-        // log.warn("Class " + className + " is not in the scene " + scene + " but in " + depJar.getScope());
-        log.warn("Class " + className + "not found in scene  " + scene);
-        return null;
+         IDepJar depJar = usedDependenciesPerClass.get(className).iterator().next();
+         log.warn("Class " + className + " is not in the scene " + scene + " but in " + depJar.getScope());
+//         log.warn("Class " + className + "not found in scene  " + scene);
+         return depJar;
     }
     @Override
     public String getBuildTool() {

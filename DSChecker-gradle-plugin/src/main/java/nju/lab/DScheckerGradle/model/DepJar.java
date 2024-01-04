@@ -121,10 +121,10 @@ public class DepJar implements IDepJar {
     }
 
     /**
-     * @return groupId:artifactId:version
+     * @return groupId:artifactId:version:scope
      */
     public String getDisplayName(){
-        return getGroupId() +":" + getArtifactId() + ":" + getVersion();
+        return getGroupId() +":" + getArtifactId() + ":" + getVersion() + ":" + getScope();
     }
 
     @Override
