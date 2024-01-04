@@ -41,6 +41,9 @@ public class GradleSharedLibrarySmell extends BaseSmell {
     public void getDependenciesOfProject(Project project) {
         File buildScriptFile = project.getBuildFile();
         BufferedReader reader;
+        if (!buildScriptFile.exists()) {
+            return;
+        }
         try {
             reader = new BufferedReader(new FileReader(buildScriptFile));
             String line;
