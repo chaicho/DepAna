@@ -18,15 +18,15 @@ import java.io.File;
 public abstract class ProjectLevelSmellTask extends BaseConflictTask {
     void initValues() {
         project = getProject();
-        mainSourceSet = project.getExtensions().getByType(SourceSetContainer.class)
-                .getByName(SourceSet.MAIN_SOURCE_SET_NAME);
-        testSourceSet = project.getExtensions().getByType(SourceSetContainer.class)
-                .getByName(SourceSet.TEST_SOURCE_SET_NAME);
-        compileSrcDirs = mainSourceSet.getAllJava().getSrcDirs();
-        // Get the output of the main source set
-        mainOutput = mainSourceSet.getOutput();
-        // Get the classes directories of the main output
-        mainClassesDir = mainOutput.getClassesDirs();
+//        mainSourceSet = project.getExtensions().getByType(SourceSetContainer.class)
+//                .getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+//        testSourceSet = project.getExtensions().getByType(SourceSetContainer.class)
+//                .getByName(SourceSet.TEST_SOURCE_SET_NAME);
+//        compileSrcDirs = mainSourceSet.getAllJava().getSrcDirs();
+//        // Get the output of the main source set
+//        mainOutput = mainSourceSet.getOutput();
+//        // Get the classes directories of the main output
+//        mainClassesDir = mainOutput.getClassesDirs();
         buildDir = project.getBuildDir();
     }
     @Override
@@ -38,13 +38,13 @@ public abstract class ProjectLevelSmellTask extends BaseConflictTask {
         initValues();
 
         HostProjectInfo.i().setResultFileName("DScheckerResultProjectLevel.txt");
-        HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
-        HostProjectInfo.i().setClassesDirs(mainClassesDir);
+//        HostProjectInfo.i().setCompileSrcFiles(compileSrcDirs);
+//        HostProjectInfo.i().setClassesDirs(mainClassesDir);
         HostProjectInfo.i().setBuildDir(buildDir);
         HostProjectInfo.i().setRootDir(project.getRootDir());
         HostProjectInfo.i().setModuleFile(project.getProjectDir());
-        HostProjectInfo.i().setBuildTestCp(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes");
-        HostProjectInfo.i().setTestCompileSrcFiles(testSourceSet.getAllJava().getSrcDirs());
+//        HostProjectInfo.i().setBuildTestCp(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes");
+//        HostProjectInfo.i().setTestCompileSrcFiles(testSourceSet.getAllJava().getSrcDirs());
         HostProjectInfo.i().init(MyCallGraph.i(), DepJars.i());
 
         DepModel depModel = new DepModel(MyCallGraph.i(), DepJars.i(), HostProjectInfo.i());
