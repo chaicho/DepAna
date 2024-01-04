@@ -163,4 +163,8 @@ public class HostProjectInfo extends IHostProjectInfo {
     public boolean useJavaLibraryPlugin() {
         return project.getPlugins().hasPlugin("java-library");
     }
+
+    public Set<String> getAppropriateScopes(String scene) {
+        return appropriateScopesMap.get(scene);
+    }
 }

@@ -6,7 +6,9 @@ import nju.lab.DSchecker.core.model.IDepJars;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
+import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Str;
 import soot.Scene;
+import soot.tagkit.Host;
 
 import java.io.File;
 import java.util.*;
@@ -226,7 +228,12 @@ public class DepJars implements IDepJars<DepJar> {
 
     @Override
     public Set<DepJar> getDirectDepJarsWithScene(String s) {
-        return null;
+        Set<String> appropriateScopes = HostProjectInfo.i().getAppropriateScopes(s);
+        Set<DepJar> result = new HashSet<>();
+        for (String scope : appropriateScopes) {
+            result.addAll(getDirectDepJarsWithScope(scope));
+        }
+        return result;
     }
 
     @Override

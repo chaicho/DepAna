@@ -15,6 +15,8 @@ public class GradleLibraryScopeMisuseSmell extends BaseSmell{
         Set<? extends IDepJar> compileOnlyDepJars = depJars.getDirectDepJarsWithScope("compileOnly");
         Set<? extends IDepJar> apiDepJars = depJars.getDirectDepJarsWithScope("api");
         Set<? extends IDepJar> implementationDepJars = depJars.getDirectDepJarsWithScope("implementation");
+        Set<? extends IDepJar> compileDepJars = depJars.getDirectDepJarsWithScene("compile");
+
         Set<IDepJar> projectABIDepJars = hostProjectInfo.getABIDepJars();
 
         // Get DepJars with their used scenario.
@@ -37,6 +39,18 @@ public class GradleLibraryScopeMisuseSmell extends BaseSmell{
                 appendToResult("---------");
             }
         }
+
+        Set<IDepJar> compileDepJarsUsedOnlyAtTest = new HashSet<>(compileDepJars);
+        compileDepJarsUsedOnlyAtTest.removeAll(actualCompileDepJars);
+        compileDepJarsUsedOnlyAtTest.removeAll(actualRuntimeDepJars);
+        compileDepJarsUsedOnlyAtTest.retainAll(actualTestDepJars);
+
+        for (IDepJar depJar : compileDepJarsUsedOnlyAtTest) {
+            appendToResult("compile scope dep " + depJar.getName() + " is acutally used only at test scene");
+            appendToResult(depJar.getUsedClassesAsString());
+            appendToResult("---------");
+        }
+
         return;
     }
 
