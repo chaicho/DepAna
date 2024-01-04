@@ -139,7 +139,7 @@ public class FullClassExtractor {
                 catch (Exception e) {
                     System.out.println("Exception in resolving SimpleName: " + sn.toString());
                 }
-            });        ;
+            });
 
 //            Get all the annotations in the file.
             cu.findAll(AnnotationExpr.class).forEach(ad -> {
