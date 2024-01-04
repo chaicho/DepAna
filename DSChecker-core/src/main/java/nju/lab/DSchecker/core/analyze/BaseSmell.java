@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Set;
 
 @Slf4j
@@ -78,15 +79,18 @@ public abstract class BaseSmell {
         }
     }
 
-    public void removeDepJarsWithSameGA(Set< ? extends IDepJar> container, Set<IDepJar> conflictJars){
-        for (IDepJar depJar : container) {
+    public void removeDepJarsWithSameGA(Set<? extends IDepJar> container, Set<IDepJar> conflictJars) {
+        Iterator<? extends IDepJar> iterator = container.iterator();
+        while (iterator.hasNext()) {
+            IDepJar depJar = iterator.next();
             for (IDepJar dep : conflictJars) {
-                if(depJar.getGA().equals(dep.getGA())){
-                    container.remove(depJar);
+                if (depJar.getGA().equals(dep.getGA())) {
+                    iterator.remove();
                     break;
                 }
             }
         }
     }
+
     public abstract void detect();
 }
