@@ -215,6 +215,7 @@ public abstract class IHostProjectInfo  {
         this.testCompileSrcDirs = testCompileSrcFiles.stream()
                 .map(File::getAbsolutePath)
                 .collect(Collectors.toSet());
+
     }
 
     public void setBuildDir(File buildDir) {
@@ -378,6 +379,8 @@ public abstract class IHostProjectInfo  {
                 Set<String> referencedClassesInSrcCode =  getReferencedClassesFromTestSrc();
                 Set<String> allReferencedClasses = new HashSet<>(referencedClassesInByteCode);
                 allReferencedClasses.addAll(referencedClassesInSrcCode);
+                System.out.println("Test Source Code Classes");
+                System.out.println(referencedClassesInSrcCode.toString());
                 Set<IDepJar> depJars = new HashSet<>();
                 for (String referencedClass : allReferencedClasses) {
                     IDepJar depJar = getFirstUsedDepFromClassWithTargetScene(referencedClass, "test");
@@ -456,6 +459,7 @@ public abstract class IHostProjectInfo  {
     public Set<String> getReferencedClassesFromTestSrc() {
         Set<String> ret = new HashSet<>();
         for (String compileSrcPath : getTestCompileSrcDirs() ) {
+            System.out.println("Get Refereneced Classes From Test Src " + compileSrcPath);
             ret.addAll(FullClassExtractor.getClassesFromJavaFiles(compileSrcPath));
         }
         return ret;

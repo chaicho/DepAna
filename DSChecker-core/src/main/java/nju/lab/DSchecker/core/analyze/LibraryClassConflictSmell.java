@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class LibraryClassConflictSmell extends BaseSmell {
@@ -25,14 +26,13 @@ public class LibraryClassConflictSmell extends BaseSmell {
             }
             Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(className);
             Set<String> jarNames = new HashSet<>();
-            for (IDepJar depJar : depJars) {
-                if (jarNames.contains(depJar.getName())) {
-                    depJars.remove(depJar);
-                }
-                jarNames.add(depJar.getName());
-            }
+            List<IDepJar> filteredDepJars = depJars.stream()
+                    .filter(depJar -> !jarNames.contains(depJar.getName()))
+                    .peek(depJar -> jarNames.add(depJar.getName()))
+                    .collect(Collectors.toList());
+            depJars = filteredDepJars;
             if (depJars.size() == 1 && containsHost(depJars)) {
-//                  The conflicting classes are in host jar, not in dependency.
+                // The conflicting classes are in host jar, not in dependency.
                 continue;
             }
             List<IDepJar> depJarSets = new ArrayList<>();

@@ -117,6 +117,7 @@ public class FullClassExtractor {
 
     // A method that parses a Java file and extracts the import statements
     public static Set<String> getReferencesFromJavaFile(File file) {
+        System.out.println("Processing source file" + file.getAbsolutePath());
         Set<String> referencedClassesInJavaFile = new HashSet<String>();
         try {
             CompilationUnit cu = StaticJavaParser.parse(file);
@@ -199,12 +200,13 @@ public class FullClassExtractor {
             System.out.println("Exception in getReferencesFromJavaFile: " + file.getAbsolutePath());
             e.printStackTrace();
         }
-
+        System.out.println(referencedClassesInJavaFile.toString());
         return referencedClassesInJavaFile;
     }
 
     public static void main(String[] args) {
-        Set<String> classes = getReferencesFromJavaFile(new File("/root/dependencySmell/evaluation/realProjects/gradle/projectsDir/sonarqube-community-branch-plugin/sonarqube-community-branch-plugin-1.14.0/src/main/java/com/github/mc1arke/sonarqube/plugin/almclient/github/v3/RestApplicationAuthenticationProvider.java"));
+//        Set<String> classes = getReferencesFromJavaFile(new File("/root/dependencySmell/evaluation/realProjects/gradle/projectsDir/btrace/btrace-2.2.4/btrace-instr/src/test/btrace/issues/BTRACE256.java"));
+        Set<String> classes = getReferencesFromJavaFile(new File("/root/dependencySmell/evaluation/realProjects/gradle/projectsDir/akhq/akhq-0.24.0/src/test/java/org/akhq/StreamTest.java"));
         for (String className : classes) {
             System.out.println(className);
         }
