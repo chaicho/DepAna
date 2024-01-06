@@ -240,7 +240,13 @@ public abstract class BaseConflictTask extends DefaultTask {
             HostProjectInfo.i().setProject(project);
 //        HostProjectInfo.i().setTestOutputDir(new File(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes"));
             HostProjectInfo.i().setBuildTestCp(project.getBuildDir().getAbsoluteFile() + File.separator + "test-classes");
-            HostProjectInfo.i().setTestCompileSrcFiles(testSourceSet.getAllJava().getSrcDirs());
+            Set<File> testSrcDirs = testSourceSet.getAllJava().getSrcDirs();
+            Set<File> testSrcDirsAll = new HashSet<>();
+            for (File testSrcDir : testSrcDirs) {
+                testSrcDirsAll.add(testSrcDir);
+                testSrcDirsAll.add(new File(testSrcDir.getAbsoluteFile().getParent()));
+            }
+            HostProjectInfo.i().setTestCompileSrcFiles(testSrcDirsAll);
             HostProjectInfo.i().init(MyCallGraph.i(), DepJars.i());
             HostProjectInfo.i().buildDepClassMap();
 
