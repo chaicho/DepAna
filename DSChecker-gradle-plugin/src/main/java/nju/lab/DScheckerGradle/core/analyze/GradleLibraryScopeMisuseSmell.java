@@ -26,7 +26,7 @@ public class GradleLibraryScopeMisuseSmell extends BaseSmell{
         if (hostProjectInfo.useJavaLibraryPlugin()) {
             for (IDepJar depJar : projectABIDepJars) {
                 if (implementationDepJars.contains(depJar)) {
-                    appendToResult("implementation scope dep " + depJar.getName() + " is acutally used only at api scene");
+                    appendToResult("implementation scope dep " + depJar.getDisplayName() + " is acutally used only at api scene");
                     appendToResult(depJar.getUsedClassesAsString());
                     appendToResult("---------");
                 }
@@ -34,7 +34,7 @@ public class GradleLibraryScopeMisuseSmell extends BaseSmell{
         }
         for (IDepJar depJar : actualRuntimeDepJars) {
             if (compileOnlyDepJars.contains(depJar)) {
-                appendToResult("compileOnly scope dep " + depJar.getName() + " is acutally used only at implementation scene");
+                appendToResult("compileOnly scope dep " + depJar.getDisplayName() + " is acutally used only at implementation scene");
                 appendToResult(depJar.getUsedClassesAsString());
                 appendToResult("---------");
             }
@@ -46,7 +46,7 @@ public class GradleLibraryScopeMisuseSmell extends BaseSmell{
         compileDepJarsUsedOnlyAtTest.retainAll(actualTestDepJars);
 
         for (IDepJar depJar : compileDepJarsUsedOnlyAtTest) {
-            appendToResult("compile scope dep " + depJar.getName() + " is acutally used only at test scene");
+            appendToResult("compile scope dep " + depJar.getDisplayName() + " is acutally used only at test scene");
             appendToResult(depJar.getUsedClassesAsString());
             appendToResult("---------");
         }

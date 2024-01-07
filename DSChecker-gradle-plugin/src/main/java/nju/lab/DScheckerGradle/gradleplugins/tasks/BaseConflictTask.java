@@ -244,7 +244,10 @@ public abstract class BaseConflictTask extends DefaultTask {
             Set<File> testSrcDirsAll = new HashSet<>();
             for (File testSrcDir : testSrcDirs) {
                 testSrcDirsAll.add(testSrcDir);
-                testSrcDirsAll.add(new File(testSrcDir.getAbsoluteFile().getParent()));
+                if (testSrcDir.getParent().endsWith("test")) {
+                    // This is for project btrace
+                    testSrcDirsAll.add(new File(testSrcDir.getAbsoluteFile().getParent()));
+                }
             }
             HostProjectInfo.i().setTestCompileSrcFiles(testSrcDirsAll);
             HostProjectInfo.i().init(MyCallGraph.i(), DepJars.i());

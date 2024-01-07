@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 public interface ICallGraph {
     // Record the possible methods that invoke specific classes.
     public Map<String , Set<SootMethod> > invokedMethods = new HashMap<String , Set<SootMethod>>();
@@ -58,6 +57,7 @@ public interface ICallGraph {
         Set<String> reachableClasses = new HashSet<String>();
         List<SootMethod> entryMthds = new ArrayList<SootMethod>();
         if (!Scene.v().hasCallGraph()) {
+            System.out.println("No CallGraph Found!");
             return reachableClasses;
         }
         CallGraph cg = Scene.v().getCallGraph();

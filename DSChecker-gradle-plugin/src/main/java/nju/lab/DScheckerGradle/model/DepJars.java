@@ -220,7 +220,7 @@ public class DepJars implements IDepJars<DepJar> {
 
     @Override
     public Set<DepJar> getDirectDepJarsWithScope(String scope) {
-        Set<DepJar> depJars = usedDepJars.stream()
+        Set<DepJar> depJars = getUsedDepJars().stream()
                 .filter(depJar -> depJar.getScope()!= null && depJar.getScope().equals(scope) && depJar.isSelected() && depJar.getDepth() == 1)
                 .collect(Collectors.toSet());
         return depJars;
