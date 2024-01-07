@@ -79,7 +79,7 @@ public abstract class BaseSmell {
         }
     }
 
-    public void removeDepJarsWithSameGA(Set<? extends IDepJar> container, Set<IDepJar> conflictJars) {
+    public void removeDepJarsWithSameGA(Set<? extends IDepJar> container, Set<? extends IDepJar> conflictJars) {
         Iterator<? extends IDepJar> iterator = container.iterator();
         while (iterator.hasNext()) {
             IDepJar depJar = iterator.next();
