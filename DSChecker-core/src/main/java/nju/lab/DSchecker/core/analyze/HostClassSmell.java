@@ -24,7 +24,7 @@ public class HostClassSmell extends BaseSmell{
                 continue;
             }
             Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(hostClass);
-            depJars.removeIf( iDepJar -> iDepJar.isHost());
+            depJars.removeIf(iDepJar -> iDepJar.isHost());
             if((depJars.size() == 1 && containsHost(depJars)) || depJars.size() == 0){
                 continue;
             }

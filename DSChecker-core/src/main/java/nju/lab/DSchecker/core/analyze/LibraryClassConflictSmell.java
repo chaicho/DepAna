@@ -25,13 +25,14 @@ public class LibraryClassConflictSmell extends BaseSmell {
                 continue;
             }
             Collection<IDepJar> depJars = hostProjectInfo.getUsedDepFromClass(className);
+            depJars.removeIf(iDepJar -> iDepJar.isHost());
             Set<String> jarNames = new HashSet<>();
             List<IDepJar> filteredDepJars = depJars.stream()
                     .filter(depJar -> !jarNames.contains(depJar.getName()))
                     .peek(depJar -> jarNames.add(depJar.getName()))
                     .collect(Collectors.toList());
             depJars = filteredDepJars;
-            if (depJars.size() == 1 && containsHost(depJars)) {
+            if (depJars.size() == 1) {
                 // The conflicting classes are in host jar, not in dependency.
                 continue;
             }
