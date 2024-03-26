@@ -76,7 +76,7 @@ public class DepJars implements IDepJars<DepJar> {
                         log.error(dep.getGroup() + ":" + dep.getName() + ":" + dep.getVersion() + " not found");
                         continue;
                     }
-                    if (targetDep.scope == null || targetDep.scope.startsWith("test")) {
+                    if (targetDep.scope == null || targetDep.scope.startsWith("test") || targetDep.scope.startsWith("annotation")) {
                         targetDep.setScope(configuration.getName());
                     }
                 }

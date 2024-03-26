@@ -148,6 +148,9 @@ public class HostProjectInfo extends IHostProjectInfo {
             if(appropriateScopes.contains(depJar.getScope()))
                 return depJar;
         }
+        if (className.contains("lombok")) {
+            return null;
+        }
         // When reach here, it means that there is no class at given scene, so it means that there should be a scope problem
         // We return the first one, though not in the scope.
          IDepJar depJar = usedDependenciesPerClass.get(className).iterator().next();
