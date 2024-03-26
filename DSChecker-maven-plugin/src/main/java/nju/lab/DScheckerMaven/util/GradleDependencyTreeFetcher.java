@@ -55,10 +55,6 @@ public class GradleDependencyTreeFetcher {
         List<String> deps = extractDepsFromDepTree(depTree);
         return extractDepVerFromDepTree(deps);
     }
-    public static void main(String[] args) {
-        String projectPath = "C:\\Users\\DELL\\OneDrive\\dependency-graph-as-task-inputs\\app"; // Replace with your project path
-        runDependenciesTask(projectPath);
-    }
     public static Map<String,String> getDepVersFromProject(String projectPath, String configuration) {
         if (!projectDepResult.containsKey(projectPath)) {
             projectDepResult.put(projectPath, runDependenciesTask(projectPath));
@@ -69,12 +65,11 @@ public class GradleDependencyTreeFetcher {
     public static String runDependenciesTask(String projectPath) {
         // Specify the Gradle executable and the task
 
-
-        ProcessBuilder processBuilder = new ProcessBuilder("gradle", "-q", "dependencies");
-        processBuilder.directory(new File(projectPath));
-        processBuilder.redirectErrorStream(true);
-
         try {
+            ProcessBuilder processBuilder = new ProcessBuilder("gradle", "-q", "dependencies");
+            processBuilder.directory(new File(projectPath));
+            processBuilder.redirectErrorStream(true);
+    
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             StringBuilder output = new StringBuilder();
