@@ -15,7 +15,10 @@ public class GetRefedClasses{
     public static void main(String[] args) {
         // Input directory containing .class files
         String inputDir = "C:\\Users\\DELL\\OneDrive\\dependency-graph-as-task-inputs\\app\\target\\classes";
-        String classDir =  "C:\\Users\\DELL\\OneDrive\\dependency-graph-as-task-inputs\\app\\target\\classes\\App.class";
+//        String classDir =  "C:\\Users\\DELL\\OneDrive\\dependency-graph-as-task-inputs\\app\\target\\classes\\App.class";
+        String classDir = "/root/dependencySmell/evaluation/realProjects/gradle/projectsDir/gtfs-validator/gtfs-validator-4.2.0/core/build/classes/java/main/org/mobilitydata/gtfsvalidator/table/GtfsColumnDescriptor.class";
+//        String classDir = "/root/dependencySmell/evaluation/realProjects/gradle/projectsDir/gtfs-validator/gtfs-validator-4.2.0/core/build/classes/java/main/org/mobilitydata/gtfsvalidator/table/GtfsColumnDescriptor$Builder.class";
+
         // Analyze the referenced classes in the input directory
 //        Set<String> referencedClasses = analyzeReferencedClasses(inputDir);
         Set<String> referencedClasses = analyzeReferencedClassFromFile(classDir);
@@ -38,6 +41,14 @@ public class GetRefedClasses{
             names.add(matcher.group(1));
         }
         return names;
+    }
+    public static boolean containsSameClass(Set<String> strings, String targetString) {
+        for (String string: strings){
+            if (string.contains(targetString)) {
+                return true;
+            }
+        }
+        return false;
     }
     public static Set<String> analyzeReferencedClassFromFile(String file) {
         Set<String> tmpClasses = new HashSet<>();
@@ -76,7 +87,7 @@ public class GetRefedClasses{
             for (String refClass : tmpClasses) {
                 // Add the referenced classes to the set
                 String formalizedClass = refClass.replace('/', '.');
-                if (!annotationsClasses.contains(formalizedClass)) {
+                if (!containsSameClass(annotationsClasses, formalizedClass)) {
                     retClasses.add(formalizedClass);
                 }
             }

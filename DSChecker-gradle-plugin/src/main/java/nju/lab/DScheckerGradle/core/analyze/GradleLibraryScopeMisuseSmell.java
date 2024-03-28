@@ -50,7 +50,7 @@ public class GradleLibraryScopeMisuseSmell extends BaseSmell{
             appendToResult(depJar.getUsedClassesAsString());
             appendToResult("---------");
         }
-
+        
         return;
     }
 
