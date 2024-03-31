@@ -168,6 +168,7 @@ public class GetRefedClasses{
             allAnnotations.add("org.immutables.value.");
             allAnnotations.add("javax.annotation");
             allAnnotations.add("edu.umd.cs.findbugs.annotations");
+            allAnnotations.add("lombok");
             return allAnnotations;
         }
 
