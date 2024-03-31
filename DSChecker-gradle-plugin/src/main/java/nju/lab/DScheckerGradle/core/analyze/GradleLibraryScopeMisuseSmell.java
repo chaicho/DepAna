@@ -32,13 +32,13 @@ public class GradleLibraryScopeMisuseSmell extends BaseSmell{
                 }
             }
         }
-        for (IDepJar depJar : actualRuntimeDepJars) {
-            if (compileOnlyDepJars.contains(depJar)) {
-                appendToResult("compileOnly scope dep " + depJar.getDisplayName() + " is acutally used only at implementation scene");
-                appendToResult(depJar.getUsedClassesAsString());
-                appendToResult("---------");
-            }
-        }
+//        for (IDepJar depJar : actualRuntimeDepJars) {
+//            if (compileOnlyDepJars.contains(depJar)) {
+//                appendToResult("compileOnly scope dep " + depJar.getDisplayName() + " is acutally used only at implementation scene");
+//                appendToResult(depJar.getUsedClassesAsString());
+//                appendToResult("---------");
+//            }
+//        }
 
         Set<IDepJar> compileDepJarsUsedOnlyAtTest = new HashSet<>(compileDepJars);
         compileDepJarsUsedOnlyAtTest.removeAll(actualCompileDepJars);
@@ -50,7 +50,9 @@ public class GradleLibraryScopeMisuseSmell extends BaseSmell{
             appendToResult(depJar.getUsedClassesAsString());
             appendToResult("---------");
         }
-        
+
+
+        // Check if provided
         return;
     }
 

@@ -3,7 +3,7 @@ plugins {
     id("maven-publish")
 }
 group = 'nju.lab' // set the group ID
-version = '1.0.0' // set the version
+version = '1.0.1' // set the version
 
 repositories {
     maven{ url 'https://maven.aliyun.com/repository/public'}
