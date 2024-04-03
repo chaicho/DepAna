@@ -15,6 +15,7 @@ public class GradleLibraryScopeMisuseSmell extends BaseSmell{
         Set<? extends IDepJar> compileOnlyDepJars = depJars.getDirectDepJarsWithScope("compileOnly");
         Set<? extends IDepJar> apiDepJars = depJars.getDirectDepJarsWithScope("api");
         Set<? extends IDepJar> implementationDepJars = depJars.getDirectDepJarsWithScope("implementation");
+        Set<? extends IDepJar> runtimeOnlyDepJars = depJars.getDirectDepJarsWithScope("runtimeOnly");
         Set<? extends IDepJar> compileDepJars = depJars.getDirectDepJarsWithScene("compile");
         Set<? extends IDepJar> testDepJars = depJars.getDirectDepJarsWithScene("test");
         Set<IDepJar> projectABIDepJars = hostProjectInfo.getABIDepJars();
@@ -51,8 +52,31 @@ public class GradleLibraryScopeMisuseSmell extends BaseSmell{
             appendToResult("---------");
         }
 
+        Set<IDepJar> compileDepJarsUsedOnlyAtProvided = new HashSet<>(implementationDepJars);
+        compileDepJarsUsedOnlyAtProvided.addAll(apiDepJars);
+        compileDepJars.removeAll(actualTestDepJars);
+        compileDepJars.removeAll(actualRuntimeDepJars);
+        compileDepJars.retainAll(actualCompileDepJars);
+        removeDepJarsWithSameGA(compileDepJarsUsedOnlyAtProvided, compileOnlyDepJars);
 
-        // Check if provided
+        for (IDepJar depJar : compileDepJarsUsedOnlyAtProvided) {
+            appendToResult("compile scope dep " + depJar.getDisplayName() + " is acutally used only at provided scene");
+            appendToResult(depJar.getUsedClassesAsString());
+            appendToResult("---------");
+        }
+
+        Set<IDepJar> compileDepJarsUsedOnlyAtRuntime = new HashSet<>(implementationDepJars);
+        compileDepJarsUsedOnlyAtRuntime.addAll(apiDepJars);
+        compileDepJars.removeAll(actualCompileDepJars);
+        compileDepJars.removeAll(actualTestDepJars);
+        compileDepJars.retainAll(actualRuntimeDepJars);
+        removeDepJarsWithSameGA(compileDepJarsUsedOnlyAtRuntime, runtimeOnlyDepJars);
+        
+        for (IDepJar depJar : compileDepJarsUsedOnlyAtRuntime) {
+            appendToResult("compile scope dep " + depJar.getDisplayName() + " is acutally used only at runtime scene");
+            appendToResult(depJar.getUsedClassesAsString());
+            appendToResult("---------");
+        }
         return;
     }
 
