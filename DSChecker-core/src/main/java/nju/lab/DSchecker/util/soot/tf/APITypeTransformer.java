@@ -45,23 +45,21 @@ public class APITypeTransformer extends SceneTransformer {
 
             // Get the types used in public method parameters, including generic parameter types
             for (SootMethod method : clazz.getMethods()) {
-                if (method.isPublic() || method.isProtected() || !method.isPrivate()) {
+                if (method.isPublic()) {
                     for (Type type : method.getParameterTypes()) {
-//                        typesUsedInPublicMethodParameters.add(type);
+                        typesUsedInPublicMethodParameters.add(type);
                         if (type instanceof ArrayType) {
                             ArrayType arrayType = (ArrayType) type;
                             Type elementType = arrayType.getArrayElementType();
                             typesUsedInPublicMethodParameters.add(elementType);
                         }
                     }
-                    Type returnType = method.getReturnType();
-                    typesUsedInPublicMethodParameters.add(returnType);
                 }
             }
 
             // Get the types used in public fields
             for (SootField field : clazz.getFields()) {
-                if (field.isPublic() || field.isProtected() || !field.isPrivate()) {
+                if (field.isPublic()) {
                     typesUsedInPublicFields.add(field.getType());
                 }
             }
