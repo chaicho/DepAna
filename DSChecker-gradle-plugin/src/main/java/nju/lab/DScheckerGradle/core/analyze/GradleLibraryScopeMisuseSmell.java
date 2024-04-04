@@ -54,9 +54,9 @@ public class GradleLibraryScopeMisuseSmell extends BaseSmell{
 
         Set<IDepJar> compileDepJarsUsedOnlyAtProvided = new HashSet<>(implementationDepJars);
         compileDepJarsUsedOnlyAtProvided.addAll(apiDepJars);
-        compileDepJars.removeAll(actualTestDepJars);
-        compileDepJars.removeAll(actualRuntimeDepJars);
-        compileDepJars.retainAll(actualCompileDepJars);
+        compileDepJarsUsedOnlyAtProvided.removeAll(actualTestDepJars);
+        compileDepJarsUsedOnlyAtProvided.removeAll(actualRuntimeDepJars);
+        compileDepJarsUsedOnlyAtProvided.retainAll(actualCompileDepJars);
         removeDepJarsWithSameGA(compileDepJarsUsedOnlyAtProvided, compileOnlyDepJars);
 
         for (IDepJar depJar : compileDepJarsUsedOnlyAtProvided) {
@@ -67,9 +67,9 @@ public class GradleLibraryScopeMisuseSmell extends BaseSmell{
 
         Set<IDepJar> compileDepJarsUsedOnlyAtRuntime = new HashSet<>(implementationDepJars);
         compileDepJarsUsedOnlyAtRuntime.addAll(apiDepJars);
-        compileDepJars.removeAll(actualCompileDepJars);
-        compileDepJars.removeAll(actualTestDepJars);
-        compileDepJars.retainAll(actualRuntimeDepJars);
+        compileDepJarsUsedOnlyAtRuntime.removeAll(actualCompileDepJars);
+        compileDepJarsUsedOnlyAtRuntime.removeAll(actualTestDepJars);
+        compileDepJarsUsedOnlyAtRuntime.retainAll(actualRuntimeDepJars);
         removeDepJarsWithSameGA(compileDepJarsUsedOnlyAtRuntime, runtimeOnlyDepJars);
         
         for (IDepJar depJar : compileDepJarsUsedOnlyAtRuntime) {
