@@ -23,35 +23,44 @@ public class APITypeTransformer extends SceneTransformer {
     protected void internalTransform(String phaseName, Map<String, String> options) {
         Chain<SootClass> classesToBeAnalyzed = Scene.v().getApplicationClasses();
         // Get the types used in super classes or interfaces
+        System.out.println("APITypeTransformer");
+        System.out.println("ClassesToBeAnalyzed = " + classesToBeAnalyzed);
         typesUsedInSuperClasses = new HashSet<>();
 
         // Get the types used in public method parameters, including generic parameter types
         typesUsedInPublicMethodParameters = new HashSet<>();
 
-        typesUsedInPublicFields = new HashSet<>();
+         typesUsedInPublicFields = new HashSet<>();
         for (SootClass clazz : classesToBeAnalyzed) {
-            if(clazz.isJavaLibraryClass()){
+            if(clazz.isJavaLibraryClass() || !clazz.isPublic() || clazz.getName().contains("$")){
+                System.out.println("Skip Class = " + clazz);
                 continue;
             }
+            System.out.println("Currently in Class = " + clazz.getName());
             // Get the types used in super classes or interfaces
             if (clazz.hasSuperclass()) {
                 typesUsedInSuperClasses.addAll(clazz.getSuperclass().getInterfaces()
                         .stream()
                         .map(sootClass -> {return sootClass.getType();})
                         .collect(Collectors.toList()));
-
+                System.out.println("Interfaces = " + clazz.getSuperclass().getInterfaces());
                 typesUsedInSuperClasses.add(clazz.getSuperclass().getType());
+                
+                System.out.println("SuperClass = " + clazz.getSuperclass().getType());
+
             }
 
             // Get the types used in public method parameters, including generic parameter types
             for (SootMethod method : clazz.getMethods()) {
-                if (method.isPublic()) {
+                if (method.isPublic() && method.isConcrete() && !method.getName().contains("lambda")) {
                     for (Type type : method.getParameterTypes()) {
                         typesUsedInPublicMethodParameters.add(type);
+                        System.out.println("Method = " + method.getName() + " Type = " + type);
                         if (type instanceof ArrayType) {
                             ArrayType arrayType = (ArrayType) type;
                             Type elementType = arrayType.getArrayElementType();
                             typesUsedInPublicMethodParameters.add(elementType);
+                            System.out.println("Method = " + method.getName() + " ArrayType = " + elementType);
                         }
                     }
                 }
@@ -61,6 +70,7 @@ public class APITypeTransformer extends SceneTransformer {
             for (SootField field : clazz.getFields()) {
                 if (field.isPublic()) {
                     typesUsedInPublicFields.add(field.getType());
+                    System.out.println("Field = " + field.getName() + " Type = " + field.getType());
                 }
             }
         }

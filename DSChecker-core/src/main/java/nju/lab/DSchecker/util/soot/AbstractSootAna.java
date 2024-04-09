@@ -36,7 +36,7 @@ public abstract class AbstractSootAna {
 			excludeList.add("apple.awt.*");
 			excludeList.add("java.util.*");
 			excludeList.add("jdk.*");
-			excludeList.add("com.google.*");
+			excludeList.add("com.google.common.*");
 		}
 		return excludeList;
 	}

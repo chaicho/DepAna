@@ -54,6 +54,7 @@ public class TypeAna extends AbstractSootAna{
         try {
             System.out.println(args);
             soot.Main.main(args.toArray(new String[0]));
+            System.out.println("-------------Reset-----------");
             G.reset();
         } catch (Exception e){
             System.out.println("-------------Reset-----------");

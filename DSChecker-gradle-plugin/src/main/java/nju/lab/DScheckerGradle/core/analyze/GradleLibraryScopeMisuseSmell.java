@@ -47,7 +47,13 @@ public class GradleLibraryScopeMisuseSmell extends BaseSmell{
         compileDepJarsUsedOnlyAtTest.removeAll(actualCompileDepJars);
         compileDepJarsUsedOnlyAtTest.removeAll(actualRuntimeDepJars);
         compileDepJarsUsedOnlyAtTest.retainAll(actualTestDepJars);
+        log.error("Test scope depJars");
+        log.error(testScopeDepJars.toString());
+        log.error("Pre compile2test depJars");
+        log.error(compileOnlyDepJars.toString());
         removeDepJarsWithSameGA(compileDepJarsUsedOnlyAtTest, testScopeDepJars);
+        log.error("After compile2test depJars");
+        log.error(compileOnlyDepJars.toString());
         for (IDepJar depJar : compileDepJarsUsedOnlyAtTest) {
             appendToResult("compile scope dep " + depJar.getDisplayName() + " is acutally used only at test scene");
             appendToResult(depJar.getUsedClassesAsString());
